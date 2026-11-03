@@ -1,0 +1,29 @@
+import React from 'react';
+import Link from 'next/link';
+import { TbArrowLeft } from 'react-icons/tb';
+import { UsersManager } from '../_components/UsersManager';
+
+export const metadata = {
+  title: 'Usuarios y Roles | MercadoAdmin',
+  description: 'Gestiona los niveles de acceso del personal y roles del sistema.',
+};
+
+export default function UsersSettingsPage() {
+  return (
+    <div className="space-y-3 max-w-7xl mx-auto pb-12">
+      {/* Breadcrumb / Botón volver a Configuración */}
+      <div>
+        <Link
+          href="/admin/settings"
+          className="inline-flex items-center gap-1.5 text-xs font-semibold text-gray-500 hover:text-[#3483fa] transition-colors cursor-pointer group"
+        >
+          <TbArrowLeft size={16} className="transition-transform group-hover:-translate-x-0.5" />
+          <span>Volver a Configuración</span>
+        </Link>
+      </div>
+
+      {/* Administrador de Usuarios */}
+      <UsersManager />
+    </div>
+  );
+}
