@@ -36,7 +36,7 @@ export const Navbar = () => {
 
   React.useEffect(() => {
     setMounted(true);
-    fetchCompany();
+    fetchCompany(true);
   }, [fetchCompany]);
 
   const canAccessSalesPanel = Boolean(

@@ -526,11 +526,16 @@ export function CompanyManager() {
             </div>
 
             {/* Redes Sociales */}
-            <div className="pt-2 border-t border-gray-100 space-y-3">
-              <span className="text-[11px] font-bold text-gray-500 uppercase tracking-wider block">
-                Enlaces a Redes Sociales
-              </span>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div className="pt-2 border-t border-gray-100 space-y-2">
+              <div>
+                <span className="text-[11px] font-bold text-gray-700 uppercase tracking-wider block">
+                  Enlaces a Redes Sociales Oficiales
+                </span>
+                <p className="text-[11px] text-gray-500 font-normal">
+                  Ingresa el enlace directo al perfil o página de tu negocio. Si aún no tienes cuentas activas, <strong>déjalos vacíos</strong> para que las pasarelas de pago no observen enlaces genéricos o rotos.
+                </p>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
                 <div className="relative">
                   <TbBrandInstagram className="absolute left-3 top-2.5 text-pink-500" size={15} />
                   <input
@@ -538,7 +543,7 @@ export function CompanyManager() {
                     name="instagramUrl"
                     value={formData.instagramUrl || ''}
                     onChange={handleChange}
-                    placeholder="Instagram URL"
+                    placeholder="https://instagram.com/tutienda"
                     className="w-full pl-9 pr-3 py-2 text-[11px] bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-amber-400"
                   />
                 </div>
@@ -549,7 +554,7 @@ export function CompanyManager() {
                     name="facebookUrl"
                     value={formData.facebookUrl || ''}
                     onChange={handleChange}
-                    placeholder="Facebook URL"
+                    placeholder="https://facebook.com/tutienda"
                     className="w-full pl-9 pr-3 py-2 text-[11px] bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-amber-400"
                   />
                 </div>
@@ -560,7 +565,7 @@ export function CompanyManager() {
                     name="tiktokUrl"
                     value={formData.tiktokUrl || ''}
                     onChange={handleChange}
-                    placeholder="TikTok URL"
+                    placeholder="https://tiktok.com/@tutienda"
                     className="w-full pl-9 pr-3 py-2 text-[11px] bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-amber-400"
                   />
                 </div>

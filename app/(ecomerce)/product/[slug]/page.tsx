@@ -180,7 +180,7 @@ export default function ProductDetailPage() {
   const activeImage = allImages[selectedImageIndex] || allImages[0] || product.imageUrl;
 
   return (
-    <div className="pb-16 bg-[#ebebeb] min-h-screen">
+    <div className="pb-16 bg-[#f3f4f6] min-h-screen">
       <div className="max-w-7xl mx-auto pt-6 px-4 md:px-7">
         {/* Breadcrumb */}
         <nav className="text-xs text-gray-500 mb-4 flex items-center gap-1.5 flex-wrap">

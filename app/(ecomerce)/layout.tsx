@@ -8,7 +8,7 @@ export default function EcomerceLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen bg-[#ebebeb] flex flex-col justify-between">
+    <div className="min-h-screen bg-[#f3f4f6] flex flex-col justify-between">
       <Navbar />
       <div className="flex-1">
         {children}

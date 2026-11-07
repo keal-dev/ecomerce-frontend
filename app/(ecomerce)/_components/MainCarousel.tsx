@@ -111,7 +111,7 @@ export const MainCarousel = () => {
       </div>
 
       {/* Degradado inferior para fundir con el fondo de la página */}
-      <div className="absolute bottom-0 left-0 w-full h-16 md:h-24 bg-gradient-to-t from-[#ebebeb] to-transparent pointer-events-none z-10" />
+      <div className="absolute bottom-0 left-0 w-full h-16 md:h-24 bg-gradient-to-t from-[#f3f4f6] to-transparent pointer-events-none z-10" />
 
       {/* Flechas de navegación (solo si hay más de 1 slide) */}
       {totalSlides > 1 && (

@@ -12,8 +12,8 @@ export const HeroBanner = () => {
           </button>
         </div>
       </div>
-      {/* Fade to background color to blend with the #ebebeb background below */}
-      <div className="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-[#ebebeb] to-transparent"></div>
+      {/* Fade to background color to blend with the #f3f4f6 background below */}
+      <div className="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-[#f3f4f6] to-transparent"></div>
     </div>
   );
 };

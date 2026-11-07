@@ -197,7 +197,7 @@ function SearchContent() {
   }, [storeProducts]);
 
   return (
-    <div className="min-h-screen bg-[#ebebeb]/50 pb-16">
+    <div className="min-h-screen pb-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-4">
         {/* Breadcrumb */}
         <nav className="flex items-center gap-1.5 text-xs text-gray-500 mb-4 font-light">
