@@ -280,7 +280,7 @@ export const Footer = () => {
             </h5>
             <ul className="space-y-2.5 text-xs text-gray-600">
               <li><Link href="/ayuda" className="hover:text-[#3483fa] transition-colors">Centro de ayuda</Link></li>
-              <li><Link href="/ayuda" className="hover:text-[#3483fa] transition-colors">Rastrea tu pedido</Link></li>
+              <li><Link href="/rastreo" className="hover:text-[#3483fa] transition-colors font-medium text-gray-800">Rastrea tu pedido</Link></li>
               <li><Link href="/ayuda" className="hover:text-[#3483fa] transition-colors">Cómo comprar</Link></li>
               <li><Link href="/ayuda" className="hover:text-[#3483fa] transition-colors">Costos y tiempos de envío</Link></li>
               <li><Link href="/devoluciones" className="hover:text-[#3483fa] transition-colors font-medium text-gray-800">Devoluciones y reembolsos</Link></li>

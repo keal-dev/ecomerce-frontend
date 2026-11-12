@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
+import Script from 'next/script';
 import { useRouter } from 'next/navigation';
 import {
   TbChevronRight,
@@ -17,12 +18,21 @@ import {
   TbMapPin,
   TbAlertCircle,
   TbLoader2,
+  TbQrcode,
 } from 'react-icons/tb';
 import { FaCcVisa, FaCcMastercard, FaCcAmex } from 'react-icons/fa6';
 import { useCartStore } from '@/stores/cart.store';
 import { useCompanyStore } from '@/stores/company.store';
 import { getDepartments, getProvinces, getDistricts } from '@/services/ubigeo.service';
 import { DepartmentItem, ProvinceItem, DistrictItem } from '@/types/ubigeo.types';
+import { processCulqiCharge } from '@/services/payment.service';
+
+declare global {
+  interface Window {
+    Culqi?: any;
+    culqi?: () => void;
+  }
+}
 
 export default function CheckoutPage() {
   const router = useRouter();
@@ -90,11 +100,164 @@ export default function CheckoutPage() {
   const shippingCost = isFreeShipping ? 0 : 10;
   const totalToPay = subtotal + shippingCost;
 
+  // Referencias para que el callback global de Culqi siempre acceda al estado actual
+  const formDataRef = useRef(formData);
+  const totalToPayRef = useRef(totalToPay);
+  const companyRef = useRef(company);
+  const itemsRef = useRef(items);
+  const subtotalRef = useRef(subtotal);
+  const shippingCostRef = useRef(shippingCost);
+
+  useEffect(() => {
+    formDataRef.current = formData;
+    totalToPayRef.current = totalToPay;
+    companyRef.current = company;
+    itemsRef.current = items;
+    subtotalRef.current = subtotal;
+    shippingCostRef.current = shippingCost;
+  }, [formData, totalToPay, company, items, subtotal, shippingCost]);
+
+  // Listener para el evento de respuesta de Culqi Checkout v4
+  useEffect(() => {
+    window.culqi = async () => {
+      if (window.Culqi?.token) {
+        const token = window.Culqi.token.id;
+        try {
+          window.Culqi.close();
+        } catch {
+          // ignore
+        }
+        setIsProcessing(true);
+        setErrorMessage(null);
+
+        const currentForm = formDataRef.current;
+        const currentTotal = totalToPayRef.current;
+        const currentItems = itemsRef.current;
+        const currentSubtotal = subtotalRef.current;
+        const currentShipping = shippingCostRef.current;
+
+        // Separar nombre y apellido para el motor antifraude de Culqi
+        const nameParts = currentForm.fullName.trim().split(/\s+/);
+        const firstName = nameParts[0] || 'Cliente';
+        const lastName = nameParts.slice(1).join(' ') || 'General';
+
+        const year = new Date().getFullYear();
+        const generatedOrderNum = `ORD-${year}-${Math.floor(10000 + Math.random() * 90000)}`;
+
+        try {
+          const res = await processCulqiCharge({
+            tokenId: token,
+            amount: Math.round(currentTotal * 100),
+            email: currentForm.email,
+            currencyCode: 'PEN',
+            description: `Pedido de ${currentForm.fullName} en ${companyRef.current?.name || 'Tienda Online'}`,
+            firstName,
+            lastName,
+            address: currentForm.address,
+            city: currentForm.province || currentForm.department || 'Lima',
+            phoneNumber: currentForm.phone,
+            docType: currentForm.docType,
+            docNumber: currentForm.docNumber,
+            department: currentForm.department,
+            province: currentForm.province,
+            district: currentForm.district,
+            orderNumber: generatedOrderNum,
+            subtotal: currentSubtotal,
+            shippingCost: currentShipping,
+            reference: currentForm.reference,
+            invoiceType: currentForm.invoiceType,
+            companyRuc: currentForm.companyRuc,
+            companyLegalName: currentForm.companyLegalName,
+            companyName: companyRef.current?.name || 'Tienda Online',
+            currencySymbol: companyRef.current?.currencySymbol || 'S/',
+            items: currentItems.map((it) => ({
+              productId: it.id,
+              title: it.title,
+              quantity: it.quantity,
+              price: it.price,
+              imageUrl: it.imageUrl,
+            })),
+          });
+
+          const finalOrderNum = res.referenceCode || generatedOrderNum;
+          const orderDate = new Date().toLocaleString('es-PE', {
+            dateStyle: 'long',
+            timeStyle: 'short',
+          });
+
+          setOrderCompleted({
+            orderNumber: finalOrderNum,
+            total: currentTotal,
+            email: currentForm.email,
+            date: orderDate,
+          });
+
+          // Guardar en el historial local del navegador para acceso sin login
+          try {
+            const rawStored = localStorage.getItem('my_saved_orders');
+            const existingOrders = rawStored ? JSON.parse(rawStored) : [];
+            const newEntry = {
+              orderNumber: finalOrderNum,
+              email: currentForm.email,
+              customerName: currentForm.fullName,
+              date: orderDate,
+              total: currentTotal,
+              currencySymbol: companyRef.current?.currencySymbol || 'S/',
+              itemsCount: currentItems.reduce((acc, it) => acc + it.quantity, 0),
+            };
+            const filtered = existingOrders.filter((o: any) => o.orderNumber !== finalOrderNum);
+            localStorage.setItem('my_saved_orders', JSON.stringify([newEntry, ...filtered].slice(0, 30)));
+          } catch (e) {
+            console.error('Error al guardar pedido en historial local:', e);
+          }
+
+          clearCart();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        } catch (err: any) {
+          const msg =
+            err.response?.data?.message ||
+            err.message ||
+            'No se pudo completar el cobro con Culqi. Por favor verifique sus datos o intente nuevamente.';
+          setErrorMessage(msg);
+        } finally {
+          setIsProcessing(false);
+        }
+      } else if (window.Culqi?.error) {
+        setIsProcessing(false);
+        const errObj = window.Culqi.error;
+        setErrorMessage(
+          errObj.user_message || errObj.merchant_message || 'El pago fue cancelado o rechazado por la pasarela.',
+        );
+      }
+    };
+  }, [clearCart]);
+
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    let sanitizedValue = value;
+
+    // Solo números y límites de caracteres específicos
+    if (name === 'docNumber') {
+      const maxLen = formData.invoiceType === 'factura' ? 11 : 8;
+      sanitizedValue = value.replace(/\D/g, '').slice(0, maxLen);
+    } else if (name === 'phone') {
+      sanitizedValue = value.replace(/\D/g, '').slice(0, 9);
+    } else if (name === 'companyRuc') {
+      sanitizedValue = value.replace(/\D/g, '').slice(0, 11);
+    }
+
+    setFormData((prev) => ({ ...prev, [name]: sanitizedValue }));
+  };
+
+  const handleInvoiceTypeChange = (type: 'boleta' | 'factura') => {
+    setFormData((prev) => ({
+      ...prev,
+      invoiceType: type,
+      docType: type === 'factura' ? 'RUC' : 'DNI',
+      docNumber: '',
+    }));
   };
 
   const handleDepartmentChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -159,20 +322,39 @@ export default function CheckoutPage() {
     setFormData((prev) => ({ ...prev, district: distName }));
   };
 
-  const handleProcessOrder = (e: React.FormEvent) => {
+  const handleProcessOrder = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage(null);
 
-    if (!formData.fullName.trim() || !formData.docNumber.trim()) {
-      setErrorMessage('Por favor ingresa tu nombre completo y número de documento.');
-      return;
+    if (formData.invoiceType === 'factura') {
+      if (!/^\d{11}$/.test(formData.docNumber.trim())) {
+        setErrorMessage('El RUC debe tener exactamente 11 dígitos numéricos (ej. 20601234567).');
+        return;
+      }
+      if (!formData.companyLegalName.trim()) {
+        setErrorMessage('Por favor ingresa la Razón Social de la empresa para la factura.');
+        return;
+      }
+      if (!formData.fullName.trim()) {
+        setErrorMessage('Por favor ingresa el nombre de la persona o contacto que recibe.');
+        return;
+      }
+    } else {
+      if (!/^\d{8}$/.test(formData.docNumber.trim())) {
+        setErrorMessage('El DNI debe tener exactamente 8 dígitos numéricos.');
+        return;
+      }
+      if (!formData.fullName.trim()) {
+        setErrorMessage('Por favor ingresa tus nombres y apellidos completos.');
+        return;
+      }
     }
     if (!formData.email.trim() || !formData.email.includes('@')) {
       setErrorMessage('Por favor ingresa un correo electrónico válido para confirmar tu pedido.');
       return;
     }
-    if (!formData.phone.trim()) {
-      setErrorMessage('El teléfono de contacto es necesario para coordinar la entrega.');
+    if (!/^\d{9}$/.test(formData.phone.trim())) {
+      setErrorMessage('El teléfono móvil debe tener exactamente 9 dígitos numéricos (ej. 987654321).');
       return;
     }
     if (!formData.department || !formData.province || !formData.district) {
@@ -184,28 +366,57 @@ export default function CheckoutPage() {
       return;
     }
 
-    setIsProcessing(true);
+    if (typeof window !== 'undefined' && window.Culqi) {
+      try {
+        const culqiEnv = (process.env.NEXT_PUBLIC_CULQI_ENV || 'test').toLowerCase();
+        const isProd = culqiEnv === 'production' || culqiEnv === 'prod' || culqiEnv === 'live';
 
-    // Simular procesamiento del pedido
-    setTimeout(() => {
-      const year = new Date().getFullYear();
-      const randomOrder = `ORD-${year}-${Math.floor(10000 + Math.random() * 90000)}`;
-      const orderDate = new Date().toLocaleString('es-PE', {
-        dateStyle: 'long',
-        timeStyle: 'short',
-      });
+        const resolvedPublicKey = isProd
+          ? process.env.NEXT_PUBLIC_CULQI_PUBLIC_KEY_LIVE ||
+          process.env.NEXT_PUBLIC_CULQI_PUBLIC_KEY
+          : process.env.NEXT_PUBLIC_CULQI_PUBLIC_KEY_TEST ||
+          process.env.NEXT_PUBLIC_CULQI_PUBLIC_KEY ||
+          'pk_test_KSDBPPU0XO3e36qf';
 
-      setOrderCompleted({
-        orderNumber: randomOrder,
-        total: totalToPay,
-        email: formData.email,
-        date: orderDate,
-      });
+        window.Culqi.publicKey = resolvedPublicKey;
 
-      clearCart();
-      setIsProcessing(false);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }, 1200);
+        window.Culqi.settings({
+          title: company?.name || 'Tienda Online',
+          currency: 'PEN',
+          amount: Math.round(totalToPay * 100),
+        });
+
+        window.Culqi.options({
+          lang: 'auto',
+          installments: true,
+          paymentMethods: {
+            tarjeta: true,
+            yape: true,
+            billetera: true,
+            bancaMovil: true,
+            agente: true,
+            cuotealo: false,
+          },
+          style: {
+            logo: company?.logoUrl || '',
+            bannerColor: '#0f172a',
+            buttonBackground: '#3483fa',
+            menuColor: '#3483fa',
+            linksColor: '#3483fa',
+            priceColor: '#3483fa',
+          },
+        });
+
+        window.Culqi.open();
+      } catch (err) {
+        console.error('Error al inicializar Culqi:', err);
+        setErrorMessage('Error al abrir la pasarela Culqi. Por favor verifique su conexión.');
+      }
+    } else {
+      setErrorMessage(
+        'La pasarela de pago Culqi aún se está conectando. Por favor espere 2 segundos e intente nuevamente.',
+      );
+    }
   };
 
   if (!mounted) {
@@ -263,20 +474,27 @@ export default function CheckoutPage() {
               </div>
             </div>
 
-            <div className="pt-2 flex flex-col sm:flex-row gap-3 justify-center">
+            <div className="pt-2 flex flex-col sm:flex-row gap-3 justify-center items-center">
+              <Link
+                href={`/rastreo?order=${encodeURIComponent(orderCompleted.orderNumber)}`}
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#3483fa] hover:bg-blue-600 text-white rounded-xl text-xs font-bold transition-all shadow-md hover:shadow-lg"
+              >
+                <TbTruckDelivery size={18} />
+                <span>Rastrear mi pedido en tiempo real</span>
+              </Link>
+              <Link
+                href="/mis-compras"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 px-5 py-3 rounded-xl border border-gray-300 hover:border-gray-400 text-gray-700 hover:bg-gray-50 text-xs font-bold transition-colors"
+              >
+                <span>Ver mis compras</span>
+              </Link>
               <button
                 type="button"
                 onClick={() => window.print()}
-                className="px-5 py-2.5 rounded-xl border border-gray-200 text-gray-700 hover:bg-gray-50 text-xs font-bold transition-colors"
+                className="w-full sm:w-auto px-4 py-3 rounded-xl border border-gray-200 text-gray-600 hover:bg-gray-50 text-xs font-medium transition-colors"
               >
                 Imprimir Comprobante
               </button>
-              <Link
-                href="/"
-                className="px-6 py-2.5 bg-[#3483fa] hover:bg-blue-600 text-white rounded-xl text-xs font-bold transition-all shadow-xs"
-              >
-                Seguir Comprando
-              </Link>
             </div>
           </div>
         </div>
@@ -309,6 +527,9 @@ export default function CheckoutPage() {
 
   return (
     <div className="min-h-screen pb-16 pt-4">
+      {/* Script oficial de Culqi Checkout v4 */}
+      <Script src="https://checkout.culqi.com/js/v4" strategy="afterInteractive" />
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         {/* Breadcrumb */}
         <nav className="flex items-center gap-1.5 text-xs text-gray-500 mb-5 font-light">
@@ -330,35 +551,74 @@ export default function CheckoutPage() {
               </div>
             )}
 
-            {/* 1. Datos Personales */}
+            {/* 1. Datos Personales y Comprobante */}
             <div className="bg-white rounded-2xl border border-gray-200/80 p-5 sm:p-6 shadow-2xs space-y-4">
               <div className="flex items-center gap-2 border-b border-gray-100 pb-3">
                 <TbUser className="text-[#3483fa]" size={20} />
-                <h2 className="font-bold text-gray-900 text-sm">1. Datos del Comprador</h2>
+                <h2 className="font-bold text-gray-900 text-sm">1. Datos del Comprador y Comprobante</h2>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 text-xs">
-                <div className="sm:col-span-8">
-                  <label className="block font-medium text-gray-700 mb-1">Nombres y Apellidos *</label>
+                {/* Selector de Comprobante / Documento combinado */}
+                <div className="sm:col-span-12">
+                  <label className="block font-medium text-gray-700 mb-1">
+                    ¿Con qué documento deseas tu comprobante? *
+                  </label>
+                  <div className="flex gap-2">
+                    <select
+                      value={formData.invoiceType}
+                      onChange={(e) => handleInvoiceTypeChange(e.target.value as 'boleta' | 'factura')}
+                      className="border border-gray-200 rounded-lg p-2.5 bg-gray-50 text-xs font-bold text-gray-800 focus:ring-2 focus:ring-[#3483fa]/20 focus:border-[#3483fa] outline-hidden cursor-pointer shrink-0"
+                    >
+                      <option value="boleta">DNI (Boleta)</option>
+                      <option value="factura">RUC (Factura)</option>
+                    </select>
+
+                    <input
+                      type="text"
+                      inputMode="numeric"
+                      name="docNumber"
+                      value={formData.docNumber}
+                      onChange={handleInputChange}
+                      maxLength={formData.invoiceType === 'factura' ? 11 : 8}
+                      placeholder={
+                        formData.invoiceType === 'factura'
+                          ? 'Número de RUC (11 dígitos)'
+                          : 'Número de DNI (8 dígitos)'
+                      }
+                      className="flex-1 border border-gray-200 rounded-lg p-2.5 text-xs focus:ring-2 focus:ring-[#3483fa]/20 focus:border-[#3483fa] outline-hidden font-mono"
+                      required
+                    />
+                  </div>
+                </div>
+
+                {/* Si es Factura: Razón Social */}
+                {formData.invoiceType === 'factura' && (
+                  <div className="sm:col-span-12 animate-in fade-in">
+                    <label className="block font-medium text-gray-700 mb-1">Razón Social de la Empresa *</label>
+                    <input
+                      type="text"
+                      name="companyLegalName"
+                      value={formData.companyLegalName}
+                      onChange={handleInputChange}
+                      placeholder="Ej: Inversiones y Servicios S.A.C."
+                      className="w-full border border-gray-200 rounded-lg p-2.5 text-xs focus:ring-2 focus:ring-[#3483fa]/20 focus:border-[#3483fa] outline-hidden"
+                      required
+                    />
+                  </div>
+                )}
+
+                {/* Nombre de la persona (o quien recibe si es factura) */}
+                <div className="sm:col-span-12">
+                  <label className="block font-medium text-gray-700 mb-1">
+                    {formData.invoiceType === 'factura' ? 'Persona de Contacto / Quien Recibe *' : 'Nombres y Apellidos *'}
+                  </label>
                   <input
                     type="text"
                     name="fullName"
                     value={formData.fullName}
                     onChange={handleInputChange}
-                    placeholder="Juan Pérez"
-                    className="w-full border border-gray-200 rounded-lg p-2.5 text-xs focus:ring-2 focus:ring-[#3483fa]/20 focus:border-[#3483fa] outline-hidden"
-                    required
-                  />
-                </div>
-
-                <div className="sm:col-span-4">
-                  <label className="block font-medium text-gray-700 mb-1">DNI / Documento *</label>
-                  <input
-                    type="text"
-                    name="docNumber"
-                    value={formData.docNumber}
-                    onChange={handleInputChange}
-                    placeholder="N° de documento"
+                    placeholder={formData.invoiceType === 'factura' ? 'Persona responsable de recibir el pedido' : 'Juan Pérez'}
                     className="w-full border border-gray-200 rounded-lg p-2.5 text-xs focus:ring-2 focus:ring-[#3483fa]/20 focus:border-[#3483fa] outline-hidden"
                     required
                   />
@@ -378,13 +638,15 @@ export default function CheckoutPage() {
                 </div>
 
                 <div className="sm:col-span-6">
-                  <label className="block font-medium text-gray-700 mb-1">Teléfono Móvil *</label>
+                  <label className="block font-medium text-gray-700 mb-1">Teléfono Móvil (9 dígitos) *</label>
                   <input
                     type="tel"
+                    inputMode="numeric"
                     name="phone"
                     value={formData.phone}
                     onChange={handleInputChange}
-                    placeholder="987654321"
+                    maxLength={9}
+                    placeholder="Ej: 987654321"
                     className="w-full border border-gray-200 rounded-lg p-2.5 text-xs focus:ring-2 focus:ring-[#3483fa]/20 focus:border-[#3483fa] outline-hidden"
                     required
                   />
@@ -501,12 +763,14 @@ export default function CheckoutPage() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+              {/* 2 Cartas con Iconos y Logos oficiales */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 text-xs">
+                {/* Opción 1: Tarjeta Débito / Crédito */}
                 <label
-                  className={`p-3.5 rounded-xl border-2 cursor-pointer transition-all ${
+                  className={`p-4 rounded-xl border-2 cursor-pointer transition-all flex flex-col justify-between gap-3 ${
                     formData.paymentMethod === 'card'
                       ? 'border-[#3483fa] bg-blue-50/40 shadow-xs'
-                      : 'border-gray-200 hover:border-gray-300'
+                    : 'border-gray-200 hover:border-gray-300 bg-white'
                   }`}
                 >
                   <input
@@ -517,15 +781,31 @@ export default function CheckoutPage() {
                     onChange={handleInputChange}
                     className="sr-only"
                   />
-                  <div className="font-bold text-gray-900">Tarjeta Débito / Crédito</div>
-                  <div className="text-[11px] text-gray-500 mt-0.5">Visa, Mastercard, Amex</div>
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-xl bg-blue-100/80 text-[#3483fa] flex items-center justify-center shrink-0">
+                        <TbCreditCard size={22} />
+                      </div>
+                      <div>
+                        <div className="font-bold text-gray-900 text-sm">Tarjeta Débito / Crédito</div>
+                        <div className="text-[11px] text-gray-500">Visa, Mastercard, Amex, Diners</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2.5 pt-2.5 border-t border-gray-100">
+                    <FaCcVisa size={24} className="text-blue-700" />
+                    <FaCcMastercard size={24} className="text-red-500" />
+                    <FaCcAmex size={24} className="text-blue-500" />
+                    <span className="text-[10px] text-gray-400 ml-auto font-medium">Pago en cuotas</span>
+                  </div>
                 </label>
 
+                {/* Opción 2: Billeteras Digitales (Yape / Plin) */}
                 <label
-                  className={`p-3.5 rounded-xl border-2 cursor-pointer transition-all ${
+                  className={`p-4 rounded-xl border-2 cursor-pointer transition-all flex flex-col justify-between gap-3 ${
                     formData.paymentMethod === 'yape'
-                      ? 'border-[#3483fa] bg-blue-50/40 shadow-xs'
-                      : 'border-gray-200 hover:border-gray-300'
+                    ? 'border-purple-600 bg-purple-50/40 shadow-xs'
+                    : 'border-gray-200 hover:border-gray-300 bg-white'
                   }`}
                 >
                   <input
@@ -536,66 +816,36 @@ export default function CheckoutPage() {
                     onChange={handleInputChange}
                     className="sr-only"
                   />
-                  <div className="font-bold text-gray-900">Billeteras Digitales</div>
-                  <div className="text-[11px] text-gray-500 mt-0.5">Yape / Plin con QR</div>
-                </label>
-
-                <label
-                  className={`p-3.5 rounded-xl border-2 cursor-pointer transition-all ${
-                    formData.paymentMethod === 'transfer'
-                      ? 'border-[#3483fa] bg-blue-50/40 shadow-xs'
-                      : 'border-gray-200 hover:border-gray-300'
-                  }`}
-                >
-                  <input
-                    type="radio"
-                    name="paymentMethod"
-                    value="transfer"
-                    checked={formData.paymentMethod === 'transfer'}
-                    onChange={handleInputChange}
-                    className="sr-only"
-                  />
-                  <div className="font-bold text-gray-900">Transferencia Bancaria</div>
-                  <div className="text-[11px] text-gray-500 mt-0.5">BCP, BBVA, Interbank</div>
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-xl bg-purple-100/80 text-purple-700 flex items-center justify-center shrink-0">
+                        <TbQrcode size={22} />
+                      </div>
+                      <div>
+                        <div className="font-bold text-gray-900 text-sm">Billeteras Digitales</div>
+                        <div className="text-[11px] text-gray-500">Yape / Plin con código QR</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2 pt-2.5 border-t border-gray-100">
+                    <span className="inline-flex items-center justify-center px-2.5 py-0.5 rounded bg-[#742284] text-white text-[11px] font-black tracking-wide shadow-2xs">
+                      yape
+                    </span>
+                    <span className="inline-flex items-center justify-center px-2.5 py-0.5 rounded bg-[#00d4aa] text-white text-[11px] font-black tracking-wide shadow-2xs">
+                      plin
+                    </span>
+                    <span className="text-[10px] text-gray-400 ml-auto font-medium">Confirmación al instante</span>
+                  </div>
                 </label>
               </div>
 
-              {formData.paymentMethod === 'card' && (
-                <div className="p-4 bg-gray-50 rounded-xl border border-gray-200 space-y-3 text-xs animate-in fade-in">
-                  <div>
-                    <label className="block font-medium text-gray-700 mb-1">Número de Tarjeta</label>
-                    <input
-                      type="text"
-                      placeholder="•••• •••• •••• ••••"
-                      maxLength={19}
-                      className="w-full border border-gray-200 rounded-lg p-2.5 bg-white text-xs tracking-widest font-mono"
-                    />
-                  </div>
-                  <div className="grid grid-cols-2 gap-3">
-                    <div>
-                      <label className="block font-medium text-gray-700 mb-1">Vencimiento (MM/AA)</label>
-                      <input
-                        type="text"
-                        placeholder="MM/AA"
-                        maxLength={5}
-                        className="w-full border border-gray-200 rounded-lg p-2.5 bg-white text-xs font-mono"
-                      />
-                    </div>
-                    <div>
-                      <label className="block font-medium text-gray-700 mb-1">CVV</label>
-                      <input
-                        type="password"
-                        placeholder="•••"
-                        maxLength={4}
-                        className="w-full border border-gray-200 rounded-lg p-2.5 bg-white text-xs font-mono"
-                      />
-                    </div>
-                  </div>
-                  <p className="text-[10px] text-gray-400 flex items-center gap-1">
-                    <TbLock size={13} /> Pasarela con encriptación SSL 256-bit y certificación de seguridad bancaria.
-                  </p>
-                </div>
-              )}
+              {/* Banner informativo de Culqi */}
+              <div className="p-3.5 bg-blue-50/70 rounded-xl border border-blue-100 flex items-start gap-2.5 text-xs text-blue-900">
+                <TbShieldCheck size={20} className="text-[#3483fa] shrink-0 mt-0.5" />
+                <p className="text-[11px] leading-relaxed text-blue-800">
+                  Al presionar el botón <strong>&ldquo;Pagar con Culqi&rdquo;</strong>, se abrirá la pasarela oficial y protegida de <strong>Culqi</strong> para completar tu pago de forma 100% segura con encriptación bancaria PCI-DSS.
+                </p>
+              </div>
             </div>
           </div>
 
@@ -667,10 +917,15 @@ export default function CheckoutPage() {
                     <TbLoader2 className="animate-spin" size={18} />
                     <span>Procesando pago seguro...</span>
                   </>
+                ) : formData.paymentMethod === 'transfer' ? (
+                  <>
+                    <TbCheck size={18} />
+                    <span>Confirmar Pedido ({currencySymbol} {totalToPay.toFixed(2)})</span>
+                  </>
                 ) : (
                   <>
                     <TbLock size={18} />
-                    <span>Pagar {currencySymbol} {totalToPay.toFixed(2)}</span>
+                        <span>Pagar con Culqi ({currencySymbol} {totalToPay.toFixed(2)})</span>
                   </>
                 )}
               </button>

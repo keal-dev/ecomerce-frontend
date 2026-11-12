@@ -28,7 +28,8 @@ import {
   TbDeviceMobile,
   TbDeviceGamepad2,
   TbDeviceTv,
-  TbShoe
+  TbShoe,
+  TbTruckDelivery
 } from 'react-icons/tb';
 import { useCategoryStore } from '@/stores/category.store';
 import { useAuthStore } from '@/stores/auth.store';
@@ -177,6 +178,24 @@ export const MobileMenuDrawer = ({ isOpen, onClose }: MobileMenuDrawerProps) => 
             >
               <TbHome size={20} className="text-gray-500" />
               <span>Inicio</span>
+            </Link>
+
+            <Link
+              href="/mis-compras"
+              onClick={onClose}
+              className="flex items-center gap-3.5 px-5 py-2.5 hover:bg-gray-50 text-gray-800 transition-colors"
+            >
+              <TbPackage size={20} className="text-gray-500" />
+              <span>Mis compras</span>
+            </Link>
+
+            <Link
+              href="/rastreo"
+              onClick={onClose}
+              className="flex items-center gap-3.5 px-5 py-2.5 hover:bg-blue-50/50 text-[#3483fa] font-medium transition-colors"
+            >
+              <TbTruckDelivery size={20} className="text-[#3483fa]" />
+              <span>Rastrea tu pedido</span>
             </Link>
 
             <Link

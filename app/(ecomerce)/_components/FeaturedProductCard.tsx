@@ -34,8 +34,11 @@ export const FeaturedProductCard = ({ product }: { product: Product }) => {
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img 
-            src={product.imageUrl} 
+            src={product.imageUrl || 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500&q=80'} 
             alt={product.title} 
+            onError={(e) => {
+              (e.currentTarget as HTMLImageElement).src = 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500&q=80';
+            }}
             className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
             loading="lazy"
           />
@@ -77,11 +80,9 @@ export const FeaturedProductCard = ({ product }: { product: Product }) => {
               <span className="text-xs text-gray-400">(48 reseñas)</span>
             </div>
 
-            {product.description && (
-              <p className="text-xs text-gray-500 line-clamp-2 mb-3 leading-relaxed">
-                {product.description}
-              </p>
-            )}
+            <p className="text-xs text-gray-500 line-clamp-2 mb-3 leading-relaxed">
+              {product.description?.trim() || `${product.title} con garantía oficial de marca y comprobante electrónico.`}
+            </p>
 
             {product.originalPrice && product.originalPrice > product.price && (
               <span className="text-gray-400 text-xs line-through block mb-1">

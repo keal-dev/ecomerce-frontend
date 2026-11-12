@@ -10,7 +10,9 @@ import {
   FaTruckFast, 
   FaArrowRotateLeft, 
   FaShareNodes, 
-  FaHeart 
+  FaHeart,
+  FaChevronDown,
+  FaChevronUp
 } from 'react-icons/fa6';
 import { getProductById, getProducts } from '@/services/product.service';
 import { Product } from '@/types/product.types';
@@ -38,6 +40,7 @@ export default function ProductDetailPage() {
   const [copied, setCopied] = useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [addedToCart, setAddedToCart] = useState(false);
+  const [showAllFeatures, setShowAllFeatures] = useState(false);
 
   const symbol = company?.currencySymbol || 'S/';
 
@@ -80,6 +83,7 @@ export default function ProductDetailPage() {
 
         setProduct(currentProd);
         setSelectedImageIndex(0);
+        setShowAllFeatures(false);
 
         // Registrar en localStorage como visto recientemente
         if (currentProd?.id) {
@@ -171,13 +175,14 @@ export default function ProductDetailPage() {
   );
 
   // Galería de imágenes del producto
+  const fallbackImage = 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&q=80';
   const allImages =
     product.images && product.images.length > 0
       ? product.images
       : product.imageUrl
       ? [product.imageUrl]
-      : [];
-  const activeImage = allImages[selectedImageIndex] || allImages[0] || product.imageUrl;
+      : [fallbackImage];
+  const activeImage = allImages[selectedImageIndex] || allImages[0] || fallbackImage;
 
   return (
     <div className="pb-16 bg-[#f3f4f6] min-h-screen">
@@ -252,6 +257,9 @@ export default function ProductDetailPage() {
                 <img
                   src={activeImage}
                   alt={product.title}
+                  onError={(e) => {
+                    (e.currentTarget as HTMLImageElement).src = fallbackImage;
+                  }}
                   className="max-h-[440px] w-auto max-w-full object-contain hover:scale-105 transition-transform duration-300"
                 />
               </div>
@@ -325,7 +333,7 @@ export default function ProductDetailPage() {
                 <div className="bg-gray-50/70 rounded-xl p-4 mb-6 border border-gray-100">
                   {product.originalPrice && product.originalPrice > product.price && (
                     <span className="text-gray-400 text-sm line-through block mb-0.5">
-                      {symbol} {Number(product.originalPrice).toFixed(2)}
+                      {symbol} {Number(product.originalPrice).toFixed(2)} PEN
                     </span>
                   )}
 
@@ -333,14 +341,18 @@ export default function ProductDetailPage() {
                     <span className="text-3xl lg:text-4xl font-semibold text-gray-900 tracking-tight">
                       {symbol} {Number(product.price).toFixed(2)}
                     </span>
+                    <span className="text-xs font-bold text-slate-500 bg-white border border-slate-200 px-2 py-0.5 rounded">
+                      PEN
+                    </span>
                     {product.discount && product.discount > 0 ? (
                       <span className="text-[#00a650] text-sm font-bold bg-emerald-100/80 px-2 py-0.5 rounded">
                         {product.discount}% OFF
                       </span>
                     ) : null}
                   </div>
-                  <p className="text-xs text-gray-500 mt-1">
-                    Precio con todos los impuestos incluidos.
+                  <p className="text-xs text-gray-600 mt-1.5 flex items-center gap-1.5 font-medium">
+                    <FaCheck className="text-emerald-600 shrink-0" size={11} />
+                    <span>Precio visible y final con <strong>18% IGV incluido</strong>. Emisión de Boleta o Factura.</span>
                   </p>
                 </div>
 
@@ -366,13 +378,33 @@ export default function ProductDetailPage() {
                       <span>Lo que tienes que saber de este producto</span>
                     </h3>
                     <ul className="space-y-2">
-                      {product.features.map((feature, idx) => (
+                      {(showAllFeatures ? product.features : product.features.slice(0, 5)).map((feature, idx) => (
                         <li key={idx} className="flex items-start gap-2.5 text-xs text-gray-700 leading-relaxed">
                           <span className="w-1.5 h-1.5 rounded-full bg-[#3483fa] mt-1.5 shrink-0" />
                           <span>{feature}</span>
                         </li>
                       ))}
                     </ul>
+
+                    {product.features.length > 5 && (
+                      <button
+                        type="button"
+                        onClick={() => setShowAllFeatures((prev) => !prev)}
+                        className="mt-3 text-xs font-semibold text-[#3483fa] hover:text-blue-700 transition-colors inline-flex items-center gap-1.5 cursor-pointer py-1"
+                      >
+                        {showAllFeatures ? (
+                          <>
+                            <span>Ver menos</span>
+                            <FaChevronUp size={10} />
+                          </>
+                        ) : (
+                          <>
+                            <span>Ver {product.features.length - 5} más</span>
+                            <FaChevronDown size={10} />
+                          </>
+                        )}
+                      </button>
+                    )}
                   </div>
                 )}
 
@@ -454,10 +486,48 @@ export default function ProductDetailPage() {
             </div>
           </div>
 
+          {/* Ficha Técnica y Especificaciones (Requerido por Culqi / Indecopi) */}
+          <div className="mt-10 pt-8 border-t border-gray-100">
+            <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+              <FaShieldHalved className="text-[#3483fa]" size={16} />
+              <span>Ficha Técnica y Especificaciones</span>
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-4xl text-xs">
+              <div className="p-3.5 bg-gray-50/80 rounded-xl border border-gray-100 flex justify-between items-center">
+                <span className="text-gray-500 font-medium">Condición del producto:</span>
+                <span className="font-semibold text-gray-900">Nuevo / Sellado de fábrica</span>
+              </div>
+              <div className="p-3.5 bg-gray-50/80 rounded-xl border border-gray-100 flex justify-between items-center">
+                <span className="text-gray-500 font-medium">Garantía comercial:</span>
+                <span className="font-semibold text-emerald-700">12 meses de garantía oficial</span>
+              </div>
+              {product.brand && (
+                <div className="p-3.5 bg-gray-50/80 rounded-xl border border-gray-100 flex justify-between items-center">
+                  <span className="text-gray-500 font-medium">Marca:</span>
+                  <span className="font-semibold text-[#3483fa]">{product.brand.name}</span>
+                </div>
+              )}
+              {product.sku && (
+                <div className="p-3.5 bg-gray-50/80 rounded-xl border border-gray-100 flex justify-between items-center">
+                  <span className="text-gray-500 font-medium">Código / SKU:</span>
+                  <span className="font-semibold text-gray-900 font-mono">{product.sku}</span>
+                </div>
+              )}
+              <div className="p-3.5 bg-gray-50/80 rounded-xl border border-gray-100 flex justify-between items-center">
+                <span className="text-gray-500 font-medium">Disponibilidad:</span>
+                <span className="font-semibold text-emerald-600">En stock para despacho inmediato</span>
+              </div>
+              <div className="p-3.5 bg-gray-50/80 rounded-xl border border-gray-100 flex justify-between items-center">
+                <span className="text-gray-500 font-medium">Comprobante de Pago:</span>
+                <span className="font-semibold text-gray-900">Boleta o Factura Electrónica SUNAT</span>
+              </div>
+            </div>
+          </div>
+
           {/* Features Detailed Section */}
           {product.features && product.features.length > 0 && (
-            <div className="mt-12 pt-8 border-t border-gray-100">
-              <h2 className="text-lg font-medium text-gray-900 mb-4">Características principales</h2>
+            <div className="mt-8 pt-8 border-t border-gray-100">
+              <h2 className="text-lg font-bold text-gray-900 mb-4">Características principales</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-4xl">
                 {product.features.map((feature, idx) => (
                   <div
@@ -472,15 +542,36 @@ export default function ProductDetailPage() {
             </div>
           )}
 
-          {/* Description Section */}
-          {product.description && (
-            <div className="mt-8 pt-8 border-t border-gray-100">
-              <h2 className="text-lg font-medium text-gray-900 mb-4">Descripción</h2>
-              <div className="text-gray-600 text-sm leading-relaxed whitespace-pre-line max-w-4xl">
-                {product.description}
+          {/* Description Section (SIEMPRE VISIBLE Y DETALLADA) */}
+          <div className="mt-8 pt-8 border-t border-gray-100">
+            <h2 className="text-lg font-bold text-gray-900 mb-3">Descripción detallada del producto</h2>
+            <div className="text-gray-700 text-sm leading-relaxed whitespace-pre-line max-w-4xl bg-slate-50/60 p-5 rounded-2xl border border-slate-200/80 space-y-3">
+              <p>
+                {product.description?.trim()
+                  ? product.description
+                  : `Presentamos el producto ${product.title}${product.brand?.name ? ` de la reconocida marca ${product.brand.name}` : ''}. Un artículo original y certificado, fabricado bajo rigurosos estándares de calidad y durabilidad para ofrecer el máximo rendimiento en su categoría.`}
+              </p>
+
+              <div className="pt-3 border-t border-slate-200/80 grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-slate-600">
+                <div className="flex items-center gap-2">
+                  <FaCheck className="text-emerald-500 shrink-0" size={12} />
+                  <span>Producto 100% original en caja sellada de fábrica.</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <FaCheck className="text-emerald-500 shrink-0" size={12} />
+                  <span>Incluye garantía oficial con soporte técnico autorizado.</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <FaCheck className="text-emerald-500 shrink-0" size={12} />
+                  <span>Emisión legal de Boleta o Factura electrónica con IGV.</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <FaCheck className="text-emerald-500 shrink-0" size={12} />
+                  <span>Envíos asegurados y protegidos a todo el territorio nacional.</span>
+                </div>
               </div>
             </div>
-          )}
+          </div>
         </div>
       </div>
 

@@ -302,7 +302,14 @@ export function Dashboard() {
                 href="/admin/orders"
                 className="flex items-center justify-between p-2.5 rounded-lg border border-gray-100 hover:bg-gray-50 transition-colors text-xs font-medium text-gray-700"
               >
-                <span>🛒 Gestionar ventas y pedidos</span>
+                <span>📦 Pedidos de la tienda online</span>
+                <TbArrowUpRight size={14} className="text-gray-400" />
+              </Link>
+              <Link
+                href="/admin/sales"
+                className="flex items-center justify-between p-2.5 rounded-lg border border-gray-100 hover:bg-gray-50 transition-colors text-xs font-medium text-gray-700"
+              >
+                <span>🛒 Punto de venta (POS tienda física)</span>
                 <TbArrowUpRight size={14} className="text-gray-400" />
               </Link>
               {!isSeller && (

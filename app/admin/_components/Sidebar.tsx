@@ -14,6 +14,7 @@ import {
   TbTruckDelivery, 
   TbSettings, 
   TbBuildingStore,
+  TbPackage,
   TbX 
 } from 'react-icons/tb';
 import { useAdminNavStore } from '@/stores/admin-nav.store';
@@ -29,7 +30,8 @@ interface NavItem {
 
 // Bloque 1: Operaciones y Ventas
 const operationsLinks: NavItem[] = [
-  { name: 'Ventas y Pedidos', href: '/admin/orders', icon: TbShoppingCart, badge: '5' },
+  { name: 'Pedidos Online', href: '/admin/orders', icon: TbPackage, badge: 'Web' },
+  { name: 'Punto de Venta (POS)', href: '/admin/sales', icon: TbShoppingCart },
   { name: 'Facturación', href: '/admin/billing', icon: TbReceipt },
   { name: 'Inventario', href: '/admin/inventory', icon: TbClipboardList },
   { name: 'Compras', href: '/admin/purchases', icon: TbTruckDelivery },
@@ -57,11 +59,11 @@ function SidebarInner({ onClose }: { onClose?: () => void }) {
   const isSuperAdmin = currentUser?.role === 'super_admin';
   const isSeller = currentUser?.role === 'seller';
 
-  // Si es Vendedor, solo ve ventas y facturación
+  // Si es Vendedor, ve pedidos, ventas POS y facturación
   const visibleOperations = React.useMemo(() => {
     if (isSeller) {
       return operationsLinks.filter(
-        (item) => item.href === '/admin/orders' || item.href === '/admin/billing',
+        (item) => item.href === '/admin/orders' || item.href === '/admin/sales' || item.href === '/admin/billing',
       );
     }
     return operationsLinks;

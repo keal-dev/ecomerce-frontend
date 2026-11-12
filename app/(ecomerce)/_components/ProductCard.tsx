@@ -88,8 +88,11 @@ export const ProductCard = ({ product }: { product: Product }) => {
 
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img 
-          src={product.imageUrl} 
+          src={product.imageUrl || 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500&q=80'} 
           alt={product.title} 
+          onError={(e) => {
+            (e.currentTarget as HTMLImageElement).src = 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500&q=80';
+          }}
           className="object-contain w-full h-full group-hover:scale-105 transition-transform duration-300"
           loading="lazy"
         />
@@ -117,12 +120,10 @@ export const ProductCard = ({ product }: { product: Product }) => {
             {product.title}
           </h3>
 
-          {/* Descripción corta */}
-          {product.description && (
-            <p className="text-[11px] sm:text-xs text-gray-500 line-clamp-2 mt-1 leading-relaxed font-light">
-              {product.description}
-            </p>
-          )}
+          {/* Descripción corta (Siempre visible para cumplir con Culqi) */}
+          <p className="text-[11px] sm:text-xs text-gray-500 line-clamp-2 mt-1 leading-relaxed font-light">
+            {product.description?.trim() || `${product.title} con garantía oficial de marca y comprobante electrónico.`}
+          </p>
         </div>
 
         <div className="mt-2.5 pt-2 border-t border-gray-50">

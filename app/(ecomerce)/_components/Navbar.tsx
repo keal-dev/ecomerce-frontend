@@ -161,6 +161,11 @@ export const Navbar = () => {
                 aria-label="Favoritos"
               >
                 <TbHeart size={21} className="transition-transform group-hover:scale-110" />
+                {mounted && totalFavorites > 0 && (
+                  <span className="absolute -top-0.5 -right-0.5 bg-rose-500 text-white text-[10px] font-bold h-3.5 min-w-[14px] px-0.5 flex items-center justify-center rounded-full leading-none animate-in zoom-in-50 duration-150">
+                    {totalFavorites > 99 ? '99+' : totalFavorites}
+                  </span>
+                )}
                 <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[11px] font-medium py-1 px-2.5 rounded shadow-lg pointer-events-none opacity-0 group-hover:opacity-100 transition-all duration-200 whitespace-nowrap z-50">
                   Favoritos
                   <span className="absolute -top-1 left-1/2 -translate-x-1/2 border-x-4 border-x-transparent border-b-4 border-b-slate-900"></span>
@@ -179,7 +184,7 @@ export const Navbar = () => {
 
           {/* FILA 2, COLUMNA 1: Rastreo de compra (Ancho automático) */}
           <div className="col-start-1 row-start-2 hidden lg:flex items-center">
-            <Link href="#" className="inline-flex items-center gap-1.5 cursor-pointer hover:border-black/20 border border-transparent px-1.5 py-0.5 rounded transition-colors">
+            <Link href="/rastreo" className="inline-flex items-center gap-1.5 cursor-pointer hover:border-black/20 border border-transparent px-1.5 py-0.5 rounded transition-colors" title="Rastrea tu pedido en tiempo real">
               <TbTruckDelivery size={18} className="text-gray-600 shrink-0" />
               <div className="flex flex-col leading-tight">
                 <span className="text-gray-600 text-[11px] truncate">¿Dónde está tu compra?</span>
@@ -199,7 +204,7 @@ export const Navbar = () => {
 
           {/* FILA 2, COLUMNA 3: Acciones inferiores (Mis compras, Notificaciones, Carrito en escritorio) */}
           <div className="col-start-3 row-start-2 hidden md:flex items-center gap-4 text-[13px] text-[#333] font-light justify-self-end py-0.5">
-            <Link href="#" className="hover:text-black font-normal">
+            <Link href="/mis-compras" className="hover:text-[#3483fa] font-normal transition-colors">
               Mis compras
             </Link>
 
@@ -216,24 +221,7 @@ export const Navbar = () => {
               </span>
             </button>
 
-            {/* Favoritos */}
-            <Link
-              href="/favoritos"
-              className="p-1.5 rounded-full hover:bg-black/5 text-[#333] relative transition-colors inline-flex items-center justify-center cursor-pointer group"
-              aria-label="Mis Favoritos"
-            >
-              <TbHeart size={20} className="transition-transform group-hover:scale-110" />
-              {mounted && totalFavorites > 0 && (
-                <span className="absolute -top-0.5 -right-0.5 bg-rose-500 text-white text-[10px] font-bold h-3.5 min-w-[14px] px-0.5 flex items-center justify-center rounded-full leading-none animate-in zoom-in-50 duration-150">
-                  {totalFavorites > 99 ? '99+' : totalFavorites}
-                </span>
-              )}
-              <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[11px] font-medium py-1 px-2.5 rounded shadow-lg pointer-events-none opacity-0 group-hover:opacity-100 transition-all duration-200 whitespace-nowrap z-50">
-                Favoritos
-                <span className="absolute -top-1 left-1/2 -translate-x-1/2 border-x-4 border-x-transparent border-b-4 border-b-slate-900"></span>
-              </span>
-            </Link>
-
+            {/* Carrito */}
             <Link
               href="/cart"
               className="p-1.5 rounded-full hover:bg-black/5 text-[#333] relative transition-colors inline-flex items-center justify-center cursor-pointer group"
