@@ -19,6 +19,7 @@ const SUPER_ADMIN_PREFIXES = [
 const SELLER_FORBIDDEN_PREFIXES = [
   '/admin/inventory',
   '/admin/purchases',
+  '/admin/claims',
   '/admin/settings',
 ];
 

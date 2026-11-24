@@ -21,7 +21,7 @@ import {
   TbRefresh,
   TbUserCheck,
 } from 'react-icons/tb';
-import { getOrders, getOrderById } from '@/services/order.service';
+import { getMyOrders, trackOrder } from '@/services/order.service';
 import { Order, OrderStatus } from '@/types/order.types';
 import { useAuthStore } from '@/stores/auth.store';
 import { useCompanyStore } from '@/stores/company.store';
@@ -97,8 +97,9 @@ function MisComprasContent() {
   const [hasSearched, setHasSearched] = useState(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [recentStored, setRecentStored] = useState<StoredRecentOrder[]>([]);
+  const [authNotice, setAuthNotice] = useState<string | null>(null);
 
-  // Cargar pedidos guardados en este navegador (localStorage)
+  // Cargar pedidos guardados en este dispositivo (localStorage)
   useEffect(() => {
     try {
       const raw = localStorage.getItem('my_saved_orders');
@@ -113,25 +114,12 @@ function MisComprasContent() {
     }
   }, []);
 
-  const loadOrders = useCallback(async (queryTerm: string) => {
-    if (!queryTerm.trim()) return;
-
+  const loadMyAuthenticatedOrders = useCallback(async () => {
     setLoading(true);
     setHasSearched(true);
+    setAuthNotice(null);
     try {
-      const term = queryTerm.trim();
-      const isEmail = term.includes('@');
-      const isDoc = /^\d{8,11}$/.test(term);
-
-      let fetched: Order[] = [];
-      if (isEmail) {
-        fetched = await getOrders({ email: term });
-      } else if (isDoc) {
-        fetched = await getOrders({ docNumber: term });
-      } else {
-        fetched = await getOrders({ search: term });
-      }
-
+      const fetched = await getMyOrders();
       setOrders(fetched);
     } catch (err) {
       console.error('Error al cargar mis compras:', err);
@@ -141,23 +129,72 @@ function MisComprasContent() {
     }
   }, []);
 
-  // Si el usuario está autenticado o viene email en URL, auto-buscar
+  const loadOrders = useCallback(
+    async (queryTerm: string) => {
+      const term = queryTerm.trim();
+      if (!term) return;
+
+      setLoading(true);
+      setHasSearched(true);
+      setAuthNotice(null);
+
+      try {
+        const isEmail = term.includes('@');
+        const isDoc = /^\d{8,11}$/.test(term);
+
+        if (isEmail || isDoc) {
+          if (currentUser) {
+            const myOrders = await getMyOrders();
+            const lowerTerm = term.toLowerCase();
+            const filtered = myOrders.filter(
+              (o) =>
+                (o.customerEmail || '').toLowerCase() === lowerTerm ||
+                (o.docNumber || '').trim() === term,
+            );
+            setOrders(filtered);
+          } else {
+            setOrders([]);
+            setAuthNotice(
+              'Por seguridad, inicia sesión con tu cuenta para consultar tu historial por correo o DNI/RUC, o ingresa directamente tu número de pedido exacto (ej: ORD-2026-12345).',
+            );
+          }
+          return;
+        }
+
+        const tracked = await trackOrder(term);
+        setOrders(tracked ? [tracked] : []);
+      } catch (err) {
+        console.error('Error al cargar mis compras:', err);
+        setOrders([]);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [currentUser],
+  );
+
+  // Si el usuario está autenticado o hay parámetro en URL / compras locales, auto-buscar
   useEffect(() => {
-    if (initialEmailParam) {
+    if (currentUser?.email) {
+      setSearchQuery(currentUser.email);
+      loadMyAuthenticatedOrders();
+    } else if (initialEmailParam) {
       setSearchQuery(initialEmailParam);
       loadOrders(initialEmailParam);
-    } else if (currentUser?.email) {
-      setSearchQuery(currentUser.email);
-      loadOrders(currentUser.email);
     } else if (recentStored.length > 0) {
-      // Si no hay login pero hay compras recientes en este dispositivo, cargarlas
-      const firstEmail = recentStored[0]?.email;
-      if (firstEmail) {
-        setSearchQuery(firstEmail);
-        loadOrders(firstEmail);
+      const firstOrderNum = recentStored[0]?.orderNumber;
+      if (firstOrderNum) {
+        setSearchQuery(firstOrderNum);
+        loadOrders(firstOrderNum);
       }
     }
-  }, [currentUser?.email, initialEmailParam, recentStored, loadOrders]);
+  }, [
+    currentUser?.email,
+    initialEmailParam,
+    recentStored,
+    loadMyAuthenticatedOrders,
+    loadOrders,
+  ]);
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -208,10 +245,12 @@ function MisComprasContent() {
             </Link>
           </div>
 
-          {/* Formulario de búsqueda por correo o DNI/RUC */}
+          {/* Formulario de búsqueda por código o sesión */}
           <form onSubmit={handleSearchSubmit} className="mt-6 pt-5 border-t border-gray-100">
             <label className="block text-xs font-bold uppercase tracking-wider text-gray-600 mb-2">
-              Buscar mis compras por correo electrónico o DNI / RUC
+              {currentUser
+                ? 'Filtrar mis compras por correo, DNI/RUC o número de pedido'
+                : 'Buscar pedido por número de orden (ej: ORD-2026-12345)'}
             </label>
             <div className="flex flex-col sm:flex-row gap-2">
               <div className="relative flex-1">
@@ -223,7 +262,11 @@ function MisComprasContent() {
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Ej: tu-correo@ejemplo.com o número de DNI / RUC"
+                  placeholder={
+                    currentUser
+                      ? 'Ej: ORD-2026-12345, tu-correo@ejemplo.com o DNI'
+                      : 'Ingresa tu número de orden (ej: ORD-2026-12345)'
+                  }
                   className="w-full pl-10 pr-4 py-2.5 bg-gray-50/80 border border-gray-200 rounded-xl text-xs sm:text-sm text-gray-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#3483fa]/20 focus:border-[#3483fa] transition-all"
                 />
               </div>
@@ -236,8 +279,16 @@ function MisComprasContent() {
               </button>
             </div>
             <p className="text-[11px] text-gray-400 mt-2">
-              💡 No necesitas estar registrado para ver tus compras. Ingresa el mismo correo o documento que utilizaste al pagar.
+              {currentUser
+                ? 'Mostrando los pedidos asociados a tu sesión iniciada.'
+                : '💡 Si compraste como invitado, ingresa tu número de orden exacto o inicia sesión para ver todo tu historial.'}
             </p>
+            {authNotice && (
+              <div className="mt-3 p-3 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-xs flex items-start gap-2">
+                <TbAlertCircle size={16} className="shrink-0 mt-0.5 text-amber-600" />
+                <span>{authNotice}</span>
+              </div>
+            )}
           </form>
 
           {/* Pedidos recientes guardados en este dispositivo */}
@@ -252,8 +303,8 @@ function MisComprasContent() {
                     key={ro.orderNumber}
                     type="button"
                     onClick={() => {
-                      setSearchQuery(ro.email);
-                      loadOrders(ro.email);
+                      setSearchQuery(ro.orderNumber);
+                      loadOrders(ro.orderNumber);
                     }}
                     className="inline-flex items-center gap-1.5 px-3 py-1 bg-gray-100 hover:bg-blue-50 hover:text-[#3483fa] border border-gray-200 rounded-lg text-xs text-gray-700 transition-colors"
                   >
@@ -333,8 +384,12 @@ function MisComprasContent() {
                         <div className="flex items-center gap-2 text-xs text-gray-500 mt-0.5">
                           <TbCalendar size={13} />
                           <span>{formattedDate}</span>
-                          <span>•</span>
-                          <span>{ord.customerEmail}</span>
+                          {ord.customerEmail && (
+                            <>
+                              <span>•</span>
+                              <span>{ord.customerEmail}</span>
+                            </>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -393,7 +448,7 @@ function MisComprasContent() {
                       </span>
                     </div>
 
-                    <div className="flex items-center justify-between sm:justify-end gap-4 shrink-0">
+                    <div className="flex items-center justify-between sm:justify-end gap-3 shrink-0 flex-wrap">
                       <div className="text-right">
                         <span className="text-[10px] uppercase font-bold text-gray-400 block">
                           Total Pagado
@@ -402,6 +457,21 @@ function MisComprasContent() {
                           {ord.currencySymbol || 'S/'} {Number(ord.total).toFixed(2)}
                         </span>
                       </div>
+
+                      {ord.invoicePdfUrl && (
+                        <a
+                          href={ord.invoicePdfUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1.5 px-3 py-2 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-800 rounded-xl text-xs font-bold transition-colors shadow-2xs"
+                          title="Descargar comprobante electrónico SUNAT en PDF"
+                        >
+                          <TbFileInvoice size={15} className="text-emerald-600" />
+                          <span>
+                            {ord.invoiceType === 'factura' ? 'Factura' : 'Boleta'} {ord.invoiceSeries}-{ord.invoiceNumber}
+                          </span>
+                        </a>
+                      )}
 
                       <Link
                         href={`/rastreo?order=${encodeURIComponent(ord.orderNumber)}`}

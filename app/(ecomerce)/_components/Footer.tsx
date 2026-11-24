@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { 
   TbCreditCard, 
@@ -10,17 +10,21 @@ import {
   TbChevronRight, 
   TbMail,
   TbBrandTiktok,
+  TbBrandWhatsapp,
   TbPhone,
   TbMapPin,
   TbBook,
+  TbCheck,
+  TbReceiptTax,
+  TbShieldLock,
+  TbLock,
 } from 'react-icons/tb';
 import { 
   FaInstagram, 
   FaFacebookF, 
-  FaXTwitter, 
-  FaYoutube 
 } from 'react-icons/fa6';
 import { useCompanyStore } from '@/stores/company.store';
+import { useCategoryStore } from '@/stores/category.store';
 
 /**
  * Valida y normaliza URLs de redes sociales.
@@ -65,17 +69,32 @@ function getValidSocialProfileUrl(url: string | null | undefined, platform: 'fac
 
 export const Footer = () => {
   const { company, fetchCompany } = useCompanyStore();
+  const { categories, fetchCategories } = useCategoryStore();
+  const [newsletterEmail, setNewsletterEmail] = useState('');
+  const [newsletterSubscribed, setNewsletterSubscribed] = useState(false);
 
   useEffect(() => {
     fetchCompany(true);
-  }, [fetchCompany]);
+    fetchCategories();
+  }, [fetchCompany, fetchCategories]);
+
+  const handleNewsletterSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newsletterEmail.trim() || !newsletterEmail.includes('@')) return;
+    setNewsletterSubscribed(true);
+    setNewsletterEmail('');
+  };
 
   const validFacebook = getValidSocialProfileUrl(company?.facebookUrl, 'facebook');
   const validInstagram = getValidSocialProfileUrl(company?.instagramUrl, 'instagram');
   const validTiktok = getValidSocialProfileUrl(company?.tiktokUrl, 'tiktok');
 
+  const brandName = company?.name || 'Tienda Oficial';
+  const rawPhone = company?.phone || '+51 999 888 777';
+  const cleanPhone = rawPhone.replace(/[^0-9+]/g, '');
+
   return (
-    <footer className="bg-white border-t border-gray-200 text-[#333]">
+    <footer className="bg-slate-900 border-t border-slate-800 text-slate-300">
       {/* 1. Value Proposition Banner */}
       <div className="border-b border-gray-100 bg-gray-50/70">
         <div className="max-w-7xl mx-auto px-4 md:px-7 py-8">
@@ -131,230 +150,307 @@ export const Footer = () => {
         </div>
       </div>
 
-      {/* 2. Main Footer Navigation & Newsletter */}
+      {/* 2. Main Footer Navigation & Brand Section */}
       <div className="max-w-7xl mx-auto px-4 md:px-7 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
-          {/* Brand & Newsletter Column */}
-          <div className="lg:col-span-2 pr-0 lg:pr-8">
-            <Link href="/" className="flex items-center gap-2.5 mb-4 group">
-              {company?.logoUrl && (
-                <div className="h-8 flex items-center justify-center overflow-hidden shrink-0">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img 
-                    src={company.logoUrl} 
-                    alt={company.name || 'Logo'} 
-                    className="h-full w-auto max-w-[45px] object-contain" 
-                  />
-                </div>
-              )}
-              <span className="text-[#333] font-bold text-2xl tracking-tighter">
-                {company?.name || 'Mercado Libre'}
-              </span>
-            </Link>
-            <p className="text-xs text-gray-600 leading-relaxed mb-6">
-              {company?.slogan || 'Tu tienda online de confianza. Miles de productos con las mejores ofertas, envíos rápidos y garantía asegurada en cada compra.'}
-            </p>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-10">
+          
+          {/* Col 1 & 2: Identidad, Newsletter y Contacto Directo */}
+          <div className="lg:col-span-2 space-y-6">
+            <div>
+              <Link href="/" className="inline-flex items-center gap-3 group">
+                {company?.logoUrl ? (
+                  <div className="h-9 flex items-center justify-center overflow-hidden shrink-0">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img 
+                      src={company.logoUrl} 
+                      alt={brandName} 
+                      className="h-full w-auto max-w-[50px] object-contain drop-shadow" 
+                    />
+                  </div>
+                ) : null}
+                <span className="text-white font-extrabold text-2xl tracking-tight">
+                  {brandName}
+                </span>
+              </Link>
+              <p className="text-xs text-slate-400 leading-relaxed mt-2.5 max-w-sm">
+                {company?.slogan || 'Tu plataforma de compras en línea de confianza. Catálogo certificado con las mejores ofertas, entregas rápidas y garantía total.'}
+              </p>
+            </div>
 
-            <div className="space-y-3">
-              <span className="text-xs font-semibold text-gray-900 block">
-                Suscríbete para recibir ofertas y cupones exclusivos
+            {/* Newsletter Dark Sleek */}
+            <div className="p-4 rounded-xl bg-slate-950/60 border border-slate-800 max-w-md">
+              <span className="text-xs font-semibold text-white block mb-1">
+                Boletín de novedades y ofertas
               </span>
-              <div className="flex max-w-md">
-                <div className="relative flex-1">
-                  <TbMail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
-                  <input 
-                    type="email" 
-                    placeholder="Ingresa tu correo electrónico" 
-                    className="w-full bg-gray-50 border border-gray-300 rounded-l-md py-2 pl-9 pr-3 text-xs outline-none focus:border-[#3483fa] focus:bg-white transition-all"
-                  />
+              <p className="text-[11px] text-slate-400 mb-3">
+                Entérate antes que nadie de lanzamientos, promociones y cupones de descuento.
+              </p>
+
+              {newsletterSubscribed ? (
+                <div className="flex items-center gap-2 p-2.5 bg-emerald-950/60 border border-emerald-700/60 rounded-lg text-xs text-emerald-300">
+                  <TbCheck size={16} className="text-emerald-400 shrink-0" />
+                  <span>¡Gracias por suscribirte! Recibirás nuestras novedades en tu correo.</span>
                 </div>
-                <button 
-                  type="button" 
-                  className="bg-[#3483fa] hover:bg-blue-600 text-white font-medium text-xs px-4 rounded-r-md transition-colors flex items-center gap-1"
-                >
-                  Unirme <TbChevronRight size={14} />
-                </button>
+              ) : (
+                <form onSubmit={handleNewsletterSubmit} className="flex">
+                  <div className="relative flex-1">
+                    <TbMail className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
+                    <input 
+                      type="email"
+                      required
+                      value={newsletterEmail}
+                      onChange={(e) => setNewsletterEmail(e.target.value)}
+                      placeholder="Ingresa tu correo electrónico" 
+                      className="w-full bg-slate-900 border border-slate-700 rounded-l-lg py-2 pl-9 pr-3 text-xs text-white placeholder-slate-500 outline-none focus:border-blue-500 transition-colors"
+                    />
+                  </div>
+                  <button 
+                    type="submit" 
+                    className="bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs px-4 rounded-r-lg transition-colors flex items-center gap-1 cursor-pointer"
+                  >
+                    Unirme <TbChevronRight size={14} />
+                  </button>
+                </form>
+              )}
+              <div className="flex items-center gap-1.5 mt-2.5 text-[10px] text-slate-400">
+                <TbLock size={12} className="text-slate-400 shrink-0" />
+                <span>No enviamos spam. Puedes cancelar tu suscripción en cualquier momento.</span>
               </div>
             </div>
 
-            {/* Información de Contacto Directa (Requisito de Pasarelas / Ley de Protección al Consumidor) */}
-            <div className="mt-6 pt-5 border-t border-gray-100 space-y-2 text-xs text-gray-600">
-              <span className="font-semibold text-gray-900 block text-xs uppercase tracking-wider mb-2">
+            {/* Canales de Contacto Directo */}
+            <div className="space-y-2.5 text-xs">
+              <span className="font-semibold text-white text-xs uppercase tracking-wider block">
                 Atención y Contacto
               </span>
 
-              <div className="flex items-center gap-2">
-                <TbPhone size={15} className="text-[#3483fa] shrink-0" />
-                <span className="text-gray-500 font-medium">Teléfono / WhatsApp:</span>
+              <div className="flex items-center gap-2.5">
+                <div className="w-6 h-6 rounded-md bg-slate-800 flex items-center justify-center text-blue-400 shrink-0">
+                  <TbBrandWhatsapp size={14} />
+                </div>
+                <span className="text-slate-400 font-medium">WhatsApp / Teléfono:</span>
                 <a
-                  href={`tel:${(company?.phone || '+51 999 888 777').replace(/[^0-9+]/g, '')}`}
-                  className="font-semibold text-gray-800 hover:text-[#3483fa] transition-colors"
+                  href={`tel:${cleanPhone}`}
+                  className="font-medium text-slate-200 hover:text-white transition-colors"
                 >
-                  {company?.phone || '+51 999 888 777'}
+                  {rawPhone}
                 </a>
               </div>
 
-              <div className="flex items-center gap-2">
-                <TbMail size={15} className="text-[#3483fa] shrink-0" />
-                <span className="text-gray-500 font-medium">Correo:</span>
+              <div className="flex items-center gap-2.5">
+                <div className="w-6 h-6 rounded-md bg-slate-800 flex items-center justify-center text-blue-400 shrink-0">
+                  <TbMail size={14} />
+                </div>
+                <span className="text-slate-400 font-medium">Correo Electrónico:</span>
                 <a
                   href={`mailto:${company?.email || 'soporte@mitienda.com'}`}
-                  className="font-semibold text-gray-800 hover:text-[#3483fa] transition-colors"
+                  className="font-medium text-slate-200 hover:text-white transition-colors"
                 >
                   {company?.email || 'soporte@mitienda.com'}
                 </a>
               </div>
 
-              <div className="flex items-start gap-2">
-                <TbMapPin size={15} className="text-[#3483fa] shrink-0 mt-0.5" />
-                <span className="text-gray-500 font-medium">Dirección:</span>
-                <span className="font-medium text-gray-800">
+              <div className="flex items-start gap-2.5">
+                <div className="w-6 h-6 rounded-md bg-slate-800 flex items-center justify-center text-blue-400 shrink-0 mt-0.5">
+                  <TbMapPin size={14} />
+                </div>
+                <span className="text-slate-400 font-medium">Ubicación:</span>
+                <span className="font-medium text-slate-200">
                   {company?.address || 'Lima, Perú'}
                 </span>
               </div>
-
-              {(validInstagram || validFacebook || validTiktok) && (
-                <div className="flex items-center gap-2.5 pt-2 border-t border-gray-100">
-                  <span className="text-gray-500 font-medium">Síguenos:</span>
-                  <div className="flex items-center gap-3 text-gray-700">
-                    {validInstagram && (
-                      <a
-                        href={validInstagram}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        aria-label="Instagram Oficial"
-                        className="flex items-center gap-1.5 text-xs text-pink-600 hover:text-pink-700 font-semibold transition-colors"
-                      >
-                        <FaInstagram size={15} />
-                        <span>Instagram</span>
-                      </a>
-                    )}
-                    {validFacebook && (
-                      <a
-                        href={validFacebook}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        aria-label="Facebook Oficial"
-                        className="flex items-center gap-1.5 text-xs text-blue-600 hover:text-blue-700 font-semibold transition-colors"
-                      >
-                        <FaFacebookF size={14} />
-                        <span>Facebook</span>
-                      </a>
-                    )}
-                    {validTiktok && (
-                      <a
-                        href={validTiktok}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        aria-label="TikTok Oficial"
-                        className="flex items-center gap-1.5 text-xs text-gray-900 hover:text-black font-semibold transition-colors"
-                      >
-                        <TbBrandTiktok size={15} />
-                        <span>TikTok</span>
-                      </a>
-                    )}
-                  </div>
-                </div>
-              )}
             </div>
+
           </div>
 
-          {/* Links Column 1: Acerca de */}
+          {/* Col 3: Empresa y Legal */}
           <div>
-            <h5 className="font-semibold text-xs uppercase tracking-wider text-gray-900 mb-4">
-              Acerca de
+            <h5 className="font-semibold text-xs uppercase tracking-wider text-white mb-4">
+              Nuestra Empresa
             </h5>
-            <ul className="space-y-2.5 text-xs text-gray-600">
-              <li><Link href="/ayuda" className="hover:text-[#3483fa] transition-colors">Quiénes somos</Link></li>
-              <li><Link href="/terminos-y-condiciones" className="hover:text-[#3483fa] transition-colors font-medium text-gray-800">Términos y condiciones</Link></li>
-              <li><Link href="/privacidad" className="hover:text-[#3483fa] transition-colors">Políticas de privacidad</Link></li>
-              <li><Link href="/ayuda" className="hover:text-[#3483fa] transition-colors">Trabaja con nosotros</Link></li>
-              <li><Link href="/ayuda" className="hover:text-[#3483fa] transition-colors">Sustentabilidad</Link></li>
+            <ul className="space-y-2.5 text-xs text-slate-400">
+              <li>
+                <Link href="/ayuda" className="hover:text-white transition-colors">
+                  Quiénes somos
+                </Link>
+              </li>
+              <li>
+                <Link href="/terminos-y-condiciones" className="hover:text-white transition-colors font-medium text-slate-300">
+                  Términos y condiciones
+                </Link>
+              </li>
+              <li>
+                <Link href="/privacidad" className="hover:text-white transition-colors">
+                  Políticas de privacidad
+                </Link>
+              </li>
+              <li>
+                <Link href="/ayuda" className="hover:text-white transition-colors">
+                  Trabaja con nosotros
+                </Link>
+              </li>
+              <li>
+                <Link href="/ayuda" className="hover:text-white transition-colors">
+                  Sostenibilidad y compromiso
+                </Link>
+              </li>
             </ul>
           </div>
 
-          {/* Links Column 2: Ayuda y Compras */}
+          {/* Col 4: Ayuda al Cliente */}
           <div>
-            <h5 className="font-semibold text-xs uppercase tracking-wider text-gray-900 mb-4">
-              Ayuda y Compras
+            <h5 className="font-semibold text-xs uppercase tracking-wider text-white mb-4">
+              Servicio al Cliente
             </h5>
-            <ul className="space-y-2.5 text-xs text-gray-600">
-              <li><Link href="/ayuda" className="hover:text-[#3483fa] transition-colors">Centro de ayuda</Link></li>
-              <li><Link href="/rastreo" className="hover:text-[#3483fa] transition-colors font-medium text-gray-800">Rastrea tu pedido</Link></li>
-              <li><Link href="/ayuda" className="hover:text-[#3483fa] transition-colors">Cómo comprar</Link></li>
-              <li><Link href="/ayuda" className="hover:text-[#3483fa] transition-colors">Costos y tiempos de envío</Link></li>
-              <li><Link href="/devoluciones" className="hover:text-[#3483fa] transition-colors font-medium text-gray-800">Devoluciones y reembolsos</Link></li>
-              <li><Link href="/devoluciones" className="hover:text-[#3483fa] transition-colors">Botón de arrepentimiento</Link></li>
+            <ul className="space-y-2.5 text-xs text-slate-400">
+              <li>
+                <Link href="/ayuda" className="hover:text-white transition-colors">
+                  Centro de ayuda
+                </Link>
+              </li>
+              <li>
+                <Link href="/rastreo" className="hover:text-white transition-colors font-medium text-slate-300">
+                  Rastrea tu pedido
+                </Link>
+              </li>
+              <li>
+                <Link href="/ayuda" className="hover:text-white transition-colors">
+                  Preguntas frecuentes
+                </Link>
+              </li>
+              <li>
+                <Link href="/ayuda" className="hover:text-white transition-colors">
+                  Costos y tiempos de entrega
+                </Link>
+              </li>
+              <li>
+                <Link href="/devoluciones" className="hover:text-white transition-colors font-medium text-slate-300">
+                  Devoluciones y reembolsos
+                </Link>
+              </li>
               <li>
                 <Link 
                   href="/libro-de-reclamaciones" 
-                  className="hover:text-[#3483fa] transition-colors font-bold text-gray-900 flex items-center gap-1.5 pt-1"
+                  className="hover:text-white transition-colors font-bold text-slate-200 flex items-center gap-1.5 pt-1"
                 >
-                  <TbBook size={14} className="text-[#3483fa]" />
+                  <TbBook size={14} className="text-blue-400" />
                   <span>Libro de Reclamaciones</span>
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Links Column 3: Categorías */}
+          {/* Col 5: Categorías & Enlaces Rápidos */}
           <div>
-            <h5 className="font-semibold text-xs uppercase tracking-wider text-gray-900 mb-4">
+            <h5 className="font-semibold text-xs uppercase tracking-wider text-white mb-4">
               Categorías
             </h5>
-            <ul className="space-y-2.5 text-xs text-gray-600">
-              <li><Link href="/categories" className="hover:text-[#3483fa] transition-colors">Tecnología y Celulares</Link></li>
-              <li><Link href="/categories" className="hover:text-[#3483fa] transition-colors">Hogar y Muebles</Link></li>
-              <li><Link href="/categories" className="hover:text-[#3483fa] transition-colors">Moda y Calzado</Link></li>
-              <li><Link href="/categories" className="hover:text-[#3483fa] transition-colors">Supermercado</Link></li>
-              <li><Link href="/ofertas" className="hover:text-[#3483fa] transition-colors">Ofertas del día</Link></li>
+            <ul className="space-y-2.5 text-xs text-slate-400">
+              {categories.slice(0, 5).map((cat) => (
+                <li key={cat.id}>
+                  <Link
+                    href={cat.href || `/category/${cat.id}`}
+                    className="hover:text-white transition-colors"
+                  >
+                    {cat.name}
+                  </Link>
+                </li>
+              ))}
+              <li>
+                <Link href="/categories" className="hover:text-white font-medium text-slate-300 transition-colors">
+                  Ver todas las categorías
+                </Link>
+              </li>
+              <li>
+                <Link href="/ofertas" className="hover:text-white transition-colors text-amber-400 font-medium">
+                  Ofertas especiales
+                </Link>
+              </li>
             </ul>
           </div>
+
         </div>
       </div>
 
-      {/* 3. Bottom Legal & Socials */}
-      <div className="border-t border-gray-100 bg-gray-50 py-6 text-xs text-gray-500">
-        <div className="max-w-7xl mx-auto px-4 md:px-7 flex flex-col md:flex-row items-center justify-between gap-4">
+      {/* 3. Strip de Confianza, Métodos de Pago y Certificaciones SUNAT */}
+      <div className="bg-slate-950/80 border-t border-slate-800/80 py-5">
+        <div className="max-w-7xl mx-auto px-4 md:px-7 flex flex-col lg:flex-row items-center justify-between gap-5 text-xs text-slate-400">
+          
+          {/* Métodos de Pago */}
+          <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2">
+            <span className="text-[11px] font-semibold text-slate-300 mr-1 uppercase tracking-wider">
+              Métodos de Pago:
+            </span>
+            {['Visa', 'Mastercard', 'Amex', 'Yape', 'Plin', 'PagoEfectivo', 'Transferencia'].map((method) => (
+              <span
+                key={method}
+                className="px-2.5 py-1 bg-slate-900 border border-slate-800 rounded-md text-[11px] font-medium text-slate-300 shadow-2xs"
+              >
+                {method}
+              </span>
+            ))}
+          </div>
+
+          {/* Garantías y Certificación */}
+          <div className="flex flex-wrap items-center justify-center gap-4 text-[11px]">
+            <div className="flex items-center gap-1.5 text-slate-300">
+              <TbReceiptTax size={15} className="text-emerald-400" />
+              <span>Boleta y Factura Electrónica SUNAT</span>
+            </div>
+            <div className="flex items-center gap-1.5 text-slate-300">
+              <TbShieldLock size={15} className="text-blue-400" />
+              <span>Cifrado SSL 256 bits Seguro</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      {/* 4. Sub-footer Legal, Libro INDECOPI y Redes Sociales */}
+      <div className="bg-slate-950 border-t border-slate-900 py-6 text-xs text-slate-400">
+        <div className="max-w-7xl mx-auto px-4 md:px-7 flex flex-col md:flex-row items-center justify-between gap-5">
+          
+          {/* Copyright y RUC */}
           <div className="text-center md:text-left space-y-1">
-            <p>
-              Copyright © {new Date().getFullYear()} {company?.legalName || company?.name || 'Mercado Libre'}. Todos los derechos reservados.
+            <p className="text-slate-400">
+              Copyright © {new Date().getFullYear()} <span className="text-slate-200 font-medium">{company?.legalName || brandName}</span>. Todos los derechos reservados.
             </p>
-            <p className="text-[11px] text-gray-400">
-              <span>{company?.legalName || 'Empresa Principal S.A.C.'}</span>
+            <p className="text-[11px] text-slate-400">
+              <span>{company?.legalName || 'Empresa de Comercio Electrónico S.A.C.'}</span>
               {company?.taxId ? <span> • RUC: {company.taxId}</span> : null}
             </p>
           </div>
 
-          {/* Badge Oficial INDECOPI Libro de Reclamaciones Virtual */}
+          {/* Badge Oficial INDECOPI Libro de Reclamaciones */}
           <Link
             href="/libro-de-reclamaciones"
-            className="flex items-center gap-2.5 px-3.5 py-2 bg-white border border-gray-200 hover:border-gray-300 rounded-xl shadow-2xs hover:shadow-xs transition-all group shrink-0"
+            className="flex items-center gap-3 px-3.5 py-2 bg-slate-900/90 border border-slate-800 hover:border-slate-700 hover:bg-slate-900 rounded-xl transition-all group shrink-0"
             title="Libro de Reclamaciones Virtual conforme a las disposiciones de INDECOPI (Ley N° 29571)"
           >
-            <div className="w-8 h-8 rounded-lg bg-brand/30 text-gray-900 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+            <div className="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-400 border border-blue-500/20 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
               <TbBook size={18} />
             </div>
             <div className="text-left">
-              <span className="font-bold text-gray-900 text-[11px] block leading-none tracking-tight">
+              <span className="font-bold text-slate-200 group-hover:text-white text-[11px] block leading-none tracking-tight">
                 Libro de Reclamaciones
               </span>
-              <span className="text-[9px] text-gray-400 block leading-none mt-1">
+              <span className="text-[10px] text-slate-400 block leading-none mt-1">
                 Virtual • INDECOPI
               </span>
             </div>
           </Link>
 
-          <div className="flex items-center gap-4 text-gray-600">
+          {/* Redes Sociales */}
+          <div className="flex items-center gap-2.5">
             {validFacebook && (
               <a
                 href={validFacebook}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Facebook Oficial"
-                className="hover:text-[#3483fa] transition-colors"
+                className="w-8 h-8 rounded-full bg-slate-900 hover:bg-blue-600 text-slate-400 hover:text-white border border-slate-800 flex items-center justify-center transition-all duration-200"
               >
-                <FaFacebookF size={16} />
+                <FaFacebookF size={13} />
               </a>
             )}
             {validInstagram && (
@@ -363,9 +459,9 @@ export const Footer = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Instagram Oficial"
-                className="hover:text-[#3483fa] transition-colors"
+                className="w-8 h-8 rounded-full bg-slate-900 hover:bg-pink-600 text-slate-400 hover:text-white border border-slate-800 flex items-center justify-center transition-all duration-200"
               >
-                <FaInstagram size={17} />
+                <FaInstagram size={14} />
               </a>
             )}
             {validTiktok && (
@@ -374,12 +470,13 @@ export const Footer = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="TikTok Oficial"
-                className="hover:text-[#3483fa] transition-colors"
+                className="w-8 h-8 rounded-full bg-slate-900 hover:bg-black text-slate-400 hover:text-white border border-slate-800 flex items-center justify-center transition-all duration-200"
               >
-                <TbBrandTiktok size={18} />
+                <TbBrandTiktok size={15} />
               </a>
             )}
           </div>
+
         </div>
       </div>
     </footer>

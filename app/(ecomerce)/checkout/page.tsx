@@ -19,6 +19,8 @@ import {
   TbAlertCircle,
   TbLoader2,
   TbQrcode,
+  TbFileInvoice,
+  TbDownload,
 } from 'react-icons/tb';
 import { FaCcVisa, FaCcMastercard, FaCcAmex } from 'react-icons/fa6';
 import { useCartStore } from '@/stores/cart.store';
@@ -46,6 +48,10 @@ export default function CheckoutPage() {
     total: number;
     email: string;
     date: string;
+    invoicePdfUrl?: string | null;
+    invoiceSeries?: string | null;
+    invoiceNumber?: string | null;
+    invoiceType?: string;
   } | null>(null);
 
   // Estados del Formulario
@@ -179,7 +185,7 @@ export default function CheckoutPage() {
             })),
           });
 
-          const finalOrderNum = res.referenceCode || generatedOrderNum;
+          const finalOrderNum = res.orderNumber || generatedOrderNum;
           const orderDate = new Date().toLocaleString('es-PE', {
             dateStyle: 'long',
             timeStyle: 'short',
@@ -190,6 +196,10 @@ export default function CheckoutPage() {
             total: currentTotal,
             email: currentForm.email,
             date: orderDate,
+            invoicePdfUrl: res.invoice?.pdfUrl,
+            invoiceSeries: res.invoice?.series,
+            invoiceNumber: res.invoice?.number,
+            invoiceType: currentForm.invoiceType,
           });
 
           // Guardar en el historial local del navegador para acceso sin login
@@ -204,6 +214,9 @@ export default function CheckoutPage() {
               total: currentTotal,
               currencySymbol: companyRef.current?.currencySymbol || 'S/',
               itemsCount: currentItems.reduce((acc, it) => acc + it.quantity, 0),
+              invoicePdfUrl: res.invoice?.pdfUrl || null,
+              invoiceSeries: res.invoice?.series || null,
+              invoiceNumber: res.invoice?.number || null,
             };
             const filtered = existingOrders.filter((o: any) => o.orderNumber !== finalOrderNum);
             localStorage.setItem('my_saved_orders', JSON.stringify([newEntry, ...filtered].slice(0, 30)));
@@ -473,6 +486,35 @@ export default function CheckoutPage() {
                 </span>
               </div>
             </div>
+
+            {/* Comprobante Electrónico SUNAT */}
+            {orderCompleted.invoicePdfUrl && (
+              <div className="p-4 bg-emerald-50 border border-emerald-200/90 rounded-xl flex flex-col sm:flex-row items-center justify-between gap-3 text-left">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
+                    <TbFileInvoice size={22} />
+                  </div>
+                  <div>
+                    <span className="text-xs font-bold text-emerald-900 block">
+                      Comprobante Electrónico SUNAT Emitido
+                    </span>
+                    <span className="text-[11px] text-emerald-700">
+                      {orderCompleted.invoiceType === 'factura' ? 'Factura Electrónica' : 'Boleta Electrónica'}:{' '}
+                      <strong>{orderCompleted.invoiceSeries}-{orderCompleted.invoiceNumber}</strong> (Aceptada por SUNAT)
+                    </span>
+                  </div>
+                </div>
+                <a
+                  href={orderCompleted.invoicePdfUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold transition-colors shadow-xs shrink-0"
+                >
+                  <TbDownload size={15} />
+                  <span>Descargar Comprobante PDF</span>
+                </a>
+              </div>
+            )}
 
             <div className="pt-2 flex flex-col sm:flex-row gap-3 justify-center items-center">
               <Link

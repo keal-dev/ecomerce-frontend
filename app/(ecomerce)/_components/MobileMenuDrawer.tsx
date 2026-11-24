@@ -227,12 +227,12 @@ export const MobileMenuDrawer = ({ isOpen, onClose }: MobileMenuDrawerProps) => 
 
 
             <Link
-              href="/vender"
+              href="/brands"
               onClick={onClose}
               className="flex items-center gap-3.5 px-5 py-2.5 hover:bg-gray-50 text-gray-800 transition-colors"
             >
               <TbBuildingStore size={20} className="text-gray-500" />
-              <span>Vender</span>
+              <span>Marcas</span>
             </Link>
 
             <Link
@@ -321,37 +321,10 @@ export const MobileMenuDrawer = ({ isOpen, onClose }: MobileMenuDrawerProps) => 
             )}
           </div>
 
-          {/* Enlaces de Usuario / Transaccionales */}
-          <div className="py-2">
-            <Link
-              href="#"
-              onClick={onClose}
-              className="flex items-center gap-3.5 px-5 py-2.5 hover:bg-gray-50 text-gray-800 transition-colors"
-            >
-              <TbPackage size={20} className="text-gray-500" />
-              <span>Mis compras</span>
-            </Link>
-
-            <Link
-              href="/favoritos"
-              onClick={onClose}
-              className="flex items-center gap-3.5 px-5 py-2.5 hover:bg-gray-50 text-gray-800 transition-colors"
-            >
-              <TbHeart size={20} className="text-gray-500" />
-              <span>Favoritos</span>
-            </Link>
-
-            <Link
-              href="#"
-              onClick={onClose}
-              className="flex items-center gap-3.5 px-5 py-2.5 hover:bg-gray-50 text-gray-800 transition-colors"
-            >
-              <TbBell size={20} className="text-gray-500" />
-              <span>Notificaciones</span>
-            </Link>
-
-            <Show when="signed-in">
-              {canAccessSalesPanel && (
+          {/* Enlaces de Administración */}
+          <Show when="signed-in">
+            {canAccessSalesPanel && (
+              <div className="py-2">
                 <Link
                   href="/admin"
                   onClick={onClose}
@@ -360,15 +333,15 @@ export const MobileMenuDrawer = ({ isOpen, onClose }: MobileMenuDrawerProps) => 
                   <TbBuildingStore size={20} className="text-emerald-600" />
                   <span className="text-emerald-700">Panel de administración</span>
                 </Link>
-              )}
-            </Show>
-          </div>
+              </div>
+            )}
+          </Show>
 
         </div>
 
         {/* Footer del Menú */}
         <div className="p-4 bg-gray-50 border-t border-gray-100 text-[11px] text-gray-400 text-center">
-          MercadoFalso &copy; {new Date().getFullYear()}
+          {company?.name || 'Tienda Online'} &copy; {new Date().getFullYear()}
         </div>
 
       </div>

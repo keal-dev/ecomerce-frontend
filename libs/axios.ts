@@ -1,5 +1,11 @@
 import axios from 'axios';
 
+let authTokenGetter: (() => Promise<string | null>) | null = null;
+
+export function setAuthTokenGetter(getter: (() => Promise<string | null>) | null) {
+  authTokenGetter = getter;
+}
+
 const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/ecomerce',
   headers: {
@@ -13,12 +19,18 @@ api.interceptors.request.use(
   async (config) => {
     try {
       if (typeof window !== 'undefined') {
-        const clerk = (window as unknown as { Clerk?: { session?: { getToken: () => Promise<string | null> } } }).Clerk;
-        if (clerk?.session) {
-          const token = await clerk.session.getToken();
-          if (token) {
-            config.headers.Authorization = `Bearer ${token}`;
+        let token: string | null = null;
+        if (authTokenGetter) {
+          token = await authTokenGetter();
+        }
+        if (!token) {
+          const clerk = (window as unknown as { Clerk?: { session?: { getToken: () => Promise<string | null> } } }).Clerk;
+          if (clerk?.session) {
+            token = await clerk.session.getToken();
           }
+        }
+        if (token) {
+          config.headers.Authorization = `Bearer ${token}`;
         }
       }
     } catch {

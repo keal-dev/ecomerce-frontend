@@ -1,18 +1,31 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { useUser } from '@clerk/nextjs';
+import { useAuth, useUser } from '@clerk/nextjs';
 import { syncUser } from '@/services/user.service';
 import { useAuthStore } from '@/stores/auth.store';
+import { setAuthTokenGetter } from '@/libs/axios';
 
 export const UserSyncProvider = ({
   children,
 }: {
   children: React.ReactNode;
 }) => {
+  const { getToken } = useAuth();
   const { user, isLoaded, isSignedIn } = useUser();
   const { setCurrentUser, setIsLoading, reset } = useAuthStore();
   const syncedUserId = useRef<string | null>(null);
+
+  useEffect(() => {
+    if (isSignedIn) {
+      setAuthTokenGetter(() => getToken());
+    } else {
+      setAuthTokenGetter(null);
+    }
+    return () => {
+      setAuthTokenGetter(null);
+    };
+  }, [isSignedIn, getToken]);
 
   useEffect(() => {
     if (!isLoaded) return;
@@ -22,6 +35,8 @@ export const UserSyncProvider = ({
       reset();
       return;
     }
+
+    setAuthTokenGetter(() => getToken());
 
     // Evitar peticiones redundantes si ya fue sincronizado en esta sesión
     if (syncedUserId.current === user.id) return;
@@ -55,7 +70,7 @@ export const UserSyncProvider = ({
     };
 
     performSync();
-  }, [isLoaded, isSignedIn, user, setCurrentUser, setIsLoading, reset]);
+  }, [isLoaded, isSignedIn, user, getToken, setCurrentUser, setIsLoading, reset]);
 
   return <>{children}</>;
 };

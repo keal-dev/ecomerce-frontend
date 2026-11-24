@@ -18,6 +18,7 @@ import {
 import { useCompanyStore } from '@/stores/company.store';
 import { getDepartments, getProvinces, getDistricts } from '@/services/ubigeo.service';
 import { DepartmentItem, ProvinceItem, DistrictItem } from '@/types/ubigeo.types';
+import { createClaim } from '@/services/claim.service';
 
 interface ClaimFormData {
   isMinor: boolean;
@@ -193,11 +194,15 @@ export default function LibroDeReclamacionesPage() {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMsg(null);
 
     // Validaciones indispensables de INDECOPI
+    if (formData.isMinor && (!formData.tutorName.trim() || !formData.tutorDocNumber.trim())) {
+      setErrorMsg('Para menores de edad, debes completar los datos del padre, madre o tutor.');
+      return;
+    }
     if (!formData.fullName.trim() || !formData.docNumber.trim()) {
       setErrorMsg('Por favor completa los datos de identificación del consumidor (Nombre y Documento).');
       return;
@@ -229,24 +234,57 @@ export default function LibroDeReclamacionesPage() {
 
     setIsSubmitting(true);
 
-    // Generar correlativo formal: LR-[AÑO]-[NÚMERO RANDOM ÚNICO]
-    const year = new Date().getFullYear();
-    const randomNum = Math.floor(10000 + Math.random() * 90000);
-    const claimCode = `LR-${year}-${randomNum}`;
-    const claimDate = new Date().toLocaleString('es-PE', {
-      dateStyle: 'long',
-      timeStyle: 'medium',
-    });
+    try {
+      const parsedAmount =
+        formData.claimedAmount.trim() !== '' && !isNaN(Number(formData.claimedAmount))
+          ? Number(formData.claimedAmount)
+          : undefined;
 
-    setTimeout(() => {
-      setIsSubmitting(false);
+      const created = await createClaim({
+        isMinor: formData.isMinor,
+        tutorName: formData.isMinor ? formData.tutorName.trim() : undefined,
+        tutorDocType: formData.isMinor ? formData.tutorDocType : undefined,
+        tutorDocNumber: formData.isMinor ? formData.tutorDocNumber.trim() : undefined,
+        tutorPhone: formData.isMinor && formData.tutorPhone.trim() ? formData.tutorPhone.trim() : undefined,
+        docType: formData.docType,
+        docNumber: formData.docNumber.trim(),
+        fullName: formData.fullName.trim(),
+        email: formData.email.trim(),
+        phone: formData.phone.trim() || undefined,
+        department: formData.department.trim(),
+        province: formData.province.trim(),
+        district: formData.district.trim(),
+        address: formData.address.trim(),
+        contractType: formData.contractType,
+        claimedAmount: parsedAmount,
+        orderNumber: formData.orderNumber.trim() || undefined,
+        contractDescription: formData.contractDescription.trim(),
+        claimType: formData.claimType,
+        claimDetail: formData.claimDetail.trim(),
+        claimRequest: formData.claimRequest.trim(),
+      });
+
+      const claimDate = new Date(created.createdAt || Date.now()).toLocaleString('es-PE', {
+        dateStyle: 'long',
+        timeStyle: 'medium',
+      });
+
       setSubmittedClaim({
-        code: claimCode,
+        code: created.code,
         date: claimDate,
         data: { ...formData },
       });
       window.scrollTo({ top: 0, behavior: 'smooth' });
-    }, 600);
+    } catch (err: any) {
+      const apiMsg = err?.response?.data?.message;
+      setErrorMsg(
+        Array.isArray(apiMsg)
+          ? apiMsg.join(' ')
+          : apiMsg || 'No se pudo registrar la hoja de reclamación. Intenta nuevamente.',
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   if (!mounted) return null;

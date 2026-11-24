@@ -15,6 +15,8 @@ export interface Company {
   facebookUrl?: string;
   instagramUrl?: string;
   tiktokUrl?: string;
+  boletaSeries?: string;
+  facturaSeries?: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -35,4 +37,6 @@ export interface UpdateCompanyDto {
   facebookUrl?: string;
   instagramUrl?: string;
   tiktokUrl?: string;
+  boletaSeries?: string;
+  facturaSeries?: string;
 }

@@ -64,6 +64,9 @@ export default function Ecomerce() {
     <div className="pb-16 -mt-[100px]">
       <MainCarousel />
 
+      {/* Categorías */}
+      <CategoryCarousel />
+
       {/* Sección «Basado en tu última visita»: Se muestra ÚNICAMENTE si hay historial en localStorage */}
       {mounted && recentlyViewedProducts.length > 0 && (
         <ProductCarousel
@@ -76,8 +79,7 @@ export default function Ecomerce() {
         />
       )}
 
-      {/* Categorías */}
-      <CategoryCarousel />
+
 
       {/* Ofertas destacadas: 1 producto en 2 columnas + 3 productos al lado */}
       {featuredOfferProducts.length > 0 && (

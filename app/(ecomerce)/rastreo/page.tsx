@@ -17,7 +17,7 @@ import {
   TbRefresh,
   TbFileInvoice,
 } from 'react-icons/tb';
-import { getOrderById } from '@/services/order.service';
+import { trackOrder } from '@/services/order.service';
 import { Order, OrderStatus } from '@/types/order.types';
 import { useCompanyStore } from '@/stores/company.store';
 
@@ -55,7 +55,7 @@ function TrackingContent() {
     setLoading(true);
     setError(null);
     try {
-      const data = await getOrderById(orderIdToSearch.trim());
+      const data = await trackOrder(orderIdToSearch.trim());
       setOrder(data);
     } catch (err: any) {
       setOrder(null);
@@ -385,6 +385,34 @@ function TrackingContent() {
                     </div>
                   )}
                 </div>
+
+                {/* Comprobante Electrónico SUNAT si fue emitido */}
+                {order.invoicePdfUrl && (
+                  <div className="bg-emerald-50/80 rounded-2xl border border-emerald-200/90 p-4 text-xs text-emerald-950 space-y-2.5">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-1.5 font-bold text-emerald-900">
+                        <TbFileInvoice size={18} className="text-emerald-600" />
+                        <span>Comprobante Electrónico</span>
+                      </div>
+                      <span className="text-[10px] bg-emerald-200/80 text-emerald-900 px-2 py-0.5 rounded-full font-bold">
+                        SUNAT {order.invoiceSunatStatus || 'ACEPTADA'}
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-emerald-800">
+                      {order.invoiceType === 'factura' ? 'Factura Electrónica' : 'Boleta Electrónica'}:{' '}
+                      <strong className="font-mono text-emerald-950">{order.invoiceSeries}-{order.invoiceNumber}</strong>
+                    </p>
+                    <a
+                      href={order.invoicePdfUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center justify-center gap-1.5 w-full py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl transition-colors shadow-2xs"
+                    >
+                      <TbFileInvoice size={15} />
+                      <span>Descargar Comprobante PDF</span>
+                    </a>
+                  </div>
+                )}
 
                 {/* Ayuda y Soporte */}
                 <div className="bg-blue-50/60 rounded-2xl border border-blue-100 p-4 text-xs text-blue-900 space-y-2">

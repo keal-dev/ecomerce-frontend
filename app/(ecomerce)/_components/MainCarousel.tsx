@@ -48,7 +48,7 @@ export const MainCarousel = () => {
 
   return (
     <div
-      className="relative w-full h-[320px] sm:h-[390px] md:h-[460px] lg:h-[480px] group overflow-hidden bg-brand/30"
+      className="relative w-full h-[360px] sm:h-[430px] md:h-[500px] lg:h-[530px] group overflow-hidden bg-brand/30"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >

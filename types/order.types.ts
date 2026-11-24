@@ -38,6 +38,13 @@ export interface Order {
   invoiceType: string | null;
   companyRuc: string | null;
   companyLegalName: string | null;
+  invoiceSeries?: string | null;
+  invoiceNumber?: string | null;
+  invoicePdfUrl?: string | null;
+  invoiceXmlUrl?: string | null;
+  invoiceCdrUrl?: string | null;
+  invoiceSunatStatus?: string | null;
+  invoiceEnvironment?: string | null;
   notes: string | null;
   items: OrderItem[];
   createdAt: string;

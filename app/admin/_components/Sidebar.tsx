@@ -15,6 +15,7 @@ import {
   TbSettings, 
   TbBuildingStore,
   TbPackage,
+  TbBook,
   TbX 
 } from 'react-icons/tb';
 import { useAdminNavStore } from '@/stores/admin-nav.store';
@@ -36,6 +37,7 @@ const operationsLinks: NavItem[] = [
   { name: 'Inventario', href: '/admin/inventory', icon: TbClipboardList },
   { name: 'Compras', href: '/admin/purchases', icon: TbTruckDelivery },
   { name: 'Proveedores', href: '/admin/suppliers', icon: TbBuildingStore },
+  { name: 'Reclamaciones', href: '/admin/claims', icon: TbBook },
 ];
 
 // Bloque 2: Mantenimientos y Catálogo (Exclusivo SUPER_ADMIN)

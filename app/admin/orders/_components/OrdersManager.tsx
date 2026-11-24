@@ -18,9 +18,11 @@ import {
   TbShieldCheck,
   TbAlertTriangle,
   TbAdjustmentsHorizontal,
+  TbFileInvoice,
 } from 'react-icons/tb';
 import { useOrderStore } from '@/stores/order.store';
 import { Order, OrderStatus } from '@/types/order.types';
+import { emitOrderInvoice } from '@/services/order.service';
 
 export function OrdersManager() {
   const {
@@ -43,6 +45,7 @@ export function OrdersManager() {
   const [detailModalOpen, setDetailModalOpen] = useState(false);
   const [activeDetailTab, setActiveDetailTab] = useState<'items' | 'shipping' | 'status'>('items');
   const [updatingStatus, setUpdatingStatus] = useState(false);
+  const [emittingInvoice, setEmittingInvoice] = useState(false);
 
   useEffect(() => {
     fetchOrders();
@@ -90,7 +93,14 @@ export function OrdersManager() {
     setPaymentMethodFilter('ALL');
   };
 
-  const filteredOrders = orders.filter((order) => {
+  // Filtrar únicamente pedidos provenientes de la Tienda Online (excluir ventas de mostrador POS)
+  const onlineOrders = orders.filter(
+    (o) =>
+      !(o.orderNumber || '').toUpperCase().startsWith('POS-') &&
+      !(o.paymentMethod || '').toUpperCase().startsWith('POS'),
+  );
+
+  const filteredOrders = onlineOrders.filter((order) => {
     const matchesSearch =
       order.orderNumber?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       order.customerName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -175,6 +185,30 @@ export function OrdersManager() {
     );
   };
 
+  const getInvoiceEnvBadge = (env?: string | null) => {
+    const isProd = env === 'production' || env === 'live' || env === 'prod';
+    if (isProd) {
+      return (
+        <span
+          className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[9px] font-extrabold uppercase bg-emerald-100 text-emerald-800 border border-emerald-300 tracking-wider shadow-2xs"
+          title="Comprobante con validez legal ante SUNAT (Producción)"
+        >
+          <TbShieldCheck className="w-2.5 h-2.5 text-emerald-600" />
+          PROD
+        </span>
+      );
+    }
+    return (
+      <span
+        className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[9px] font-extrabold uppercase bg-amber-100 text-amber-900 border border-amber-300 tracking-wider shadow-2xs"
+        title="Comprobante en modo Demo / Pruebas (Sin validez legal ante SUNAT)"
+      >
+        <TbAlertTriangle className="w-2.5 h-2.5 text-amber-700" />
+        DEMO
+      </span>
+    );
+  };
+
   return (
     <div className="space-y-4">
       {/* Page Header */}
@@ -208,9 +242,9 @@ export function OrdersManager() {
           <div className="min-w-0">
             <p className="text-[11px] font-medium text-slate-500 truncate">Total Pedidos</p>
             <div className="flex items-baseline gap-1.5">
-              <span className="text-base sm:text-lg font-bold text-slate-900">{orders.length}</span>
+              <span className="text-base sm:text-lg font-bold text-slate-900">{onlineOrders.length}</span>
               <span className="text-[10px] text-slate-400">
-                ({orders.filter((o) => o.environment === 'test').length} test)
+                ({onlineOrders.filter((o) => o.environment === 'test').length} test)
               </span>
             </div>
           </div>
@@ -223,7 +257,7 @@ export function OrdersManager() {
           <div className="min-w-0">
             <p className="text-[11px] font-medium text-slate-500 truncate">Por Enviar</p>
             <span className="text-base sm:text-lg font-bold text-amber-600">
-              {orders.filter((o) => o.orderStatus === 'pending' || o.orderStatus === 'preparing').length}
+              {onlineOrders.filter((o) => o.orderStatus === 'pending' || o.orderStatus === 'preparing').length}
             </span>
           </div>
         </div>
@@ -235,7 +269,7 @@ export function OrdersManager() {
           <div className="min-w-0">
             <p className="text-[11px] font-medium text-slate-500 truncate">Entregados</p>
             <span className="text-base sm:text-lg font-bold text-emerald-600">
-              {orders.filter((o) => o.orderStatus === 'delivered').length}
+              {onlineOrders.filter((o) => o.orderStatus === 'delivered').length}
             </span>
           </div>
         </div>
@@ -247,7 +281,7 @@ export function OrdersManager() {
           <div className="min-w-0">
             <p className="text-[11px] font-medium text-slate-500 truncate">Total Online</p>
             <span className="text-base sm:text-lg font-bold text-slate-900">
-              S/ {orders
+              S/ {onlineOrders
                 .filter((o) => o.orderStatus !== 'cancelled')
                 .reduce((sum, o) => sum + Number(o.total || 0), 0)
                 .toFixed(2)}
@@ -369,6 +403,7 @@ export function OrdersManager() {
                   <th className="px-5 py-3.5">Cliente</th>
                   <th className="px-5 py-3.5">Destino</th>
                   <th className="px-5 py-3.5">Total & Pago</th>
+                  <th className="px-5 py-3.5">Comprobante SUNAT</th>
                   <th className="px-5 py-3.5">Estado</th>
                   <th className="px-5 py-3.5 text-right">Acción</th>
                 </tr>
@@ -426,6 +461,41 @@ export function OrdersManager() {
                           ? 'Transferencia'
                           : order.paymentMethod}
                       </div>
+                    </td>
+
+                    {/* Comprobante SUNAT */}
+                    <td className="px-5 py-4">
+                      {order.invoicePdfUrl ? (
+                        <div className="flex flex-col gap-1 items-start">
+                          <div className="flex items-center gap-1.5 flex-wrap">
+                            <a
+                              href={order.invoicePdfUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-800 rounded-md text-xs font-bold transition-colors shadow-2xs"
+                              title="Descargar comprobante electrónico en PDF"
+                            >
+                              <TbFileInvoice className="text-emerald-600" size={14} />
+                              <span>
+                                {order.invoiceType === 'factura' ? 'Fac.' : 'Bol.'} {order.invoiceSeries}-{order.invoiceNumber}
+                              </span>
+                            </a>
+                            {getInvoiceEnvBadge(order.invoiceEnvironment || (order.environment === 'production' ? 'production' : 'demo'))}
+                          </div>
+                          <span className="text-[10px] text-emerald-700 font-medium px-0.5">
+                            ✓ {order.invoiceSunatStatus || 'ACEPTADA'}
+                          </span>
+                        </div>
+                      ) : (
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-[11px] text-slate-400 italic">
+                            {order.invoiceType === 'factura' ? 'Factura pend.' : 'Boleta pend.'}
+                          </span>
+                          <span className="text-[9px] font-bold text-slate-400 px-1 py-0.2 bg-slate-100 rounded">
+                            {order.environment === 'production' ? 'PROD' : 'DEMO'}
+                          </span>
+                        </div>
+                      )}
                     </td>
 
                     {/* Estado */}
@@ -607,6 +677,79 @@ export function OrdersManager() {
                           {selectedOrder.companyRuc && ` (RUC: ${selectedOrder.companyRuc} - ${selectedOrder.companyLegalName})`}
                         </div>
                       )}
+
+                      {/* Facturación Electrónica SUNAT (Facturalo.pe) */}
+                      <div className="pt-2 border-t border-slate-200 mt-2">
+                        {selectedOrder.invoicePdfUrl ? (
+                          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 bg-emerald-50 p-2.5 rounded-lg border border-emerald-200">
+                            <div>
+                              <div className="flex items-center gap-2 font-bold text-emerald-900 text-xs">
+                                <TbFileInvoice className="text-emerald-600" size={16} />
+                                <span>
+                                  {selectedOrder.invoiceType === 'factura' ? 'Factura' : 'Boleta'} {selectedOrder.invoiceSeries}-{selectedOrder.invoiceNumber}
+                                </span>
+                                {getInvoiceEnvBadge(selectedOrder.invoiceEnvironment || (selectedOrder.environment === 'production' ? 'production' : 'demo'))}
+                              </div>
+                              <div className="text-[10px] text-emerald-700 mt-0.5">
+                                Estado SUNAT: <strong>{selectedOrder.invoiceSunatStatus || 'ACEPTADA'}</strong>
+                                <span className="ml-1.5 text-slate-500">
+                                  ({(selectedOrder.invoiceEnvironment || (selectedOrder.environment === 'production' ? 'production' : 'demo')) === 'production'
+                                    ? 'Comprobante Real SUNAT'
+                                    : 'Demo de Pruebas - Sin validez tributaria'})
+                                </span>
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              {selectedOrder.invoiceXmlUrl && (
+                                <a
+                                  href={selectedOrder.invoiceXmlUrl}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="px-2.5 py-1 text-[11px] font-semibold text-emerald-800 bg-emerald-100 hover:bg-emerald-200 rounded-md transition-colors"
+                                >
+                                  XML
+                                </a>
+                              )}
+                              <a
+                                href={selectedOrder.invoicePdfUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="px-3 py-1 text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 rounded-md shadow-2xs transition-colors"
+                              >
+                                Ver PDF
+                              </a>
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 bg-slate-100 p-2.5 rounded-lg">
+                            <span className="text-[11px] text-slate-600">
+                              Comprobante electrónico pendiente de emisión
+                            </span>
+                            <button
+                              type="button"
+                              disabled={emittingInvoice}
+                              onClick={async () => {
+                                setEmittingInvoice(true);
+                                try {
+                                  await emitOrderInvoice(selectedOrder.id);
+                                  await fetchOrderById(selectedOrder.id);
+                                  await fetchOrders();
+                                } catch (e: any) {
+                                  alert(
+                                    e.response?.data?.message ||
+                                      'Error al emitir comprobante con Facturalo',
+                                  );
+                                } finally {
+                                  setEmittingInvoice(false);
+                                }
+                              }}
+                              className="px-3 py-1 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white rounded-md text-xs font-semibold cursor-pointer shadow-2xs transition-colors"
+                            >
+                              {emittingInvoice ? 'Emitiendo en SUNAT...' : 'Emitir Comprobante (Facturalo)'}
+                            </button>
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>

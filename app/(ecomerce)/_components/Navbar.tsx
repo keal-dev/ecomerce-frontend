@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { 
   TbSearch, 
   TbTruckDelivery, 
@@ -8,7 +8,10 @@ import {
   TbMenu2, 
   TbBell, 
   TbBuildingStore, 
-  TbHeart 
+  TbHeart,
+  TbTag,
+  TbPackage,
+  TbChevronRight,
 } from 'react-icons/tb';
 import Link from 'next/link';
 import {
@@ -24,30 +27,86 @@ import { useAuthStore } from '@/stores/auth.store';
 import { useCompanyStore } from '@/stores/company.store';
 import { useCartStore } from '@/stores/cart.store';
 import { useFavoritesStore } from '@/stores/favorites.store';
+import { getMyOrders } from '@/services/order.service';
+import { Order } from '@/types/order.types';
 
 export const Navbar = () => {
   const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [notifOpen, setNotifOpen] = useState(false);
+  const [myOrders, setMyOrders] = useState<Order[]>([]);
   const [mounted, setMounted] = useState(false);
+  const notifRef = useRef<HTMLDivElement>(null);
+
   const { currentUser } = useAuthStore();
   const { company, fetchCompany } = useCompanyStore();
   const totalCartItems = useCartStore((state) => state.getTotalItems());
   const totalFavorites = useFavoritesStore((state) => state.favoriteIds.length);
 
-  React.useEffect(() => {
+  const loadCustomerOrders = useCallback(async () => {
+    if (!currentUser?.email) {
+      setMyOrders([]);
+      return;
+    }
+    try {
+      const data = await getMyOrders();
+      setMyOrders(data.slice(0, 3));
+    } catch {
+      setMyOrders([]);
+    }
+  }, [currentUser?.email]);
+
+  useEffect(() => {
     setMounted(true);
     fetchCompany(true);
   }, [fetchCompany]);
+
+  useEffect(() => {
+    loadCustomerOrders();
+  }, [loadCustomerOrders]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (notifRef.current && !notifRef.current.contains(event.target as Node)) {
+        setNotifOpen(false);
+      }
+    };
+    if (notifOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [notifOpen]);
 
   const canAccessSalesPanel = Boolean(
     currentUser && ['admin', 'super_admin', 'seller'].includes(currentUser.role)
   );
 
   return (
-    <header 
-      className="w-full py-2 shadow-sm relative z-50 bg-brand transition-colors duration-300"
-    >
-      <div className="max-w-7xl mx-auto px-4 md:px-7 relative">
+    <header className="w-full relative z-50">
+      {/* Sección fina encima del header */}
+      <div className="bg-slate-950 text-slate-200 text-[11px] py-1.5 px-4 border-b border-slate-800">
+        <div className="max-w-7xl mx-auto flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shrink-0" />
+            <span className="font-medium text-slate-200">
+              Envíos garantizados a todo el país • Garantía Oficial • Comprobantes SUNAT
+            </span>
+          </div>
+
+          <div className="hidden sm:flex items-center gap-4 text-slate-400 text-[11px]">
+            <Link href="/ayuda" className="hover:text-white transition-colors">
+              Centro de Ayuda
+            </Link>
+            <span>•</span>
+            <Link href="/rastreo" className="hover:text-white transition-colors">
+              Rastrea tu pedido
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      <div className="w-full py-2 shadow-sm bg-brand transition-colors duration-300">
+        <div className="max-w-7xl mx-auto px-4 md:px-7 relative">
 
         {/* 1. Mobile Search Overlay (se despliega a pantalla completa al tocar la lupa) */}
         {isMobileSearchOpen && (
@@ -85,7 +144,7 @@ export const Navbar = () => {
                 </div>
               )}
               <span className="text-[#333] font-bold text-lg md:text-2xl tracking-tighter truncate max-w-[150px] sm:max-w-[190px] md:max-w-[240px]">
-                {company?.name || 'Mercado Libre'}
+                {company?.name || 'Tienda Online'}
               </span>
             </Link>
           </div>
@@ -197,8 +256,8 @@ export const Navbar = () => {
           <nav className="col-start-2 row-start-2 hidden lg:flex items-center gap-4 text-[13px] text-[#333] font-light justify-self-start py-0.5">
             <CategoriesDropdown />
             <Link href="/ofertas" className="hover:text-[#3483fa] transition-colors">Ofertas</Link>
+            <Link href="/brands" className="hover:text-[#3483fa] transition-colors">Marcas</Link>
             <Link href="/historial" className="hover:text-[#3483fa] transition-colors">Historial</Link>
-            <Link href="/vender" className="hover:text-[#3483fa] transition-colors">Vender</Link>
             <Link href="/ayuda" className="hover:text-[#3483fa] transition-colors">Ayuda</Link>
           </nav>
 
@@ -208,18 +267,113 @@ export const Navbar = () => {
               Mis compras
             </Link>
 
-            <button
-              type="button"
-              aria-label="Notificaciones"
-              className="p-1.5 rounded-full hover:bg-black/5 text-[#333] relative transition-colors cursor-pointer group"
-            >
-              <TbBell size={19} className="transition-transform group-hover:scale-110" />
-              <span className="absolute top-1 right-1 w-1.5 h-1.5 bg-[#00a650] rounded-full"></span>
-              <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[11px] font-medium py-1 px-2.5 rounded shadow-lg pointer-events-none opacity-0 group-hover:opacity-100 transition-all duration-200 whitespace-nowrap z-50">
-                Notificaciones
-                <span className="absolute -top-1 left-1/2 -translate-x-1/2 border-x-4 border-x-transparent border-b-4 border-b-slate-900"></span>
-              </span>
-            </button>
+            <div className="relative" ref={notifRef}>
+              <button
+                type="button"
+                onClick={() => {
+                  const next = !notifOpen;
+                  setNotifOpen(next);
+                  if (next) loadCustomerOrders();
+                }}
+                aria-label="Notificaciones"
+                className="p-1.5 rounded-full hover:bg-black/5 text-[#333] relative transition-colors cursor-pointer group"
+              >
+                <TbBell size={19} className="transition-transform group-hover:scale-110" />
+                <span className="absolute top-1 right-1 w-1.5 h-1.5 bg-[#00a650] rounded-full"></span>
+                {!notifOpen && (
+                  <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[11px] font-medium py-1 px-2.5 rounded shadow-lg pointer-events-none opacity-0 group-hover:opacity-100 transition-all duration-200 whitespace-nowrap z-50">
+                    Notificaciones
+                    <span className="absolute -top-1 left-1/2 -translate-x-1/2 border-x-4 border-x-transparent border-b-4 border-b-slate-900"></span>
+                  </span>
+                )}
+              </button>
+
+              {notifOpen && (
+                <div className="absolute right-0 mt-2 w-80 bg-white rounded-2xl shadow-xl border border-gray-200 overflow-hidden z-50 text-left font-normal animate-in fade-in zoom-in-95 duration-150">
+                  <div className="px-4 py-3 bg-gray-50 border-b border-gray-100 flex items-center justify-between">
+                    <span className="text-xs font-bold text-gray-900">Notificaciones</span>
+                    <Link
+                      href="/mis-compras"
+                      onClick={() => setNotifOpen(false)}
+                      className="text-[11px] font-semibold text-[#3483fa] hover:underline"
+                    >
+                      Ver mis compras
+                    </Link>
+                  </div>
+
+                  <div className="divide-y divide-gray-100 max-h-80 overflow-y-auto">
+                    {myOrders.map((ord) => (
+                      <Link
+                        key={ord.id}
+                        href={`/rastreo?order=${encodeURIComponent(ord.orderNumber)}`}
+                        onClick={() => setNotifOpen(false)}
+                        className="p-3.5 hover:bg-gray-50 flex items-start gap-3 transition-colors"
+                      >
+                        <div className="p-2 rounded-xl bg-blue-50 text-[#3483fa] shrink-0 mt-0.5">
+                          <TbPackage size={17} />
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <p className="text-xs font-bold text-gray-900 truncate">
+                            Pedido #{ord.orderNumber}
+                          </p>
+                          <p className="text-[11px] text-gray-500 mt-0.5">
+                            Estado:{' '}
+                            <strong className="text-gray-800">
+                              {ord.orderStatus === 'delivered'
+                                ? 'Entregado'
+                                : ord.orderStatus === 'shipping'
+                                  ? 'En camino'
+                                  : ord.orderStatus === 'preparing'
+                                    ? 'En preparación'
+                                    : 'Recibido'}
+                            </strong>
+                          </p>
+                        </div>
+                        <TbChevronRight size={15} className="text-gray-400 self-center shrink-0" />
+                      </Link>
+                    ))}
+
+                    <Link
+                      href="/ofertas"
+                      onClick={() => setNotifOpen(false)}
+                      className="p-3.5 hover:bg-gray-50 flex items-start gap-3 transition-colors"
+                    >
+                      <div className="p-2 rounded-xl bg-emerald-50 text-[#00a650] shrink-0 mt-0.5">
+                        <TbTag size={17} />
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <p className="text-xs font-bold text-gray-900">
+                          Ofertas y Descuentos Activos
+                        </p>
+                        <p className="text-[11px] text-gray-500 mt-0.5">
+                          Explora los productos en promoción con envío a todo el Perú.
+                        </p>
+                      </div>
+                      <TbChevronRight size={15} className="text-gray-400 self-center shrink-0" />
+                    </Link>
+
+                    <Link
+                      href="/rastreo"
+                      onClick={() => setNotifOpen(false)}
+                      className="p-3.5 hover:bg-gray-50 flex items-start gap-3 transition-colors"
+                    >
+                      <div className="p-2 rounded-xl bg-gray-100 text-gray-700 shrink-0 mt-0.5">
+                        <TbTruckDelivery size={17} />
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <p className="text-xs font-bold text-gray-900">
+                          Rastrea tu Pedido en Línea
+                        </p>
+                        <p className="text-[11px] text-gray-500 mt-0.5">
+                          Consulta el estado de tu envío y descarga tu Boleta o Factura SUNAT.
+                        </p>
+                      </div>
+                      <TbChevronRight size={15} className="text-gray-400 self-center shrink-0" />
+                    </Link>
+                  </div>
+                </div>
+              )}
+            </div>
 
             {/* Carrito */}
             <Link
@@ -239,6 +393,7 @@ export const Navbar = () => {
               </span>
             </Link>
           </div>
+        </div>
         </div>
       </div>
 

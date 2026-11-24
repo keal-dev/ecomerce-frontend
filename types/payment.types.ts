@@ -24,6 +24,7 @@ export interface CreateChargeDto {
   companyName?: string;
   currencySymbol?: string;
   items?: {
+    productId?: string;
     title: string;
     quantity: number;
     price: number;
@@ -35,9 +36,19 @@ export interface ChargeResponse {
   success: boolean;
   chargeId: string;
   referenceCode?: string;
+  orderNumber?: string;
+  orderId?: string;
+  environment?: string;
   outcome?: any;
   amount: number;
   currencyCode: string;
+  invoice?: {
+    series?: string;
+    number?: string;
+    pdfUrl?: string;
+    xmlUrl?: string;
+    status?: string;
+  } | null;
   message: string;
 }
 
