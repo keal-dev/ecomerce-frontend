@@ -829,9 +829,13 @@ export function SalesManager() {
       {/* MODAL PASO 2: COBRO EN CAJA Y COMPROBANTE ELECTRÓNICO SUNAT */}
       {isCheckoutModalOpen && cart.length > 0 && (
         <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
-          <div className="bg-white rounded-2xl max-w-lg w-full shadow-xl border border-gray-200 overflow-hidden animate-in zoom-in-95 duration-150 my-auto">
+          <div
+            role="dialog"
+            aria-modal="true"
+            className="bg-white rounded-2xl max-w-4xl w-full shadow-xl border border-gray-200 overflow-hidden animate-in zoom-in-95 duration-150 my-auto"
+          >
             {/* Encabezado limpio y profesional */}
-            <div className="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
+            <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
               <div>
                 <h3 className="font-bold text-gray-900 text-base">
                   Finalizar Cobro
@@ -861,7 +865,7 @@ export function SalesManager() {
               </div>
             </div>
 
-            <div className="p-5 space-y-5">
+            <div className="p-6 space-y-4">
               {errorMessage && (
                 <div className="p-3 bg-rose-50 border border-rose-200 rounded-xl text-rose-800 text-xs font-medium flex items-start gap-2">
                   <TbAlertCircle size={16} className="text-rose-600 shrink-0 mt-0.5" />
@@ -869,220 +873,222 @@ export function SalesManager() {
                 </div>
               )}
 
-              {/* SECCIÓN 1: COMPROBANTE Y DATOS DEL CLIENTE */}
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <label className="text-xs font-bold text-gray-700 uppercase tracking-wide">
-                    1. Tipo de Comprobante
-                  </label>
-                  <span className="text-[11px] text-gray-400">
-                    Emisión electrónica SUNAT
-                  </span>
-                </div>
-
-                {/* Selector segmentado neutro */}
-                <div className="grid grid-cols-3 gap-1.5 p-1 bg-gray-100 rounded-xl text-xs">
-                  {(
-                    [
-                      { id: 'boleta', label: `Boleta (${company?.boletaSeries || 'B001'})` },
-                      { id: 'factura', label: `Factura (${company?.facturaSeries || 'F001'})` },
-                      { id: 'nota', label: 'Nota Interna' },
-                    ] as const
-                  ).map((t) => (
-                    <button
-                      key={t.id}
-                      type="button"
-                      onClick={() => handleSelectDocType(t.id)}
-                      className={`py-2 px-2 rounded-lg font-semibold transition-all cursor-pointer ${
-                        docType === t.id
-                          ? 'bg-white text-gray-900 shadow-2xs border border-gray-200/80'
-                          : 'text-gray-600 hover:text-gray-900'
-                      }`}
-                    >
-                      {t.label}
-                    </button>
-                  ))}
-                </div>
-
-                {/* Campos de DNI / RUC y Nombre / Razón Social */}
-                <div className="p-3.5 bg-gray-50/70 rounded-xl border border-gray-200/80 space-y-2.5">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+                {/* COLUMNA IZQUIERDA: COMPROBANTE Y DATOS DEL CLIENTE */}
+                <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-semibold text-gray-700 flex items-center gap-1.5">
-                      <TbUser size={14} className="text-gray-400" />
-                      <span>
-                        {docType === 'factura'
-                          ? 'Datos de Empresa (Obligatorio)'
-                          : 'Datos del Cliente (Opcional)'}
-                      </span>
+                    <label className="text-xs font-bold text-gray-700 uppercase tracking-wide">
+                      1. Tipo de Comprobante
+                    </label>
+                    <span className="text-[11px] text-gray-400">
+                      Emisión electrónica SUNAT
                     </span>
-                    {docType === 'boleta' && !customerDoc && (
-                      <span className="text-[11px] text-gray-400">
-                        Por defecto: Clientes Varios
-                      </span>
-                    )}
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-12 gap-2">
-                    {docType !== 'nota' && (
-                      <div className="sm:col-span-5">
-                        <input
-                          type="text"
-                          inputMode="numeric"
-                          value={customerDoc}
-                          onChange={(e) => handleCustomerDocChange(e.target.value)}
-                          placeholder={
-                            docType === 'factura' ? 'RUC (11 dígitos)' : 'DNI (8 dígitos)'
-                          }
-                          className="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-xs font-mono text-gray-900 focus:outline-none focus:border-gray-900"
-                        />
-                      </div>
-                    )}
-
-                    <div className={docType !== 'nota' ? 'sm:col-span-7' : 'sm:col-span-12'}>
-                      <input
-                        type="text"
-                        value={customerName}
-                        onChange={(e) => setCustomerName(e.target.value)}
-                        placeholder={
-                          docType === 'factura'
-                            ? 'Razón Social de la empresa'
-                            : 'Nombre del cliente (o Clientes Varios)'
-                        }
-                        className="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-xs text-gray-900 focus:outline-none focus:border-gray-900"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* SECCIÓN 2: MÉTODO DE PAGO */}
-              <div className="space-y-3 pt-2 border-t border-gray-100">
-                <label className="block text-xs font-bold text-gray-700 uppercase tracking-wide">
-                  2. Método de Pago
-                </label>
-
-                <div className="grid grid-cols-3 gap-2.5 text-xs">
-                  {(
-                    [
-                      { id: 'efectivo', label: 'Efectivo', icon: TbCash },
-                      { id: 'pos', label: 'Tarjeta POS', icon: TbCreditCard },
-                      { id: 'yape', label: 'Yape / Plin', icon: TbQrcode },
-                    ] as const
-                  ).map((m) => {
-                    const Icon = m.icon;
-                    const isSelected = paymentMethod === m.id;
-                    return (
+                  {/* Selector segmentado neutro */}
+                  <div className="grid grid-cols-3 gap-1.5 p-1 bg-gray-100 rounded-xl text-xs">
+                    {(
+                      [
+                        { id: 'boleta', label: `Boleta (${company?.boletaSeries || 'B001'})` },
+                        { id: 'factura', label: `Factura (${company?.facturaSeries || 'F001'})` },
+                        { id: 'nota', label: 'Nota Interna' },
+                      ] as const
+                    ).map((t) => (
                       <button
-                        key={m.id}
+                        key={t.id}
                         type="button"
-                        onClick={() => setPaymentMethod(m.id)}
-                        className={`p-3 rounded-xl border flex flex-col items-center gap-1.5 transition-all cursor-pointer ${
-                          isSelected
-                            ? 'border-gray-900 bg-gray-900 text-white font-semibold shadow-2xs'
-                            : 'border-gray-200 bg-white text-gray-600 hover:border-gray-300 hover:bg-gray-50'
+                        onClick={() => handleSelectDocType(t.id)}
+                        className={`py-2 px-2 rounded-lg font-semibold transition-all cursor-pointer ${
+                          docType === t.id
+                            ? 'bg-white text-gray-900 shadow-2xs border border-gray-200/80'
+                            : 'text-gray-600 hover:text-gray-900'
                         }`}
                       >
-                        <Icon size={20} className={isSelected ? 'text-white' : 'text-gray-400'} />
-                        <span>{m.label}</span>
+                        {t.label}
                       </button>
-                    );
-                  })}
-                </div>
+                    ))}
+                  </div>
 
-                {/* Calculadora de Efectivo y Billetes Rápidos */}
-                {paymentMethod === 'efectivo' && (
-                  <div className="p-3.5 bg-gray-50/70 border border-gray-200/80 rounded-xl space-y-3 text-xs">
-                    <div className="flex flex-wrap items-center gap-1.5">
-                      <span className="text-[11px] font-medium text-gray-500 mr-1">
-                        Importe rápido:
+                  {/* Campos de DNI / RUC y Nombre / Razón Social */}
+                  <div className="p-3.5 bg-gray-50/70 rounded-xl border border-gray-200/80 space-y-2.5">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-semibold text-gray-700 flex items-center gap-1.5">
+                        <TbUser size={14} className="text-gray-400" />
+                        <span>
+                          {docType === 'factura'
+                            ? 'Datos de Empresa (Obligatorio)'
+                            : 'Datos del Cliente (Opcional)'}
+                        </span>
                       </span>
-                      <button
-                        type="button"
-                        onClick={() => setCashReceived(subtotal.toFixed(2))}
-                        className="px-2.5 py-1 rounded-lg bg-white hover:bg-gray-100 text-gray-800 border border-gray-200 font-semibold text-[11px] cursor-pointer"
-                      >
-                        Exacto ({symbol} {subtotal.toFixed(2)})
-                      </button>
-                      {[10, 20, 50, 100, 200]
-                        .filter((bill) => bill >= subtotal)
-                        .map((bill) => (
-                          <button
-                            key={bill}
-                            type="button"
-                            onClick={() => setCashReceived(String(bill))}
-                            className="px-2.5 py-1 rounded-lg bg-white hover:bg-gray-100 text-gray-800 border border-gray-200 font-semibold text-[11px] cursor-pointer"
-                          >
-                            {symbol} {bill}
-                          </button>
-                        ))}
+                      {docType === 'boleta' && !customerDoc && (
+                        <span className="text-[11px] text-gray-400">
+                          Por defecto: Clientes Varios
+                        </span>
+                      )}
                     </div>
 
-                    <div className="grid grid-cols-2 gap-3 pt-1">
-                      <div>
-                        <label className="block text-[11px] font-medium text-gray-600 mb-1">
-                          Efectivo recibido ({symbol})
-                        </label>
+                    <div className="grid grid-cols-1 sm:grid-cols-12 gap-2">
+                      {docType !== 'nota' && (
+                        <div className="sm:col-span-5">
+                          <input
+                            type="text"
+                            inputMode="numeric"
+                            value={customerDoc}
+                            onChange={(e) => handleCustomerDocChange(e.target.value)}
+                            placeholder={
+                              docType === 'factura' ? 'RUC (11 dígitos)' : 'DNI (8 dígitos)'
+                            }
+                            className="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-xs font-mono text-gray-900 focus:outline-none focus:border-gray-900"
+                          />
+                        </div>
+                      )}
+
+                      <div className={docType !== 'nota' ? 'sm:col-span-7' : 'sm:col-span-12'}>
                         <input
-                          type="number"
-                          step="0.10"
-                          min="0"
-                          value={cashReceived}
-                          onChange={(e) => setCashReceived(e.target.value)}
-                          placeholder={subtotal.toFixed(2)}
-                          className="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg font-bold text-sm text-gray-900 focus:outline-none focus:border-gray-900"
+                          type="text"
+                          value={customerName}
+                          onChange={(e) => setCustomerName(e.target.value)}
+                          placeholder={
+                            docType === 'factura'
+                              ? 'Razón Social de la empresa'
+                              : 'Nombre del cliente (o Clientes Varios)'
+                          }
+                          className="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-xs text-gray-900 focus:outline-none focus:border-gray-900"
                         />
-                      </div>
-                      <div className="px-3 py-2 bg-white border border-gray-200 rounded-lg flex flex-col justify-center items-end">
-                        <span className="text-[10px] font-semibold text-gray-400 uppercase">
-                          Vuelto a entregar
-                        </span>
-                        <span className="text-base font-black text-emerald-700">
-                          {symbol} {changeAmount.toFixed(2)}
-                        </span>
                       </div>
                     </div>
                   </div>
-                )}
-              </div>
+                </div>
 
-              {/* Botones Finales del Modal */}
-              <div className="flex flex-col-reverse sm:flex-row items-center justify-end gap-2.5 pt-3 border-t border-gray-100">
-                <button
-                  type="button"
-                  disabled={isProcessing}
-                  onClick={() => setIsCheckoutModalOpen(false)}
-                  className="w-full sm:w-auto px-4 py-2.5 rounded-xl border border-gray-200 hover:bg-gray-50 text-gray-700 font-semibold text-xs cursor-pointer"
-                >
-                  Cancelar
-                </button>
+                {/* COLUMNA DERECHA: MÉTODO DE PAGO */}
+                <div className="space-y-3 md:border-l md:border-gray-200/80 md:pl-6">
+                  <label className="block text-xs font-bold text-gray-700 uppercase tracking-wide">
+                    2. Método de Pago
+                  </label>
 
-                <button
-                  type="button"
-                  disabled={isProcessing}
-                  onClick={handleProcessPosSale}
-                  className="w-full sm:flex-1 py-2.5 px-5 bg-emerald-600 hover:bg-emerald-700 disabled:bg-gray-300 text-white font-bold text-xs sm:text-sm rounded-xl transition-all shadow-2xs flex items-center justify-center gap-2 cursor-pointer disabled:cursor-not-allowed"
-                >
-                  {isProcessing ? (
-                    <>
-                      <TbRefresh size={17} className="animate-spin" />
-                      <span>Procesando cobro...</span>
-                    </>
-                  ) : (
-                    <>
-                      <TbCheck size={17} />
-                      <span>
-                        Confirmar y Emitir{' '}
-                        {docType === 'factura'
-                          ? 'Factura'
-                          : docType === 'boleta'
-                            ? 'Boleta'
-                            : 'Ticket'}{' '}
-                        ({symbol} {subtotal.toFixed(2)})
-                      </span>
-                    </>
+                  <div className="grid grid-cols-3 gap-2.5 text-xs">
+                    {(
+                      [
+                        { id: 'efectivo', label: 'Efectivo', icon: TbCash },
+                        { id: 'pos', label: 'Tarjeta POS', icon: TbCreditCard },
+                        { id: 'yape', label: 'Yape / Plin', icon: TbQrcode },
+                      ] as const
+                    ).map((m) => {
+                      const Icon = m.icon;
+                      const isSelected = paymentMethod === m.id;
+                      return (
+                        <button
+                          key={m.id}
+                          type="button"
+                          onClick={() => setPaymentMethod(m.id)}
+                          className={`p-3 rounded-xl border flex flex-col items-center gap-1.5 transition-all cursor-pointer ${
+                            isSelected
+                              ? 'border-gray-900 bg-gray-900 text-white font-semibold shadow-2xs'
+                              : 'border-gray-200 bg-white text-gray-600 hover:border-gray-300 hover:bg-gray-50'
+                          }`}
+                        >
+                          <Icon size={20} className={isSelected ? 'text-white' : 'text-gray-400'} />
+                          <span>{m.label}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  {/* Calculadora de Efectivo y Billetes Rápidos */}
+                  {paymentMethod === 'efectivo' && (
+                    <div className="p-3.5 bg-gray-50/70 border border-gray-200/80 rounded-xl space-y-3 text-xs">
+                      <div className="flex flex-wrap items-center gap-1.5">
+                        <span className="text-[11px] font-medium text-gray-500 mr-1">
+                          Importe rápido:
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => setCashReceived(subtotal.toFixed(2))}
+                          className="px-2.5 py-1 rounded-lg bg-white hover:bg-gray-100 text-gray-800 border border-gray-200 font-semibold text-[11px] cursor-pointer"
+                        >
+                          Exacto ({symbol} {subtotal.toFixed(2)})
+                        </button>
+                        {[10, 20, 50, 100, 200]
+                          .filter((bill) => bill >= subtotal)
+                          .map((bill) => (
+                            <button
+                              key={bill}
+                              type="button"
+                              onClick={() => setCashReceived(String(bill))}
+                              className="px-2.5 py-1 rounded-lg bg-white hover:bg-gray-100 text-gray-800 border border-gray-200 font-semibold text-[11px] cursor-pointer"
+                            >
+                              {symbol} {bill}
+                            </button>
+                          ))}
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-3 pt-1">
+                        <div>
+                          <label className="block text-[11px] font-medium text-gray-600 mb-1">
+                            Efectivo recibido ({symbol})
+                          </label>
+                          <input
+                            type="number"
+                            step="0.10"
+                            min="0"
+                            value={cashReceived}
+                            onChange={(e) => setCashReceived(e.target.value)}
+                            placeholder={subtotal.toFixed(2)}
+                            className="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg font-bold text-sm text-gray-900 focus:outline-none focus:border-gray-900"
+                          />
+                        </div>
+                        <div className="px-3 py-2 bg-white border border-gray-200 rounded-lg flex flex-col justify-center items-end">
+                          <span className="text-[10px] font-semibold text-gray-400 uppercase">
+                            Vuelto a entregar
+                          </span>
+                          <span className="text-base font-black text-emerald-700">
+                            {symbol} {changeAmount.toFixed(2)}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
                   )}
-                </button>
+                </div>
               </div>
+            </div>
+
+            {/* Botones Finales del Modal */}
+            <div className="px-6 py-3.5 bg-gray-50/80 border-t border-gray-200/80 flex flex-col-reverse sm:flex-row items-center justify-end gap-2.5">
+              <button
+                type="button"
+                disabled={isProcessing}
+                onClick={() => setIsCheckoutModalOpen(false)}
+                className="w-full sm:w-auto px-5 py-2.5 rounded-xl border border-gray-200 bg-white hover:bg-gray-50 text-gray-700 font-semibold text-xs cursor-pointer"
+              >
+                Cancelar
+              </button>
+
+              <button
+                type="button"
+                disabled={isProcessing}
+                onClick={handleProcessPosSale}
+                className="w-full sm:w-auto sm:min-w-[260px] py-2.5 px-6 bg-emerald-600 hover:bg-emerald-700 disabled:bg-gray-300 text-white font-bold text-xs sm:text-sm rounded-xl transition-all shadow-2xs flex items-center justify-center gap-2 cursor-pointer disabled:cursor-not-allowed"
+              >
+                {isProcessing ? (
+                  <>
+                    <TbRefresh size={17} className="animate-spin" />
+                    <span>Procesando cobro...</span>
+                  </>
+                ) : (
+                  <>
+                    <TbCheck size={17} />
+                    <span>
+                      Confirmar y Emitir{' '}
+                      {docType === 'factura'
+                        ? 'Factura'
+                        : docType === 'boleta'
+                          ? 'Boleta'
+                          : 'Ticket'}{' '}
+                      ({symbol} {subtotal.toFixed(2)})
+                    </span>
+                  </>
+                )}
+              </button>
             </div>
           </div>
         </div>

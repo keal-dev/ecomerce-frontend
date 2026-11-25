@@ -2,6 +2,7 @@ import React from 'react';
 import { Sidebar } from "@/app/admin/_components/Sidebar";
 import { Header } from "@/app/admin/_components/Header";
 import { AdminGuard } from "@/app/admin/_components/AdminGuard";
+import './fluent-admin.css';
 
 export default function AdminLayout({
   children,
@@ -10,7 +11,7 @@ export default function AdminLayout({
 }) {
   return (
     <AdminGuard>
-      <div className="min-h-screen bg-gray-100 text-gray-900 font-sans">
+      <div className="admin-fluent min-h-screen bg-[#ebebeb] text-[#242424] font-sans">
         <Sidebar />
         <div className="flex flex-col min-w-0 lg:pl-56">
           <Header />

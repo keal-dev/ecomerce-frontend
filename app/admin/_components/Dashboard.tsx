@@ -30,6 +30,7 @@ import { useCategoryStore } from '@/stores/category.store';
 import { Order, OrderStatus } from '@/types/order.types';
 import { Product } from '@/types/product.types';
 import { User } from '@/types/user.types';
+import { SalesAnalyticsSection } from './SalesAnalyticsSection';
 
 export function Dashboard() {
   const { currentUser } = useAuthStore();
@@ -405,6 +406,13 @@ export function Dashboard() {
           </span>
         </div>
       </div>
+
+      {/* Gráficos Estadísticos de Ventas */}
+      <SalesAnalyticsSection
+        orders={filteredOrders}
+        currencySymbol={currencySymbol}
+        isLoading={isLoading}
+      />
 
       {/* Main Content Grid: Pedidos Recientes + Lateral info */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
