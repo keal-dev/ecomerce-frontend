@@ -18,7 +18,11 @@ import {
   TbDeviceMobile,
   TbDeviceGamepad2,
   TbDeviceTv,
-  TbCategory
+  TbCategory,
+  TbBottle,
+  TbCandy,
+  TbSeedling,
+  TbCoffee
 } from 'react-icons/tb';
 import { Category } from '@/types/category.types';
 import { useCategoryStore } from '@/stores/category.store';
@@ -38,7 +42,11 @@ const iconMap: Record<string, React.ElementType> = {
   TbDeviceMobile,
   TbDeviceGamepad2,
   TbDeviceTv,
-  TbCategory
+  TbCategory,
+  TbBottle,
+  TbCandy,
+  TbSeedling,
+  TbCoffee
 };
 
 interface CategoriesDropdownProps {
@@ -124,27 +132,40 @@ export const CategoriesDropdown = ({ categories: propCategories, isActive = fals
         />
       </button>
 
-      {/* Menú Desplegable Directo de Categorías */}
+      {/* Menú Desplegable Glamour de Colecciones */}
       {isOpen && (
         <div 
-          className="absolute left-0 top-full pt-2 z-50 animate-in fade-in slide-in-from-top-1 duration-150"
-          style={{ width: '280px' }}
+          className="absolute left-0 top-full pt-3 z-50 animate-in fade-in slide-in-from-top-2 duration-200"
+          style={{ width: categories.length > 4 ? '560px' : '340px' }}
         >
-          {/* Tarjeta flotante negra editorial */}
-          <div className="bg-black text-white rounded-none shadow-2xl overflow-hidden border border-[#262626] py-2">
-            
-            {/* Estado de carga */}
+          <div className="bg-white text-[#020202] rounded-none shadow-[0_24px_60px_-12px_rgba(0,0,0,0.45)] border-t-2 border-brand-accent overflow-hidden">
+            {/* Encabezado editorial */}
+            <div className="px-7 pt-6 pb-4 text-center border-b border-[#ececec]">
+              <span className="block text-[10px] font-bold uppercase tracking-[0.32em] text-brand-accent">
+                Nuestras colecciones
+              </span>
+              <span className="block mt-1.5 font-display text-xl font-bold tracking-wide text-black">
+                Explora por Categoría
+              </span>
+              <span className="mx-auto mt-3 block h-px w-10 bg-brand-accent" />
+            </div>
+
+            {/* Estado de carga / vacío / lista */}
             {isLoading && categories.length === 0 ? (
-              <div className="py-6 px-4 flex flex-col items-center justify-center space-y-2 text-xs text-neutral-400">
+              <div className="py-10 px-4 flex flex-col items-center justify-center space-y-2 text-xs text-neutral-500">
                 <div className="w-5 h-5 border-2 border-brand-accent border-t-transparent rounded-full animate-spin" />
-                <span>Cargando categorías...</span>
+                <span>Cargando colecciones...</span>
               </div>
             ) : categories.length === 0 ? (
-              <div className="py-6 px-4 text-center text-xs text-neutral-400">
+              <div className="py-10 px-4 text-center text-xs text-neutral-500">
                 No hay categorías disponibles
               </div>
             ) : (
-              <ul className="flex flex-col max-h-[460px] overflow-y-auto divide-y divide-[#1f1f1f]">
+              <ul
+                className={`grid max-h-[420px] overflow-y-auto px-4 py-4 gap-x-2 gap-y-1 ${
+                  categories.length > 4 ? 'grid-cols-2' : 'grid-cols-1'
+                }`}
+              >
                 {categories.map((cat) => {
                   const IconComponent = (cat.icon && iconMap[cat.icon]) ? iconMap[cat.icon] : TbCategory;
 
@@ -153,35 +174,36 @@ export const CategoriesDropdown = ({ categories: propCategories, isActive = fals
                       <Link
                         href={cat.href || `/category/${cat.id}`}
                         onClick={() => setIsOpen(false)}
-                        className="px-4 py-2.5 flex items-center justify-between text-xs text-neutral-200 hover:bg-brand-accent hover:text-white transition-colors cursor-pointer group"
+                        className="group flex items-center gap-3.5 px-3 py-3 border border-transparent hover:border-[#e5e5e5] hover:bg-[#faf8f5] transition-all duration-200 cursor-pointer"
                       >
-                        <div className="flex items-center gap-3 truncate">
+                        <span className="w-10 h-10 shrink-0 flex items-center justify-center rounded-full border border-[#e5e5e5] bg-white text-black group-hover:bg-brand-primary group-hover:text-white group-hover:border-brand-primary transition-colors duration-200">
                           {cat.icon && (cat.icon.startsWith('http') || cat.icon.startsWith('data:')) ? (
-                            <img 
-                              src={cat.icon} 
-                              alt={cat.name} 
-                              className="w-[18px] h-[18px] object-contain shrink-0" 
+                            // eslint-disable-next-line @next/next/no-img-element
+                            <img
+                              src={cat.icon}
+                              alt={cat.name}
+                              className="w-5 h-5 object-contain"
                             />
                           ) : (
-                            <IconComponent 
-                              size={18} 
-                              className="text-neutral-400 group-hover:text-white transition-colors shrink-0" 
-                            />
+                            <IconComponent size={19} strokeWidth={1.6} />
                           )}
-                          <span className="truncate font-semibold uppercase tracking-wide">{cat.name}</span>
-                        </div>
+                        </span>
 
-                        <div className="flex items-center gap-1.5 shrink-0 ml-2">
+                        <span className="min-w-0 flex-1">
+                          <span className="block truncate font-display text-[15px] font-semibold tracking-wide text-black group-hover:text-brand-accent transition-colors">
+                            {cat.name}
+                          </span>
                           {cat.badge && (
-                            <span className="bg-[#f3ff34] text-black text-[9px] font-extrabold px-1.5 py-0.5 uppercase tracking-wider">
+                            <span className="mt-0.5 block text-[9px] font-bold uppercase tracking-[0.22em] text-neutral-500">
                               {cat.badge}
                             </span>
                           )}
-                          <TbChevronRight 
-                            size={14} 
-                            className="text-neutral-500 group-hover:text-white transition-transform group-hover:translate-x-0.5" 
-                          />
-                        </div>
+                        </span>
+
+                        <TbChevronRight
+                          size={14}
+                          className="shrink-0 text-neutral-300 group-hover:text-brand-accent group-hover:translate-x-0.5 transition-all"
+                        />
                       </Link>
                     </li>
                   );
@@ -190,13 +212,14 @@ export const CategoriesDropdown = ({ categories: propCategories, isActive = fals
             )}
 
             {/* Pie del menú */}
-            <div className="px-4 pt-2.5 pb-1 border-t border-[#262626] mt-1">
+            <div className="px-7 py-3.5 bg-brand-primary text-center">
               <Link
                 href="/categories"
                 onClick={() => setIsOpen(false)}
-                className="text-[11px] font-bold uppercase tracking-wider text-white hover:text-brand-accent block text-center py-1 transition-colors"
+                className="inline-flex items-center justify-center gap-2 text-[11px] font-bold uppercase tracking-[0.22em] text-white hover:text-brand-accent transition-colors"
               >
-                Ver todas las categorías →
+                <span>Ver todo el catálogo</span>
+                <TbChevronRight size={13} />
               </Link>
             </div>
           </div>

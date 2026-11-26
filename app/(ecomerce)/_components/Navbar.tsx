@@ -375,6 +375,17 @@ export const Navbar = () => {
 
             <div className="flex items-center gap-5 shrink-0">
               <Link
+                href="/rastreo"
+                className={`inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider transition-colors whitespace-nowrap ${
+                  pathname.startsWith('/rastreo')
+                    ? 'text-brand-accent'
+                    : 'text-white hover:text-brand-accent'
+                }`}
+              >
+                <TbTruckDelivery size={15} />
+                <span>Rastrear pedido</span>
+              </Link>
+              <Link
                 href="/historial"
                 className={`text-[11px] font-semibold uppercase tracking-wider transition-colors whitespace-nowrap ${
                   pathname.startsWith('/historial')

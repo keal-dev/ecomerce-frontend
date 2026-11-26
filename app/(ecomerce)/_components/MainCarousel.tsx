@@ -9,14 +9,14 @@ import { Banner, BannerButtonPosition } from '@/types/banner.types';
 function getButtonOverlayClasses(position?: BannerButtonPosition): string {
   switch (position) {
     case 'bottom-center':
-      return 'items-end justify-center px-6 pb-11 sm:pb-14';
+      return 'items-end justify-center px-4 sm:px-6 pb-5 sm:pb-12';
     case 'bottom-right':
-      return 'items-end justify-end pl-6 pr-6 sm:pr-16 pb-11 sm:pb-14';
+      return 'items-end justify-end pl-4 pr-4 sm:pr-14 pb-5 sm:pb-12';
     case 'center':
-      return 'items-center justify-center p-6';
+      return 'items-center justify-center p-4 sm:p-6';
     case 'bottom-left':
     default:
-      return 'items-end justify-start pl-6 sm:pl-16 pr-6 pb-11 sm:pb-14';
+      return 'items-end justify-start pl-4 sm:pl-14 pr-4 pb-5 sm:pb-12';
   }
 }
 
@@ -26,7 +26,7 @@ export const MainCarousel = () => {
   const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
-    fetchBanners({ type: 'hero', isActive: true });
+    fetchBanners({ type: 'hero', isActive: true }, true);
   }, [fetchBanners]);
 
   const activeHeroBanners = useMemo(() => {
@@ -62,13 +62,19 @@ export const MainCarousel = () => {
 
   return (
     <div
-      className="relative w-full h-[260px] sm:h-[330px] md:h-[390px] lg:h-[420px] group overflow-hidden bg-brand-primary"
+      className={`relative w-full group overflow-hidden bg-brand-primary ${activeHeroBanners.length > 0
+        ? 'aspect-[7/2] max-h-[500px]'
+        : 'min-h-[300px] sm:min-h-[360px] lg:min-h-[400px] flex'
+        }`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
       {/* Carrusel Deslizante */}
       <div
-        className="flex w-full h-full transition-transform duration-700 ease-out"
+        className={`${activeHeroBanners.length > 0
+          ? 'absolute inset-0'
+          : 'min-h-[300px] sm:min-h-[360px] lg:min-h-[400px]'
+          } flex w-full h-full transition-transform duration-700 ease-out`}
         style={{ transform: `translateX(-${currentSlide * 100}%)` }}
       >
         {activeHeroBanners.length > 0 ? (
@@ -77,7 +83,7 @@ export const MainCarousel = () => {
             const isButtonMode = hasLink && banner.linkMode === 'button';
             const isExternal = hasLink && /^https?:\/\//i.test(banner.linkUrl!);
             const ctaClasses =
-              'pointer-events-auto inline-flex items-center gap-2 bg-brand-accent hover:bg-brand-primary text-white font-bold text-[11px] sm:text-xs uppercase tracking-[0.16em] px-6 sm:px-8 py-3 sm:py-3.5 rounded-none border border-white/15 shadow-xl transition-colors duration-200';
+              'pointer-events-auto inline-flex items-center gap-1.5 sm:gap-2 bg-brand-accent hover:bg-brand-primary text-white font-bold text-[10px] sm:text-xs uppercase tracking-[0.14em] sm:tracking-[0.16em] px-3.5 sm:px-7 py-2 sm:py-3 rounded-none border border-white/15 shadow-xl transition-colors duration-200';
 
             return (
               <div key={banner.id} className="min-w-full h-full flex-shrink-0 relative">
@@ -93,7 +99,7 @@ export const MainCarousel = () => {
                       <img
                         src={banner.imageUrl || ''}
                         alt={banner.title}
-                        className="w-full h-full object-cover object-center"
+                        className="w-full h-full object-contain object-center"
                         draggable={false}
                       />
                     </a>
@@ -106,7 +112,7 @@ export const MainCarousel = () => {
                       <img
                         src={banner.imageUrl || ''}
                         alt={banner.title}
-                        className="w-full h-full object-cover object-center"
+                          className="w-full h-full object-contain object-center"
                         draggable={false}
                       />
                     </Link>
@@ -117,7 +123,7 @@ export const MainCarousel = () => {
                     <img
                       src={banner.imageUrl || ''}
                       alt={banner.title}
-                      className="w-full h-full object-cover object-center"
+                        className="w-full h-full object-contain object-center"
                       draggable={false}
                     />
 
@@ -187,22 +193,22 @@ export const MainCarousel = () => {
         <>
           <button
             onClick={prevSlide}
-            className="absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-white text-black hover:bg-brand-accent hover:text-white border border-black/15 w-11 h-11 flex items-center justify-center rounded-none shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-200 cursor-pointer"
+            className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-20 bg-white text-black hover:bg-brand-accent hover:text-white border border-black/15 w-8 h-8 sm:w-11 sm:h-11 flex items-center justify-center rounded-none shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-200 cursor-pointer"
             aria-label="Anterior slide"
           >
-            <TbChevronLeft className="w-5 h-5" />
+            <TbChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
           </button>
 
           <button
             onClick={nextSlide}
-            className="absolute right-4 top-1/2 -translate-y-1/2 z-20 bg-white text-black hover:bg-brand-accent hover:text-white border border-black/15 w-11 h-11 flex items-center justify-center rounded-none shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-200 cursor-pointer"
+            className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-20 bg-white text-black hover:bg-brand-accent hover:text-white border border-black/15 w-8 h-8 sm:w-11 sm:h-11 flex items-center justify-center rounded-none shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-200 cursor-pointer"
             aria-label="Siguiente slide"
           >
-            <TbChevronRight className="w-5 h-5" />
+            <TbChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
           </button>
 
           {/* Barras indicadoras inferiores */}
-          <div className="absolute bottom-5 left-1/2 -translate-x-1/2 z-20 flex gap-2">
+          <div className="absolute bottom-2 sm:bottom-4 left-1/2 -translate-x-1/2 z-20 flex gap-2">
             {Array.from({ length: totalSlides }).map((_, index) => (
               <button
                 key={index}
