@@ -13,7 +13,7 @@ export default function AdminLayout({
     <AdminGuard>
       <div className="admin-fluent min-h-screen bg-[#ebebeb] text-[#242424] font-store">
         <Sidebar />
-        <div className="flex flex-col min-w-0 lg:pl-56">
+        <div className="flex flex-col min-w-0 lg:pl-[225px]">
           <Header />
           <main className="flex-1 px-5 py-3 sm:px-7 sm:py-4">
             {children}

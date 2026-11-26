@@ -135,7 +135,7 @@ export function UserFormModal({
         {/* Cabecera */}
         <div className="px-6 py-4 bg-black text-white border-b border-[#262626] flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-[#de2a2a] text-white flex items-center justify-center shadow-xs">
+            <div className="w-10 h-10 rounded-xl bg-brand-accent text-white flex items-center justify-center shadow-xs">
               <TbShield size={22} />
             </div>
             <div>

@@ -19,7 +19,7 @@ export default function VenderPage() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-6">
         {/* Breadcrumb */}
         <nav className="flex items-center gap-1.5 text-[11px] uppercase tracking-wider text-neutral-500 mb-6">
-          <Link href="/" className="hover:text-[#de2a2a] transition-colors">
+          <Link href="/" className="hover:text-brand-accent transition-colors">
             Inicio
           </Link>
           <TbChevronRight size={13} className="text-neutral-400" />
@@ -30,12 +30,12 @@ export default function VenderPage() {
         <div className="bg-[#f8f8f8] rounded-none border border-[#d9d9d9] p-8 sm:p-14 text-center">
           {/* Insignia superior */}
           <div className="inline-flex items-center gap-2 px-3 py-1 bg-black text-white rounded-none text-[11px] font-bold uppercase tracking-widest mb-6">
-            <TbTools size={14} className="text-[#de2a2a]" />
+            <TbTools size={14} className="text-brand-accent" />
             <span>Próximamente</span>
           </div>
 
           {/* Icono central */}
-          <div className="w-20 h-20 bg-black text-white rounded-none flex items-center justify-center mx-auto mb-5 border-b-4 border-[#de2a2a]">
+          <div className="w-20 h-20 bg-black text-white rounded-none flex items-center justify-center mx-auto mb-5 border-b-4 border-brand-accent">
             <TbBuildingStore size={42} />
           </div>
 
@@ -44,7 +44,7 @@ export default function VenderPage() {
             Estamos trabajando en esto
           </h1>
 
-          <p className="text-sm sm:text-base font-bold uppercase tracking-wider text-[#de2a2a] mt-2">
+          <p className="text-sm sm:text-base font-bold uppercase tracking-wider text-brand-accent mt-2">
             Esta sección aún no está disponible
           </p>
 
@@ -79,7 +79,7 @@ export default function VenderPage() {
             </div>
 
             <div className="p-4 rounded-none bg-white border border-[#d9d9d9]">
-              <div className="w-8 h-8 rounded-none bg-[#de2a2a] text-white flex items-center justify-center mb-2.5">
+              <div className="w-8 h-8 rounded-none bg-brand-accent text-white flex items-center justify-center mb-2.5">
                 <TbTruckDelivery size={18} />
               </div>
               <h3 className="font-display text-xs font-extrabold uppercase text-black">
@@ -94,7 +94,7 @@ export default function VenderPage() {
           <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
             <Link
               href="/"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#de2a2a] hover:bg-red-700 text-white text-xs font-bold uppercase tracking-widest rounded-none transition-colors"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-brand-accent hover:bg-red-700 text-white text-xs font-bold uppercase tracking-widest rounded-none transition-colors"
             >
               <TbArrowLeft size={16} />
               <span>Volver al inicio</span>
@@ -104,7 +104,7 @@ export default function VenderPage() {
               href="/ofertas"
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 border border-black bg-white hover:bg-black hover:text-white text-black text-xs font-bold uppercase tracking-widest rounded-none transition-colors"
             >
-              <TbFlame size={16} className="text-[#de2a2a]" />
+              <TbFlame size={16} className="text-brand-accent" />
               <span>Explorar ofertas</span>
             </Link>
           </div>

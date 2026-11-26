@@ -6,6 +6,7 @@ export interface Company {
   logoUrl?: string;
   logoPublicId?: string;
   primaryColor: string;
+  accentColor?: string;
   slogan?: string;
   email?: string;
   phone?: string;
@@ -28,6 +29,7 @@ export interface UpdateCompanyDto {
   logoUrl?: string;
   logoPublicId?: string;
   primaryColor?: string;
+  accentColor?: string;
   slogan?: string;
   email?: string;
   phone?: string;

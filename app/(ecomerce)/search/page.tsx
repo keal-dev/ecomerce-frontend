@@ -199,7 +199,7 @@ function SearchContent() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-6">
         {/* Breadcrumb */}
         <nav className="flex items-center gap-1.5 text-[11px] uppercase tracking-wider text-neutral-500 mb-4">
-          <Link href="/" className="hover:text-[#de2a2a] transition-colors">
+          <Link href="/" className="hover:text-brand-accent transition-colors">
             Inicio
           </Link>
           <TbChevronRight size={13} className="text-neutral-400" />
@@ -224,7 +224,7 @@ function SearchContent() {
 
         {isLoading ? (
           <div className="min-h-[50vh] flex flex-col items-center justify-center gap-3">
-            <TbLoader2 className="animate-spin text-[#de2a2a]" size={36} />
+            <TbLoader2 className="animate-spin text-brand-accent" size={36} />
             <p className="text-xs font-medium uppercase tracking-wider text-neutral-500">
               Buscando productos para &quot;{query}&quot;...
             </p>
@@ -312,7 +312,7 @@ function SearchContent() {
                 <button
                   type="button"
                   onClick={() => setIsMobileFiltersOpen(false)}
-                  className="w-full py-3 bg-[#de2a2a] hover:bg-red-700 text-white text-xs font-bold uppercase tracking-widest rounded-none text-center cursor-pointer transition-colors"
+                  className="w-full py-3 bg-brand-accent hover:bg-red-700 text-white text-xs font-bold uppercase tracking-widest rounded-none text-center cursor-pointer transition-colors"
                 >
                   Ver {filteredProducts.length} resultados
                 </button>
@@ -330,7 +330,7 @@ export default function SearchPage() {
     <Suspense
       fallback={
         <div className="min-h-[60vh] bg-white flex flex-col items-center justify-center gap-3">
-          <TbLoader2 className="animate-spin text-[#de2a2a]" size={36} />
+          <TbLoader2 className="animate-spin text-brand-accent" size={36} />
           <p className="text-xs font-medium uppercase tracking-wider text-neutral-500">
             Cargando búsqueda...
           </p>

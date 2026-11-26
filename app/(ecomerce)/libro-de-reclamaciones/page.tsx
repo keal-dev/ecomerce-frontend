@@ -298,7 +298,7 @@ export default function LibroDeReclamacionesPage() {
             <button
               type="button"
               onClick={() => window.print()}
-              className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#de2a2a] hover:bg-red-700 text-white rounded-none text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer"
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-brand-accent hover:bg-red-700 text-white rounded-none text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer"
             >
               <TbPrinter size={16} />
               Imprimir / Guardar Constancia en PDF
@@ -371,7 +371,7 @@ export default function LibroDeReclamacionesPage() {
               </h2>
               <div className="p-3 bg-[#f8f8f8] rounded-none border border-[#d9d9d9]">
                 <p className="font-bold text-black uppercase text-[11px]">
-                  Tipo de Reclamación: <span className="text-[#de2a2a]">{submittedClaim.data.claimType.toUpperCase()}</span>
+                  Tipo de Reclamación: <span className="text-brand-accent">{submittedClaim.data.claimType.toUpperCase()}</span>
                 </p>
                 <p className="text-[11px] text-neutral-600 mt-0.5">
                   {submittedClaim.data.claimType === 'reclamo'
@@ -418,7 +418,7 @@ export default function LibroDeReclamacionesPage() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-6">
         {/* Breadcrumb */}
         <nav className="flex items-center gap-1.5 text-[11px] uppercase tracking-wider text-neutral-500 mb-5">
-          <Link href="/" className="hover:text-[#de2a2a] transition-colors">
+          <Link href="/" className="hover:text-brand-accent transition-colors">
             Inicio
           </Link>
           <TbChevronRight size={13} className="text-neutral-400" />
@@ -426,13 +426,13 @@ export default function LibroDeReclamacionesPage() {
         </nav>
 
         {/* Banner Superior Oficial */}
-        <div className="bg-black text-white rounded-none border-b-4 border-[#de2a2a] p-6 sm:p-8 mb-6">
+        <div className="bg-black text-white rounded-none border-b-4 border-brand-accent p-6 sm:p-8 mb-6">
           <div className="flex items-start gap-4">
-            <div className="p-3 bg-[#de2a2a] text-white rounded-none shrink-0">
+            <div className="p-3 bg-brand-accent text-white rounded-none shrink-0">
               <TbBook size={30} />
             </div>
             <div>
-              <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#de2a2a]">
+              <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-brand-accent">
                 Conforme al Código de Protección y Defensa del Consumidor (Ley N° 29571)
               </span>
               <h1 className="font-display text-2xl sm:text-3xl font-extrabold uppercase tracking-tight text-white mt-1">
@@ -470,7 +470,7 @@ export default function LibroDeReclamacionesPage() {
         {/* Formulario */}
         <form onSubmit={handleSubmit} className="bg-white rounded-none border border-[#d9d9d9] p-6 sm:p-10 space-y-8">
           {errorMsg && (
-            <div className="p-4 bg-red-50 border border-[#de2a2a] rounded-none text-[#de2a2a] text-xs font-bold flex items-center gap-2">
+            <div className="p-4 bg-red-50 border border-brand-accent rounded-none text-brand-accent text-xs font-bold flex items-center gap-2">
               <TbAlertCircle size={18} className="shrink-0" />
               <span>{errorMsg}</span>
             </div>
@@ -662,7 +662,7 @@ export default function LibroDeReclamacionesPage() {
                     name="isMinor"
                     checked={formData.isMinor}
                     onChange={handleChange}
-                    className="rounded-none border-[#d9d9d9] accent-[#de2a2a]"
+                    className="rounded-none border-[#d9d9d9] accent-brand-accent"
                   />
                   <span>
                     El reclamante es <strong>menor de edad</strong> (Habilitar datos del padre, madre o apoderado legal)
@@ -743,7 +743,7 @@ export default function LibroDeReclamacionesPage() {
                       value="producto"
                       checked={formData.contractType === 'producto'}
                       onChange={handleChange}
-                      className="accent-[#de2a2a]"
+                      className="accent-brand-accent"
                     />
                     <span>Producto</span>
                   </label>
@@ -754,7 +754,7 @@ export default function LibroDeReclamacionesPage() {
                       value="servicio"
                       checked={formData.contractType === 'servicio'}
                       onChange={handleChange}
-                      className="accent-[#de2a2a]"
+                      className="accent-brand-accent"
                     />
                     <span>Servicio</span>
                   </label>
@@ -838,7 +838,7 @@ export default function LibroDeReclamacionesPage() {
                       value="reclamo"
                       checked={formData.claimType === 'reclamo'}
                       onChange={handleChange}
-                      className="mt-0.5 accent-[#de2a2a]"
+                      className="mt-0.5 accent-brand-accent"
                     />
                     <div>
                       <span className="font-display font-extrabold uppercase text-black block">
@@ -865,7 +865,7 @@ export default function LibroDeReclamacionesPage() {
                       value="queja"
                       checked={formData.claimType === 'queja'}
                       onChange={handleChange}
-                      className="mt-0.5 accent-[#de2a2a]"
+                      className="mt-0.5 accent-brand-accent"
                     />
                     <div>
                       <span className="font-display font-extrabold uppercase text-black block">
@@ -919,7 +919,7 @@ export default function LibroDeReclamacionesPage() {
                 name="acceptedTerms"
                 checked={formData.acceptedTerms}
                 onChange={handleChange}
-                className="rounded-none border-[#d9d9d9] accent-[#de2a2a] mt-0.5"
+                className="rounded-none border-[#d9d9d9] accent-brand-accent mt-0.5"
                 required
               />
               <span className="font-semibold">
@@ -948,7 +948,7 @@ export default function LibroDeReclamacionesPage() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="px-6 py-3 bg-[#de2a2a] hover:bg-red-700 disabled:bg-neutral-300 text-white rounded-none text-xs font-bold uppercase tracking-widest transition-colors cursor-pointer"
+              className="px-6 py-3 bg-brand-accent hover:bg-red-700 disabled:bg-neutral-300 text-white rounded-none text-xs font-bold uppercase tracking-widest transition-colors cursor-pointer"
             >
               {isSubmitting ? 'Registrando en Libro...' : 'Enviar Hoja de Reclamación'}
             </button>

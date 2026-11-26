@@ -69,7 +69,7 @@ export const CartSummary = ({
             </span>
             <div className="w-full bg-neutral-200 h-1.5 rounded-none mt-2 overflow-hidden">
               <div
-                className="bg-[#de2a2a] h-full rounded-none transition-all duration-300"
+                className="bg-brand-accent h-full rounded-none transition-all duration-300"
                 style={{ width: `${Math.min((subtotal / 99) * 100, 100)}%` }}
               />
             </div>
@@ -90,7 +90,7 @@ export const CartSummary = ({
       {/* Botón principal para realizar pedido */}
       <Link
         href="/checkout"
-        className="w-full mt-5 py-3.5 px-4 bg-[#de2a2a] hover:bg-red-700 text-white text-xs font-bold uppercase tracking-widest rounded-none transition-colors flex items-center justify-center gap-2 cursor-pointer text-center"
+        className="w-full mt-5 py-3.5 px-4 bg-brand-accent hover:bg-red-700 text-white text-xs font-bold uppercase tracking-widest rounded-none transition-colors flex items-center justify-center gap-2 cursor-pointer text-center"
       >
         <span>Continuar compra</span>
         <TbArrowRight size={16} />

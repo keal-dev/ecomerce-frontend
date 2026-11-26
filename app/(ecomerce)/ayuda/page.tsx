@@ -51,7 +51,7 @@ export default function AyudaPage() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-6">
         {/* Breadcrumb */}
         <nav className="flex items-center gap-1.5 text-[11px] uppercase tracking-wider text-neutral-500 mb-5">
-          <Link href="/" className="hover:text-[#de2a2a] transition-colors">
+          <Link href="/" className="hover:text-brand-accent transition-colors">
             Inicio
           </Link>
           <TbChevronRight size={13} className="text-neutral-400" />

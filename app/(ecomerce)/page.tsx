@@ -140,7 +140,7 @@ export default function Ecomerce() {
       {/* 3. Bloque Rich-Text Editorial */}
       <section className="py-12 px-4 md:px-7 border-b border-[#ebebeb] bg-white">
         <div className="max-w-3xl mx-auto text-center space-y-4">
-          <span className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.22em] text-[#de2a2a]">
+          <span className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.22em] text-brand-accent">
             <TbSparkles size={14} />
             <span>DE NUESTRA COOPERATIVA A TU MESA</span>
           </span>
@@ -153,7 +153,7 @@ export default function Ecomerce() {
           <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
             <Link
               href="/ofertas"
-              className="px-7 py-3 bg-[#de2a2a] hover:bg-red-700 text-white text-xs font-bold uppercase tracking-widest rounded-none transition-colors"
+              className="px-7 py-3 bg-brand-accent hover:bg-red-700 text-white text-xs font-bold uppercase tracking-widest rounded-none transition-colors"
             >
               VER OFERTAS
             </Link>
@@ -246,7 +246,7 @@ export default function Ecomerce() {
       <section className="max-w-7xl mx-auto py-12 px-4 md:px-7 border-b border-[#ebebeb]">
         <div className="flex items-end justify-between gap-4 mb-6">
           <div>
-            <span className="block text-[11px] font-bold uppercase tracking-[0.2em] text-[#de2a2a] mb-1">
+            <span className="block text-[11px] font-bold uppercase tracking-[0.2em] text-brand-accent mb-1">
               CULTURA & MARIDAJE
             </span>
             <h2 className="font-display text-2xl sm:text-3xl font-extrabold uppercase tracking-tight text-black leading-none">
@@ -255,7 +255,7 @@ export default function Ecomerce() {
           </div>
           <Link
             href="/categories"
-            className="text-xs font-bold uppercase tracking-widest text-black hover:text-[#de2a2a] underline underline-offset-4 transition-colors shrink-0"
+            className="text-xs font-bold uppercase tracking-widest text-black hover:text-brand-accent underline underline-offset-4 transition-colors shrink-0"
           >
             EXPLORAR CATÁLOGO
           </Link>
@@ -270,12 +270,12 @@ export default function Ecomerce() {
             >
               <div>
                 <div className="flex items-center justify-between mb-4">
-                  <span className="text-[10px] font-extrabold uppercase tracking-[0.18em] px-2.5 py-1 bg-black text-white group-hover:bg-[#de2a2a] transition-colors">
+                  <span className="text-[10px] font-extrabold uppercase tracking-[0.18em] px-2.5 py-1 bg-black text-white group-hover:bg-brand-accent transition-colors">
                     {guide.tag}
                   </span>
                   <TbCoffee size={20} className="text-neutral-400 group-hover:text-black transition-colors" />
                 </div>
-                <h3 className="font-display font-extrabold uppercase text-base sm:text-lg text-black leading-snug group-hover:text-[#de2a2a] transition-colors">
+                <h3 className="font-display font-extrabold uppercase text-base sm:text-lg text-black leading-snug group-hover:text-brand-accent transition-colors">
                   {guide.title}
                 </h3>
                 <p className="text-xs text-neutral-600 mt-2.5 leading-relaxed">
@@ -283,7 +283,7 @@ export default function Ecomerce() {
                 </p>
               </div>
 
-              <div className="mt-5 pt-4 border-t border-[#efefef] inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-black group-hover:text-[#de2a2a]">
+              <div className="mt-5 pt-4 border-t border-[#efefef] inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-black group-hover:text-brand-accent">
                 <span>VER PRODUCTOS RELACIONADOS</span>
                 <TbArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
               </div>
@@ -295,10 +295,10 @@ export default function Ecomerce() {
       {/* 10. Banner Newsletter de Ofertas */}
       <section className="bg-[#f5f5f5] py-12 px-4 md:px-7">
         <div className="max-w-3xl mx-auto bg-white border border-[#d9d9d9] p-7 sm:p-10 text-center space-y-4">
-          <div className="w-11 h-11 bg-[#de2a2a] text-white flex items-center justify-center mx-auto">
+          <div className="w-11 h-11 bg-brand-accent text-white flex items-center justify-center mx-auto">
             <TbMail size={22} />
           </div>
-          <span className="block text-[11px] font-bold uppercase tracking-[0.2em] text-[#de2a2a]">
+          <span className="block text-[11px] font-bold uppercase tracking-[0.2em] text-brand-accent">
             CLUB DE OFERTAS
           </span>
           <h2 className="font-display text-xl sm:text-3xl font-extrabold uppercase tracking-tight text-black">
@@ -328,7 +328,7 @@ export default function Ecomerce() {
               />
               <button
                 type="submit"
-                className="h-11 px-6 bg-[#de2a2a] hover:bg-red-700 text-white text-xs font-bold uppercase tracking-widest rounded-none transition-colors cursor-pointer shrink-0"
+                className="h-11 px-6 bg-brand-accent hover:bg-red-700 text-white text-xs font-bold uppercase tracking-widest rounded-none transition-colors cursor-pointer shrink-0"
               >
                 SUSCRIBIRME
               </button>

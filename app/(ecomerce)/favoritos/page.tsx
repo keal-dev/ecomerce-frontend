@@ -41,7 +41,7 @@ export default function FavoritesPage() {
   if (!mounted || (isLoading && products.length === 0)) {
     return (
       <div className="min-h-[60vh] bg-white flex flex-col items-center justify-center gap-3">
-        <TbLoader2 className="animate-spin text-[#de2a2a]" size={36} />
+        <TbLoader2 className="animate-spin text-brand-accent" size={36} />
         <p className="text-xs font-bold uppercase tracking-wider text-neutral-500">
           Cargando tus favoritos...
         </p>
@@ -54,7 +54,7 @@ export default function FavoritesPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-6">
         {/* Breadcrumb */}
         <nav className="flex items-center gap-1.5 text-[11px] uppercase tracking-wider text-neutral-500 mb-5">
-          <Link href="/" className="hover:text-[#de2a2a] transition-colors">
+          <Link href="/" className="hover:text-brand-accent transition-colors">
             Inicio
           </Link>
           <TbChevronRight size={13} className="text-neutral-400" />
@@ -62,13 +62,13 @@ export default function FavoritesPage() {
         </nav>
 
         {/* Encabezado */}
-        <div className="bg-black text-white rounded-none border-b-4 border-[#de2a2a] p-5 sm:p-7 mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="bg-black text-white rounded-none border-b-4 border-brand-accent p-5 sm:p-7 mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-3 flex-wrap">
               <h1 className="font-display text-xl sm:text-3xl font-extrabold uppercase tracking-tight text-white">
                 Mis Favoritos
               </h1>
-              <span className="bg-[#de2a2a] text-white text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-none">
+              <span className="bg-brand-accent text-white text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-none">
                 {favoriteProducts.length} {favoriteProducts.length === 1 ? 'producto' : 'productos'}
               </span>
             </div>
@@ -81,7 +81,7 @@ export default function FavoritesPage() {
             <button
               type="button"
               onClick={clearFavorites}
-              className="text-xs text-white hover:text-[#de2a2a] font-bold uppercase tracking-wider flex items-center gap-1.5 px-3.5 py-2 border border-[#262626] hover:border-[#de2a2a] rounded-none transition-colors cursor-pointer self-start sm:self-auto"
+              className="text-xs text-white hover:text-brand-accent font-bold uppercase tracking-wider flex items-center gap-1.5 px-3.5 py-2 border border-[#262626] hover:border-brand-accent rounded-none transition-colors cursor-pointer self-start sm:self-auto"
             >
               <TbTrash size={15} />
               <span>Vaciar lista</span>
@@ -108,7 +108,7 @@ export default function FavoritesPage() {
               <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
                 <Link
                   href="/ofertas"
-                  className="px-5 py-2.5 bg-[#de2a2a] hover:bg-red-700 text-white text-xs font-bold uppercase tracking-widest rounded-none transition-colors flex items-center gap-2"
+                  className="px-5 py-2.5 bg-brand-accent hover:bg-red-700 text-white text-xs font-bold uppercase tracking-widest rounded-none transition-colors flex items-center gap-2"
                 >
                   <TbFlame size={16} />
                   <span>Descubrir ofertas</span>
@@ -128,7 +128,7 @@ export default function FavoritesPage() {
             {recommendedProducts.length > 0 && (
               <div className="bg-white rounded-none border border-[#d9d9d9] p-5 sm:p-6">
                 <div className="flex items-center gap-2 mb-5 pb-3 border-b border-[#d9d9d9]">
-                  <TbFlame className="text-[#de2a2a]" size={20} />
+                  <TbFlame className="text-brand-accent" size={20} />
                   <h3 className="font-display text-sm sm:text-base font-extrabold uppercase tracking-tight text-black">
                     Recomendados de nuestra cooperativa
                   </h3>

@@ -86,7 +86,7 @@ export const BrandsCarousel = ({
     <section className="max-w-7xl mx-auto py-8 px-4 md:px-7">
       <div className="flex items-end justify-between gap-4 mb-6">
         <div>
-          <span className="block text-[11px] font-bold uppercase tracking-[0.2em] text-[#de2a2a] mb-1">
+          <span className="block text-[11px] font-bold uppercase tracking-[0.2em] text-brand-accent mb-1">
             ETIQUETAS SELECTAS
           </span>
           <h2 className="font-display text-2xl sm:text-3xl font-extrabold uppercase tracking-tight text-black leading-none">
@@ -95,7 +95,7 @@ export const BrandsCarousel = ({
         </div>
         <Link
           href="/brands"
-          className="text-xs font-bold uppercase tracking-widest text-black hover:text-[#de2a2a] underline underline-offset-4 transition-colors shrink-0"
+          className="text-xs font-bold uppercase tracking-widest text-black hover:text-brand-accent underline underline-offset-4 transition-colors shrink-0"
         >
           VER TODAS
         </Link>
@@ -156,7 +156,7 @@ export const BrandsCarousel = ({
                   </div>
 
                   <div className="w-full">
-                    <h3 className="font-bold text-xs uppercase tracking-wider text-black mb-1.5 group-hover:text-[#de2a2a] transition-colors truncate">
+                    <h3 className="font-bold text-xs uppercase tracking-wider text-black mb-1.5 group-hover:text-brand-accent transition-colors truncate">
                       {brand.name}
                     </h3>
                     <span className="inline-block text-[10px] font-bold uppercase tracking-wider text-white bg-black px-2 py-0.5">
@@ -180,10 +180,10 @@ export const BrandsCarousel = ({
                   </div>
 
                   <div className="w-full">
-                    <h3 className="font-bold text-xs uppercase tracking-wider text-black mb-1.5 group-hover:text-[#de2a2a] transition-colors truncate">
+                    <h3 className="font-bold text-xs uppercase tracking-wider text-black mb-1.5 group-hover:text-brand-accent transition-colors truncate">
                       {brand.name}
                     </h3>
-                    <span className="inline-block text-[10px] font-bold uppercase tracking-wider text-white bg-[#de2a2a] px-2 py-0.5">
+                    <span className="inline-block text-[10px] font-bold uppercase tracking-wider text-white bg-brand-accent px-2 py-0.5">
                       {brand.discount || 'Oficial'}
                     </span>
                   </div>

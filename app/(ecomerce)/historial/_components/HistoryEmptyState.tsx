@@ -30,7 +30,7 @@ export const HistoryEmptyState = ({ recommendedProducts }: HistoryEmptyStateProp
         <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3">
           <Link
             href="/ofertas"
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#de2a2a] hover:bg-red-700 text-white text-xs font-bold uppercase tracking-widest rounded-none transition-colors"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-brand-accent hover:bg-red-700 text-white text-xs font-bold uppercase tracking-widest rounded-none transition-colors"
           >
             <TbFlame size={16} />
             <span>Descubrir ofertas</span>
@@ -50,7 +50,7 @@ export const HistoryEmptyState = ({ recommendedProducts }: HistoryEmptyStateProp
       {recommendedProducts.length > 0 && (
         <div className="bg-white rounded-none border border-[#d9d9d9] p-5 sm:p-6">
           <div className="flex items-center gap-2 mb-5 pb-3 border-b border-[#d9d9d9]">
-            <TbFlame className="text-[#de2a2a]" size={20} />
+            <TbFlame className="text-brand-accent" size={20} />
             <h3 className="font-display text-sm sm:text-base font-extrabold uppercase tracking-tight text-black">
               Recomendados de nuestra cooperativa
             </h3>

@@ -36,7 +36,7 @@ export default function AllBrandsPage() {
       <div className="max-w-7xl mx-auto px-4 md:px-7 py-8">
         {/* Breadcrumbs */}
         <nav className="flex items-center gap-2 text-[11px] uppercase tracking-wider text-neutral-500 mb-6">
-          <Link href="/" className="hover:text-[#de2a2a] transition-colors">
+          <Link href="/" className="hover:text-brand-accent transition-colors">
             Inicio
           </Link>
           <TbChevronRight size={12} />
@@ -44,9 +44,9 @@ export default function AllBrandsPage() {
         </nav>
 
         {/* Header */}
-        <div className="bg-black text-white border-b-4 border-[#de2a2a] p-6 sm:p-8 mb-8 flex flex-col md:flex-row md:items-center justify-between gap-5">
+        <div className="bg-black text-white border-b-4 border-brand-accent p-6 sm:p-8 mb-8 flex flex-col md:flex-row md:items-center justify-between gap-5">
           <div>
-            <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#de2a2a] block mb-1.5">
+            <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-brand-accent block mb-1.5">
               Calidad de origen garantizada
             </span>
             <h1 className="font-display text-2xl sm:text-4xl font-extrabold uppercase tracking-tight text-white">
@@ -98,7 +98,7 @@ export default function AllBrandsPage() {
               <button
                 type="button"
                 onClick={() => setSearchTerm('')}
-                className="mt-4 px-5 py-2 bg-[#de2a2a] text-white text-xs font-bold uppercase tracking-wider rounded-none cursor-pointer"
+                className="mt-4 px-5 py-2 bg-brand-accent text-white text-xs font-bold uppercase tracking-wider rounded-none cursor-pointer"
               >
                 Limpiar búsqueda
               </button>
@@ -126,14 +126,14 @@ export default function AllBrandsPage() {
                         loading="lazy"
                       />
                     ) : (
-                      <span className="font-display font-black text-black text-lg group-hover:text-[#de2a2a] transition-colors">
+                      <span className="font-display font-black text-black text-lg group-hover:text-brand-accent transition-colors">
                         {initials}
                       </span>
                     )}
                   </div>
 
                   <div className="w-full">
-                    <span className="font-display text-xs sm:text-sm font-extrabold uppercase tracking-tight text-black group-hover:text-[#de2a2a] transition-colors line-clamp-1 block">
+                    <span className="font-display text-xs sm:text-sm font-extrabold uppercase tracking-tight text-black group-hover:text-brand-accent transition-colors line-clamp-1 block">
                       {brand.name}
                     </span>
                     <span className="inline-block text-[10px] font-bold uppercase tracking-wider text-[#2e9e7b] bg-[#2e9e7b]/10 px-2 py-0.5 rounded-none mt-1.5">

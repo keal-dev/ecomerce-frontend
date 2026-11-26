@@ -51,7 +51,7 @@ export const HistoryHeader = ({
               <button
                 type="button"
                 onClick={() => setShowConfirmModal(true)}
-                className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold uppercase tracking-wider text-[#de2a2a] border border-[#d9d9d9] hover:border-[#de2a2a] hover:bg-red-50 rounded-none transition-colors cursor-pointer"
+                className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold uppercase tracking-wider text-brand-accent border border-[#d9d9d9] hover:border-brand-accent hover:bg-red-50 rounded-none transition-colors cursor-pointer"
               >
                 <TbTrash size={15} />
                 <span>Borrar historial</span>
@@ -106,7 +106,7 @@ export const HistoryHeader = ({
                 onClick={() => onFilterChange('discount')}
                 className={`px-3.5 py-2 rounded-none transition-colors whitespace-nowrap cursor-pointer border ${
                   activeFilter === 'discount'
-                    ? 'bg-[#de2a2a] text-white border-[#de2a2a]'
+                    ? 'bg-brand-accent text-white border-brand-accent'
                     : 'bg-[#f8f8f8] text-neutral-700 border-[#d9d9d9] hover:border-black'
                 }`}
               >
@@ -133,7 +133,7 @@ export const HistoryHeader = ({
       {showConfirmModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4 animate-in fade-in duration-150">
           <div className="bg-white rounded-none max-w-sm w-full p-6 shadow-2xl border border-black">
-            <div className="w-11 h-11 rounded-none bg-[#de2a2a] text-white flex items-center justify-center mb-4">
+            <div className="w-11 h-11 rounded-none bg-brand-accent text-white flex items-center justify-center mb-4">
               <TbAlertCircle size={24} />
             </div>
             <h3 className="font-display text-base font-extrabold uppercase text-black">
@@ -154,7 +154,7 @@ export const HistoryHeader = ({
               <button
                 type="button"
                 onClick={handleConfirmClear}
-                className="px-4 py-2 text-xs font-bold uppercase tracking-wider text-white bg-[#de2a2a] hover:bg-red-700 rounded-none transition-colors cursor-pointer"
+                className="px-4 py-2 text-xs font-bold uppercase tracking-wider text-white bg-brand-accent hover:bg-red-700 rounded-none transition-colors cursor-pointer"
               >
                 Sí, borrar todo
               </button>

@@ -88,7 +88,7 @@ export const HelpContactChannels = ({ company }: HelpContactChannelsProps) => {
             href={`mailto:${email}?subject=Consulta%20desde%20Centro%20de%20Ayuda`}
             className="flex items-center gap-4 p-4 rounded-none border border-[#d9d9d9] bg-[#f8f8f8] hover:border-black transition-all group"
           >
-            <div className="w-12 h-12 rounded-none bg-black text-white flex items-center justify-center shrink-0 group-hover:bg-[#de2a2a] transition-colors">
+            <div className="w-12 h-12 rounded-none bg-black text-white flex items-center justify-center shrink-0 group-hover:bg-brand-accent transition-colors">
               <TbMail size={24} />
             </div>
             <div>
@@ -96,7 +96,7 @@ export const HelpContactChannels = ({ company }: HelpContactChannelsProps) => {
                 Correo Electrónico
               </span>
               <p className="text-sm font-extrabold text-black">{email}</p>
-              <span className="text-[11px] text-[#de2a2a] font-bold">
+              <span className="text-[11px] text-brand-accent font-bold">
                 Escríbenos en cualquier momento →
               </span>
             </div>
@@ -105,7 +105,7 @@ export const HelpContactChannels = ({ company }: HelpContactChannelsProps) => {
           {/* Horario y Ubicación */}
           <div className="p-4 rounded-none border border-[#d9d9d9] bg-[#f8f8f8] space-y-3">
             <div className="flex items-start gap-3">
-              <TbClock size={18} className="text-[#de2a2a] shrink-0 mt-0.5" />
+              <TbClock size={18} className="text-brand-accent shrink-0 mt-0.5" />
               <div>
                 <p className="text-xs font-bold uppercase tracking-wider text-black">
                   Horario de atención
@@ -117,7 +117,7 @@ export const HelpContactChannels = ({ company }: HelpContactChannelsProps) => {
             </div>
 
             <div className="flex items-start gap-3 pt-2 border-t border-[#d9d9d9]">
-              <TbMapPin size={18} className="text-[#de2a2a] shrink-0 mt-0.5" />
+              <TbMapPin size={18} className="text-brand-accent shrink-0 mt-0.5" />
               <div>
                 <p className="text-xs font-bold uppercase tracking-wider text-black">
                   Oficina Principal
@@ -151,7 +151,7 @@ export const HelpContactChannels = ({ company }: HelpContactChannelsProps) => {
               <button
                 type="button"
                 onClick={() => setSubmitted(false)}
-                className="mt-4 text-xs font-bold uppercase tracking-wider text-[#de2a2a] underline cursor-pointer"
+                className="mt-4 text-xs font-bold uppercase tracking-wider text-brand-accent underline cursor-pointer"
               >
                 Enviar otra consulta
               </button>
@@ -237,7 +237,7 @@ export const HelpContactChannels = ({ company }: HelpContactChannelsProps) => {
               <button
                 type="submit"
                 disabled={isSending}
-                className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 bg-[#de2a2a] hover:bg-red-700 text-white text-xs font-bold uppercase tracking-widest rounded-none transition-colors cursor-pointer disabled:opacity-50"
+                className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 bg-brand-accent hover:bg-red-700 text-white text-xs font-bold uppercase tracking-widest rounded-none transition-colors cursor-pointer disabled:opacity-50"
               >
                 <TbSend size={15} />
                 <span>{isSending ? 'Enviando consulta...' : 'Enviar mensaje'}</span>

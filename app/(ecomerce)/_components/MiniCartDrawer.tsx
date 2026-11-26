@@ -74,10 +74,10 @@ export const MiniCartDrawer = () => {
 
       {/* Drawer Panel */}
       <div className="relative z-10 w-full max-w-md bg-white text-[#020202] h-full flex flex-col shadow-2xl border-l border-[#d9d9d9]">
-        {/* Header Negro Puro */}
-        <div className="bg-black text-white px-5 py-4 flex items-center justify-between border-b border-[#262626]">
+        {/* Header Principal Oscuro */}
+        <div className="bg-brand-primary text-white px-5 py-4 flex items-center justify-between border-b border-white/15">
           <div className="flex items-center gap-2.5">
-            <TbShoppingBag size={20} className="text-[#de2a2a]" />
+            <TbShoppingBag size={20} className="text-brand-accent" />
             <h2 className="font-display font-extrabold uppercase text-sm tracking-wider">
               TU CARRITO ({totalItems})
             </h2>
@@ -98,7 +98,7 @@ export const MiniCartDrawer = () => {
             <div className="flex items-center gap-2 text-xs font-medium text-[#020202]">
               <TbTruckDelivery
                 size={16}
-                className={hasFreeShipping ? 'text-[#2e9e7b]' : 'text-[#de2a2a]'}
+                className={hasFreeShipping ? 'text-[#2e9e7b]' : 'text-brand-accent'}
               />
               {hasFreeShipping ? (
                 <span>
@@ -107,14 +107,14 @@ export const MiniCartDrawer = () => {
               ) : (
                 <span>
                   Agrega <strong>{symbol} {missingForFree.toFixed(2)}</strong> más para{' '}
-                  <strong className="text-[#de2a2a]">ENVÍO GRATIS</strong>.
+                  <strong className="text-brand-accent">ENVÍO GRATIS</strong>.
                 </span>
               )}
             </div>
             <div className="w-full h-1.5 bg-[#e5e5e5] overflow-hidden">
               <div
                 className={`h-full transition-all duration-300 ${
-                  hasFreeShipping ? 'bg-[#2e9e7b]' : 'bg-[#de2a2a]'
+                  hasFreeShipping ? 'bg-[#2e9e7b]' : 'bg-brand-accent'
                 }`}
                 style={{ width: `${hasFreeShipping ? 100 : progressPct}%` }}
               />
@@ -140,7 +140,7 @@ export const MiniCartDrawer = () => {
               <Link
                 href="/categories"
                 onClick={closeDrawer}
-                className="px-6 py-3 bg-[#de2a2a] hover:bg-red-700 text-white text-xs font-bold uppercase tracking-widest transition-colors rounded-none"
+                className="px-6 py-3 bg-brand-accent hover:bg-red-700 text-white text-xs font-bold uppercase tracking-widest transition-colors rounded-none"
               >
                 Explorar Catálogo
               </Link>
@@ -166,7 +166,7 @@ export const MiniCartDrawer = () => {
                     <Link
                       href={`/product/${item.slug || item.id}`}
                       onClick={closeDrawer}
-                      className="text-xs font-semibold text-[#020202] hover:text-[#de2a2a] line-clamp-2 leading-snug transition-colors"
+                      className="text-xs font-semibold text-[#020202] hover:text-brand-accent line-clamp-2 leading-snug transition-colors"
                     >
                       {item.title}
                     </Link>
@@ -174,7 +174,7 @@ export const MiniCartDrawer = () => {
                       type="button"
                       onClick={() => removeItem(item.id)}
                       aria-label={`Quitar ${item.title}`}
-                      className="text-neutral-400 hover:text-[#de2a2a] p-0.5 transition-colors cursor-pointer shrink-0"
+                      className="text-neutral-400 hover:text-brand-accent p-0.5 transition-colors cursor-pointer shrink-0"
                     >
                       <TbTrash size={15} />
                     </button>
@@ -234,7 +234,7 @@ export const MiniCartDrawer = () => {
               <Link
                 href="/checkout"
                 onClick={closeDrawer}
-                className="w-full h-12 bg-[#de2a2a] hover:bg-red-700 text-white text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2 transition-colors rounded-none"
+                className="w-full h-12 bg-brand-accent hover:bg-red-700 text-white text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2 transition-colors rounded-none"
               >
                 <span>IR A PAGAR</span>
                 <TbArrowRight size={16} />

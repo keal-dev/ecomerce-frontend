@@ -143,7 +143,7 @@ export default function ProductDetailPage() {
     return (
       <div className="max-w-4xl mx-auto py-20 px-4 text-center bg-white">
         <div className="bg-[#f8f8f8] rounded-none p-10 border border-[#d9d9d9]">
-          <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#de2a2a] block mb-2">
+          <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-brand-accent block mb-2">
             No disponible
           </span>
           <h2 className="font-display text-2xl font-extrabold uppercase tracking-tight text-black mb-2">
@@ -154,7 +154,7 @@ export default function ProductDetailPage() {
           </p>
           <Link
             href="/"
-            className="inline-block bg-[#de2a2a] hover:bg-red-700 text-white text-xs font-bold uppercase tracking-widest px-6 py-3 rounded-none transition-colors"
+            className="inline-block bg-brand-accent hover:bg-red-700 text-white text-xs font-bold uppercase tracking-widest px-6 py-3 rounded-none transition-colors"
           >
             Volver a la tienda
           </Link>
@@ -191,7 +191,7 @@ export default function ProductDetailPage() {
       <div className="max-w-7xl mx-auto pt-6 px-4 md:px-7">
         {/* Breadcrumb */}
         <nav className="text-[11px] uppercase tracking-wider text-neutral-500 mb-5 flex items-center gap-1.5 flex-wrap">
-          <Link href="/" className="hover:text-[#de2a2a] transition-colors">
+          <Link href="/" className="hover:text-brand-accent transition-colors">
             Inicio
           </Link>
           <span>/</span>
@@ -199,7 +199,7 @@ export default function ProductDetailPage() {
             <>
               <Link
                 href={product.category.href || `/category/${product.category.id}`}
-                className="hover:text-[#de2a2a] transition-colors"
+                className="hover:text-brand-accent transition-colors"
               >
                 {product.category.name}
               </Link>
@@ -210,7 +210,7 @@ export default function ProductDetailPage() {
             <>
               <Link
                 href={`/brand/${product.brand.slug || product.brand.id}`}
-                className="hover:text-[#de2a2a] transition-colors"
+                className="hover:text-brand-accent transition-colors"
               >
                 {product.brand.name}
               </Link>
@@ -256,7 +256,7 @@ export default function ProductDetailPage() {
               {/* Imagen Principal Activa */}
               <div className="relative flex-1 w-full order-1 md:order-2 flex flex-col items-center justify-center bg-[#f8f8f8] rounded-none p-6 border border-[#d9d9d9] min-h-[380px] md:min-h-[480px]">
                 {product.discount && product.discount > 0 ? (
-                  <span className="absolute top-3 left-3 bg-[#de2a2a] text-white text-[11px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-none">
+                  <span className="absolute top-3 left-3 bg-brand-accent text-white text-[11px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-none">
                     -{product.discount}% OFF
                   </span>
                 ) : null}
@@ -286,7 +286,7 @@ export default function ProductDetailPage() {
                     {product.brand && (
                       <Link
                         href={`/brand/${product.brand.slug || product.brand.id}`}
-                        className="font-bold uppercase tracking-wider text-[#de2a2a] hover:underline"
+                        className="font-bold uppercase tracking-wider text-brand-accent hover:underline"
                       >
                         {product.brand.name}
                       </Link>
@@ -310,7 +310,7 @@ export default function ProductDetailPage() {
                     >
                       <FaHeart
                         size={12}
-                        className={product && isFavorite(product.id) ? 'text-[#de2a2a]' : 'text-neutral-400'}
+                        className={product && isFavorite(product.id) ? 'text-brand-accent' : 'text-neutral-400'}
                       />
                       <span>{product && isFavorite(product.id) ? 'Favorito' : 'Guardar'}</span>
                     </button>
@@ -362,7 +362,7 @@ export default function ProductDetailPage() {
                       PEN
                     </span>
                     {product.discount && product.discount > 0 ? (
-                      <span className="bg-[#de2a2a] text-white text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded-none">
+                      <span className="bg-brand-accent text-white text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded-none">
                         -{product.discount}% OFF
                       </span>
                     ) : null}
@@ -393,13 +393,13 @@ export default function ProductDetailPage() {
                 {product.features && product.features.length > 0 && (
                   <div className="mb-6 bg-[#f8f8f8] rounded-none p-4 border border-[#d9d9d9]">
                     <h3 className="text-[11px] font-bold text-black uppercase tracking-widest mb-2.5 flex items-center gap-1.5">
-                      <FaCheck className="text-[#de2a2a]" size={11} />
+                      <FaCheck className="text-brand-accent" size={11} />
                       <span>Notas y características</span>
                     </h3>
                     <ul className="space-y-2">
                       {(showAllFeatures ? product.features : product.features.slice(0, 5)).map((feature, idx) => (
                         <li key={idx} className="flex items-start gap-2.5 text-xs text-neutral-700 leading-relaxed">
-                          <span className="w-1.5 h-1.5 bg-[#de2a2a] mt-1.5 shrink-0" />
+                          <span className="w-1.5 h-1.5 bg-brand-accent mt-1.5 shrink-0" />
                           <span>{feature}</span>
                         </li>
                       ))}
@@ -409,7 +409,7 @@ export default function ProductDetailPage() {
                       <button
                         type="button"
                         onClick={() => setShowAllFeatures((prev) => !prev)}
-                        className="mt-3 text-xs font-bold uppercase tracking-wider text-[#de2a2a] hover:text-red-700 transition-colors inline-flex items-center gap-1.5 cursor-pointer py-1"
+                        className="mt-3 text-xs font-bold uppercase tracking-wider text-brand-accent hover:text-red-700 transition-colors inline-flex items-center gap-1.5 cursor-pointer py-1"
                       >
                         {showAllFeatures ? (
                           <>
@@ -455,7 +455,7 @@ export default function ProductDetailPage() {
                     type="button"
                     onClick={handleBuyNow}
                     disabled={product.stock <= 0}
-                    className="w-full bg-[#de2a2a] hover:bg-red-700 disabled:bg-neutral-300 text-white text-xs font-bold uppercase tracking-widest py-3.5 px-6 rounded-none transition-colors disabled:cursor-not-allowed text-center cursor-pointer"
+                    className="w-full bg-brand-accent hover:bg-red-700 disabled:bg-neutral-300 text-white text-xs font-bold uppercase tracking-widest py-3.5 px-6 rounded-none transition-colors disabled:cursor-not-allowed text-center cursor-pointer"
                   >
                     Comprar ahora
                   </button>
@@ -476,13 +476,13 @@ export default function ProductDetailPage() {
                       aria-label="Guardar en favoritos"
                       className={`h-11 w-11 flex items-center justify-center shrink-0 rounded-none transition-all border cursor-pointer ${
                         product && isFavorite(product.id)
-                          ? 'bg-black text-[#de2a2a] border-black'
-                          : 'bg-white text-neutral-500 border-[#d9d9d9] hover:text-[#de2a2a] hover:border-black'
+                          ? 'bg-black text-brand-accent border-black'
+                          : 'bg-white text-neutral-500 border-[#d9d9d9] hover:text-brand-accent hover:border-black'
                       }`}
                     >
                       <FaHeart
                         size={17}
-                        className={product && isFavorite(product.id) ? 'text-[#de2a2a]' : ''}
+                        className={product && isFavorite(product.id) ? 'text-brand-accent' : ''}
                       />
                     </button>
                   </div>
@@ -492,7 +492,7 @@ export default function ProductDetailPage() {
               {/* Guarantees */}
               <div className="mt-8 pt-5 border-t border-[#d9d9d9] flex flex-col gap-3 text-xs text-neutral-600">
                 <div className="flex items-center gap-2.5">
-                  <FaArrowRotateLeft className="text-[#de2a2a] shrink-0" size={14} />
+                  <FaArrowRotateLeft className="text-brand-accent shrink-0" size={14} />
                   <span>
                     <strong className="text-black">Cambio o devolución garantizada.</strong> Empaques y sellos de origen verificados.
                   </span>
@@ -510,7 +510,7 @@ export default function ProductDetailPage() {
           {/* Ficha Técnica y Especificaciones */}
           <div className="mt-10 pt-8 border-t border-[#d9d9d9]">
             <h2 className="font-display text-lg font-extrabold uppercase tracking-tight text-black mb-4 flex items-center gap-2">
-              <FaShieldHalved className="text-[#de2a2a]" size={16} />
+              <FaShieldHalved className="text-brand-accent" size={16} />
               <span>Especificaciones y Garantía</span>
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-4xl text-xs">
@@ -525,7 +525,7 @@ export default function ProductDetailPage() {
               {product.brand && (
                 <div className="p-3.5 bg-[#f8f8f8] rounded-none border border-[#d9d9d9] flex justify-between items-center">
                   <span className="text-neutral-500 font-medium">Marca / Productor:</span>
-                  <span className="font-bold text-[#de2a2a] uppercase">{product.brand.name}</span>
+                  <span className="font-bold text-brand-accent uppercase">{product.brand.name}</span>
                 </div>
               )}
               {product.sku && (
@@ -559,7 +559,7 @@ export default function ProductDetailPage() {
                     key={idx}
                     className="flex items-center gap-3 p-3.5 bg-[#f8f8f8] rounded-none border border-[#d9d9d9] text-xs font-medium text-[#020202]"
                   >
-                    <span className="w-2 h-2 bg-[#de2a2a] shrink-0" />
+                    <span className="w-2 h-2 bg-brand-accent shrink-0" />
                     <span>{feature}</span>
                   </div>
                 ))}

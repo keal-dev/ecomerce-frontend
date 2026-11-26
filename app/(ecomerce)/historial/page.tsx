@@ -75,7 +75,7 @@ export default function HistoryPage() {
   if (!mounted || (isLoading && products.length === 0)) {
     return (
       <div className="min-h-[60vh] bg-white flex flex-col items-center justify-center gap-3">
-        <TbLoader2 className="animate-spin text-[#de2a2a]" size={36} />
+        <TbLoader2 className="animate-spin text-brand-accent" size={36} />
         <p className="text-xs font-bold uppercase tracking-wider text-neutral-500">
           Cargando tu historial...
         </p>
@@ -88,7 +88,7 @@ export default function HistoryPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-6">
         {/* Breadcrumb */}
         <nav className="flex items-center gap-1.5 text-[11px] uppercase tracking-wider text-neutral-500 mb-5">
-          <Link href="/" className="hover:text-[#de2a2a] transition-colors">
+          <Link href="/" className="hover:text-brand-accent transition-colors">
             Inicio
           </Link>
           <TbChevronRight size={13} className="text-neutral-400" />
@@ -126,7 +126,7 @@ export default function HistoryPage() {
                   setSearchQuery('');
                   setActiveFilter('all');
                 }}
-                className="px-5 py-2.5 bg-[#de2a2a] hover:bg-red-700 text-white text-xs font-bold uppercase tracking-wider rounded-none transition-colors cursor-pointer"
+                className="px-5 py-2.5 bg-brand-accent hover:bg-red-700 text-white text-xs font-bold uppercase tracking-wider rounded-none transition-colors cursor-pointer"
               >
                 Restablecer búsqueda
               </button>

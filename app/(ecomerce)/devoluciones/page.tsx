@@ -28,7 +28,7 @@ export default function DevolucionesPage() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-6">
         {/* Breadcrumb */}
         <nav className="flex items-center gap-1.5 text-[11px] uppercase tracking-wider text-neutral-500 mb-5">
-          <Link href="/" className="hover:text-[#de2a2a] transition-colors">
+          <Link href="/" className="hover:text-brand-accent transition-colors">
             Inicio
           </Link>
           <TbChevronRight size={13} className="text-neutral-400" />
@@ -36,9 +36,9 @@ export default function DevolucionesPage() {
         </nav>
 
         {/* Encabezado */}
-        <div className="bg-black text-white rounded-none border-b-4 border-[#de2a2a] p-6 sm:p-8 mb-6">
+        <div className="bg-black text-white rounded-none border-b-4 border-brand-accent p-6 sm:p-8 mb-6">
           <div className="flex items-start gap-4">
-            <div className="p-3 bg-[#de2a2a] text-white rounded-none shrink-0">
+            <div className="p-3 bg-brand-accent text-white rounded-none shrink-0">
               <TbArrowBackUp size={28} />
             </div>
             <div>
@@ -86,7 +86,7 @@ export default function DevolucionesPage() {
           </div>
 
           <div className="bg-[#f8f8f8] rounded-none border border-[#d9d9d9] p-5 flex items-start gap-3">
-            <div className="w-10 h-10 rounded-none bg-[#de2a2a] text-white flex items-center justify-center shrink-0">
+            <div className="w-10 h-10 rounded-none bg-brand-accent text-white flex items-center justify-center shrink-0">
               <TbTruckReturn size={20} />
             </div>
             <div>
@@ -195,7 +195,7 @@ export default function DevolucionesPage() {
             </div>
             <Link
               href="/ayuda"
-              className="inline-flex items-center justify-center gap-1.5 px-5 py-2.5 bg-[#de2a2a] hover:bg-red-700 text-white rounded-none text-xs font-bold uppercase tracking-wider transition-colors shrink-0"
+              className="inline-flex items-center justify-center gap-1.5 px-5 py-2.5 bg-brand-accent hover:bg-red-700 text-white rounded-none text-xs font-bold uppercase tracking-wider transition-colors shrink-0"
             >
               <TbHelpCircle size={16} />
               Contactar Soporte

@@ -1,11 +1,11 @@
 /* Editorial Black & Crimson Design System — Scoped to /admin */
 
 .admin-fluent {
-  --fluent-brand: #111111;
-  --fluent-brand-hover: #262626;
-  --fluent-brand-pressed: #000000;
-  --fluent-accent: #de2a2a;
-  --fluent-accent-hover: #b91c1c;
+  --fluent-brand: var(--brand-primary, #000000);
+  --fluent-brand-hover: color-mix(in srgb, var(--brand-primary, #000000) 86%, white);
+  --fluent-brand-pressed: var(--brand-primary, #000000);
+  --fluent-accent: var(--brand-accent, #de2a2a);
+  --fluent-accent-hover: color-mix(in srgb, var(--brand-accent, #de2a2a) 84%, black);
   --fluent-canvas: #ebebeb;
   --fluent-surface: #ffffff;
   --fluent-stroke: #d1d1d1;
@@ -98,7 +98,7 @@
   border-color: #c7c7c7 #c7c7c7 var(--fluent-accent) #c7c7c7;
   box-shadow:
     inset 0 -2px 0 0 var(--fluent-accent),
-    0 0 0 1px rgba(222, 42, 42, 0.14);
+    0 0 0 1px color-mix(in srgb, var(--fluent-accent) 16%, transparent);
 }
 
 .admin-fluent
@@ -189,7 +189,7 @@
 .admin-fluent input[type='checkbox']:not(.sr-only):focus-visible,
 .admin-fluent input[type='radio']:not(.sr-only):focus-visible {
   outline: none;
-  box-shadow: 0 0 0 2px rgba(222, 42, 42, 0.22);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--fluent-accent) 24%, transparent);
 }
 
 /* Field labels inside forms */
@@ -217,10 +217,10 @@
     0 0 2px rgba(0, 0, 0, 0.08);
 }
 
-/* Primary submit buttons inside forms (preserving explicit semantic red/green cash actions) */
+/* Primary submit buttons inside forms (preserving explicit semantic red/green/accent actions) */
 .admin-fluent
   form
-  button[type='submit']:not([class*='bg-rose-']):not([class*='bg-[#00a650]']) {
+  button[type='submit']:not([class*='bg-rose-']):not([class*='bg-[#00a650]']):not([class*='bg-brand-accent']) {
   background-color: var(--fluent-brand);
   color: #ffffff;
   border-radius: 4px;
@@ -235,13 +235,13 @@
 
 .admin-fluent
   form
-  button[type='submit']:not([class*='bg-rose-']):not([class*='bg-[#00a650]']):hover:not(:disabled) {
+  button[type='submit']:not([class*='bg-rose-']):not([class*='bg-[#00a650]']):not([class*='bg-brand-accent']):hover:not(:disabled) {
   background-color: var(--fluent-brand-hover);
 }
 
 .admin-fluent
   form
-  button[type='submit']:not([class*='bg-rose-']):not([class*='bg-[#00a650]']):active:not(:disabled) {
+  button[type='submit']:not([class*='bg-rose-']):not([class*='bg-[#00a650]']):not([class*='bg-brand-accent']):active:not(:disabled) {
   background-color: var(--fluent-brand-pressed);
 }
 

@@ -114,13 +114,13 @@ export const CategoriesDropdown = ({ categories: propCategories, isActive = fals
         aria-expanded={isOpen}
         aria-haspopup="true"
         className={`flex items-center gap-1.5 cursor-pointer transition-colors text-[11px] font-bold uppercase tracking-wider outline-none ${
-          isOpen || isActive ? 'text-[#de2a2a]' : 'text-white hover:text-[#de2a2a]'
+          isOpen || isActive ? 'text-brand-accent' : 'text-white hover:text-brand-accent'
         }`}
       >
         <span>CATEGORÍAS</span>
         <TbChevronDown 
           size={14} 
-          className={`transition-transform duration-200 ${isOpen ? 'rotate-180 text-[#de2a2a]' : isActive ? 'text-[#de2a2a]' : ''}`} 
+          className={`transition-transform duration-200 ${isOpen ? 'rotate-180 text-brand-accent' : isActive ? 'text-brand-accent' : ''}`} 
         />
       </button>
 
@@ -136,7 +136,7 @@ export const CategoriesDropdown = ({ categories: propCategories, isActive = fals
             {/* Estado de carga */}
             {isLoading && categories.length === 0 ? (
               <div className="py-6 px-4 flex flex-col items-center justify-center space-y-2 text-xs text-neutral-400">
-                <div className="w-5 h-5 border-2 border-[#de2a2a] border-t-transparent rounded-full animate-spin" />
+                <div className="w-5 h-5 border-2 border-brand-accent border-t-transparent rounded-full animate-spin" />
                 <span>Cargando categorías...</span>
               </div>
             ) : categories.length === 0 ? (
@@ -153,7 +153,7 @@ export const CategoriesDropdown = ({ categories: propCategories, isActive = fals
                       <Link
                         href={cat.href || `/category/${cat.id}`}
                         onClick={() => setIsOpen(false)}
-                        className="px-4 py-2.5 flex items-center justify-between text-xs text-neutral-200 hover:bg-[#de2a2a] hover:text-white transition-colors cursor-pointer group"
+                        className="px-4 py-2.5 flex items-center justify-between text-xs text-neutral-200 hover:bg-brand-accent hover:text-white transition-colors cursor-pointer group"
                       >
                         <div className="flex items-center gap-3 truncate">
                           {cat.icon && (cat.icon.startsWith('http') || cat.icon.startsWith('data:')) ? (
@@ -194,7 +194,7 @@ export const CategoriesDropdown = ({ categories: propCategories, isActive = fals
               <Link
                 href="/categories"
                 onClick={() => setIsOpen(false)}
-                className="text-[11px] font-bold uppercase tracking-wider text-white hover:text-[#de2a2a] block text-center py-1 transition-colors"
+                className="text-[11px] font-bold uppercase tracking-wider text-white hover:text-brand-accent block text-center py-1 transition-colors"
               >
                 Ver todas las categorías →
               </Link>

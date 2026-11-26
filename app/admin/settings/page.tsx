@@ -97,8 +97,8 @@ const SETTING_CARDS: SettingCard[] = [
     href: '/admin/settings/database-reset',
     icon: TbDatabase,
     badge: 'Zona Crítica',
-    badgeColor: 'bg-red-100 text-[#de2a2a]',
-    iconColor: 'text-[#de2a2a]',
+    badgeColor: 'bg-red-100 text-brand-accent',
+    iconColor: 'text-brand-accent',
     iconBg: 'bg-red-50',
     isAvailable: true,
     superAdminOnly: true,
@@ -120,7 +120,7 @@ export default function AdminSettingsHubPage() {
       <div className="flex items-start justify-between gap-4">
         <div>
           <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-md bg-black text-white text-[11px] font-bold mb-2">
-            <TbSettings size={14} className="text-[#de2a2a]" />
+            <TbSettings size={14} className="text-brand-accent" />
             <span>PANEL DE CONTROL</span>
           </div>
           <h1 className="text-xl sm:text-2xl font-black text-gray-900 tracking-tight">
@@ -156,7 +156,7 @@ export default function AdminSettingsHubPage() {
                 {/* Título y Descripción */}
                 <h3
                   className={`font-bold text-[12px] text-gray-900 transition-colors leading-tight truncate ${
-                    card.isDanger ? 'group-hover:text-[#de2a2a]' : 'group-hover:text-[#111111]'
+                    card.isDanger ? 'group-hover:text-brand-accent' : 'group-hover:text-[#111111]'
                   }`}
                 >
                   {card.title}
@@ -173,7 +173,7 @@ export default function AdminSettingsHubPage() {
                     !card.isAvailable
                       ? 'text-gray-400'
                       : card.isDanger
-                        ? 'text-[#de2a2a]'
+                        ? 'text-brand-accent'
                         : 'text-gray-800 group-hover:text-[#111111]'
                   }`}
                 >
@@ -185,7 +185,7 @@ export default function AdminSettingsHubPage() {
                     !card.isAvailable
                       ? 'bg-gray-100 text-gray-400'
                       : card.isDanger
-                        ? 'bg-red-50 text-[#de2a2a] group-hover:bg-[#de2a2a] group-hover:text-white group-hover:translate-x-0.5'
+                        ? 'bg-red-50 text-brand-accent group-hover:bg-brand-accent group-hover:text-white group-hover:translate-x-0.5'
                         : 'bg-gray-100 text-gray-700 group-hover:bg-[#111111] group-hover:text-white group-hover:translate-x-0.5'
                   }`}
                 >
@@ -202,7 +202,7 @@ export default function AdminSettingsHubPage() {
                 href={card.href}
                 className={`bg-white rounded-xl border hover:shadow-md cursor-pointer p-3 flex flex-col justify-between transition-all duration-200 group relative ${
                   card.isDanger
-                    ? 'border-red-200/90 hover:border-[#de2a2a]'
+                    ? 'border-red-200/90 hover:border-brand-accent'
                     : 'border-gray-200/90 hover:border-[#111111]'
                 }`}
               >

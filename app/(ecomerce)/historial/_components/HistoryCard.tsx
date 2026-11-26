@@ -61,13 +61,13 @@ export const HistoryCard = ({ product, onRemove }: HistoryCardProps) => {
         onClick={handleRemove}
         title="Eliminar de mi historial"
         aria-label="Eliminar del historial"
-        className="absolute top-2 right-2 z-10 p-1.5 rounded-none bg-white hover:bg-[#de2a2a] text-neutral-500 hover:text-white border border-[#d9d9d9] hover:border-[#de2a2a] transition-all cursor-pointer"
+        className="absolute top-2 right-2 z-10 p-1.5 rounded-none bg-white hover:bg-brand-accent text-neutral-500 hover:text-white border border-[#d9d9d9] hover:border-brand-accent transition-all cursor-pointer"
       >
         <TbTrash size={14} />
       </button>
 
       {discountPercent > 0 && (
-        <span className="absolute top-2 left-2 z-10 bg-[#de2a2a] text-white text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-none">
+        <span className="absolute top-2 left-2 z-10 bg-brand-accent text-white text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-none">
           -{discountPercent}%
         </span>
       )}
@@ -106,7 +106,7 @@ export const HistoryCard = ({ product, onRemove }: HistoryCardProps) => {
             </div>
 
             {/* Título */}
-            <h3 className="text-black text-xs sm:text-sm font-bold line-clamp-2 leading-snug group-hover:text-[#de2a2a] transition-colors">
+            <h3 className="text-black text-xs sm:text-sm font-bold line-clamp-2 leading-snug group-hover:text-brand-accent transition-colors">
               {product.title}
             </h3>
 

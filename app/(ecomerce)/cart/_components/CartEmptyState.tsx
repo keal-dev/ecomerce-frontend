@@ -19,7 +19,7 @@ export const CartEmptyState = ({ recommendedProducts }: CartEmptyStateProps) => 
           <TbShoppingCartOff size={32} />
         </div>
 
-        <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#de2a2a] block mb-1">
+        <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-brand-accent block mb-1">
           Aún sin productos
         </span>
         <h2 className="font-display text-xl sm:text-2xl font-extrabold uppercase tracking-tight text-black">
@@ -33,7 +33,7 @@ export const CartEmptyState = ({ recommendedProducts }: CartEmptyStateProps) => 
         <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
           <Link
             href="/ofertas"
-            className="px-6 py-3 bg-[#de2a2a] hover:bg-red-700 text-white text-xs font-bold uppercase tracking-widest rounded-none transition-colors flex items-center gap-2"
+            className="px-6 py-3 bg-brand-accent hover:bg-red-700 text-white text-xs font-bold uppercase tracking-widest rounded-none transition-colors flex items-center gap-2"
           >
             <TbFlame size={16} />
             <span>Descubrir ofertas</span>
@@ -53,7 +53,7 @@ export const CartEmptyState = ({ recommendedProducts }: CartEmptyStateProps) => 
       {recommendedProducts.length > 0 && (
         <div className="bg-white rounded-none border border-[#d9d9d9] p-5 sm:p-6">
           <div className="flex items-center gap-2 mb-5 pb-3 border-b border-[#d9d9d9]">
-            <TbFlame className="text-[#de2a2a]" size={20} />
+            <TbFlame className="text-brand-accent" size={20} />
             <h3 className="font-display text-sm sm:text-base font-extrabold uppercase tracking-tight text-black">
               Recomendados de nuestra cooperativa
             </h3>

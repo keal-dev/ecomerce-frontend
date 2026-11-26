@@ -102,7 +102,7 @@ export const CategoryCarousel = ({
     <section className="max-w-7xl mx-auto py-8 px-4 md:px-7">
       <div className="flex items-end justify-between gap-4 mb-6">
         <div>
-          <span className="block text-[11px] font-bold uppercase tracking-[0.2em] text-[#de2a2a] mb-1">
+          <span className="block text-[11px] font-bold uppercase tracking-[0.2em] text-brand-accent mb-1">
             NUESTRA COOPERATIVA
           </span>
           <h2 className="font-display text-2xl sm:text-3xl font-extrabold uppercase tracking-tight text-black leading-none">
@@ -111,7 +111,7 @@ export const CategoryCarousel = ({
         </div>
         <Link
           href="/categories"
-          className="text-xs font-bold uppercase tracking-widest text-black hover:text-[#de2a2a] underline underline-offset-4 transition-colors shrink-0"
+          className="text-xs font-bold uppercase tracking-widest text-black hover:text-brand-accent underline underline-offset-4 transition-colors shrink-0"
         >
           VER TODAS
         </Link>
@@ -170,7 +170,7 @@ export const CategoryCarousel = ({
                   className="group w-[155px] sm:w-[175px] md:w-[190px] shrink-0 bg-white rounded-none p-5 border border-[#e5e5e5] hover:border-black transition-colors duration-200 flex flex-col items-center justify-center text-center relative overflow-hidden select-none"
                 >
                   {cat.badge && (
-                    <span className="absolute top-2 right-2 bg-[#de2a2a] text-white text-[9px] font-extrabold px-1.5 py-0.5 rounded-none uppercase tracking-wider">
+                    <span className="absolute top-2 right-2 bg-brand-accent text-white text-[9px] font-extrabold px-1.5 py-0.5 rounded-none uppercase tracking-wider">
                       {cat.badge}
                     </span>
                   )}
@@ -191,7 +191,7 @@ export const CategoryCarousel = ({
                     )}
                   </div>
 
-                  <span className="text-xs font-extrabold uppercase tracking-wider text-black group-hover:text-[#de2a2a] transition-colors line-clamp-1 w-full text-center">
+                  <span className="text-xs font-extrabold uppercase tracking-wider text-black group-hover:text-brand-accent transition-colors line-clamp-1 w-full text-center">
                     {cat.name}
                   </span>
                 </Link>

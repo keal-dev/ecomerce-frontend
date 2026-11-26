@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useEffect, useState, useRef, useCallback } from 'react';
+import React, { useEffect, useState, useRef, useCallback, useMemo } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { 
   TbBell, 
   TbBuildingStore, 
@@ -13,6 +14,19 @@ import {
   TbCheck,
   TbRefresh,
   TbChevronRight,
+  TbLayoutDashboard,
+  TbPackage,
+  TbShoppingCart,
+  TbClipboardList,
+  TbBook,
+  TbBox,
+  TbCategory,
+  TbTag,
+  TbSettings,
+  TbCash,
+  TbPhotoVideo,
+  TbUsers,
+  TbDatabase,
 } from 'react-icons/tb';
 import { UserButton, Show } from '@clerk/nextjs';
 import { useAdminNavStore } from '@/stores/admin-nav.store';
@@ -22,7 +36,50 @@ import { getProducts } from '@/services/product.service';
 import { Order } from '@/types/order.types';
 import { Product } from '@/types/product.types';
 
+interface AdminSectionInfo {
+  title: string;
+  parent?: string;
+  icon: React.ElementType;
+}
+
+const ADMIN_SECTION_ROUTES: { prefix: string; exact?: boolean; info: AdminSectionInfo }[] = [
+  { prefix: '/admin', exact: true, info: { title: 'Dashboard', icon: TbLayoutDashboard } },
+  { prefix: '/admin/orders', info: { title: 'Pedidos Online', icon: TbPackage } },
+  { prefix: '/admin/sales', info: { title: 'Punto de Venta (POS)', icon: TbShoppingCart } },
+  { prefix: '/admin/billing', info: { title: 'Facturación', icon: TbReceipt } },
+  { prefix: '/admin/inventory', info: { title: 'Inventario', icon: TbClipboardList } },
+  { prefix: '/admin/purchases/new', info: { title: 'Nueva Compra', parent: 'Compras', icon: TbTruckDelivery } },
+  { prefix: '/admin/purchases', info: { title: 'Compras', icon: TbTruckDelivery } },
+  { prefix: '/admin/suppliers', info: { title: 'Proveedores', icon: TbBuildingStore } },
+  { prefix: '/admin/claims', info: { title: 'Reclamaciones', icon: TbBook } },
+  { prefix: '/admin/products/new', info: { title: 'Nuevo Producto', parent: 'Productos', icon: TbBox } },
+  { prefix: '/admin/products/', info: { title: 'Editar Producto', parent: 'Productos', icon: TbBox } },
+  { prefix: '/admin/products', info: { title: 'Productos', icon: TbBox } },
+  { prefix: '/admin/categories', info: { title: 'Categorías', icon: TbCategory } },
+  { prefix: '/admin/brands', info: { title: 'Marcas', icon: TbTag } },
+  { prefix: '/admin/settings/cash-register', info: { title: 'Caja', parent: 'Configuración', icon: TbCash } },
+  { prefix: '/admin/settings/company', info: { title: 'Datos de la Empresa', parent: 'Configuración', icon: TbBuilding } },
+  { prefix: '/admin/settings/marketing', info: { title: 'Banners y Marketing', parent: 'Configuración', icon: TbPhotoVideo } },
+  { prefix: '/admin/settings/users/new', info: { title: 'Nuevo Usuario', parent: 'Usuarios y Roles', icon: TbUsers } },
+  { prefix: '/admin/settings/users', info: { title: 'Usuarios y Roles', parent: 'Configuración', icon: TbUsers } },
+  { prefix: '/admin/settings/billing', info: { title: 'Series SUNAT', parent: 'Configuración', icon: TbReceipt } },
+  { prefix: '/admin/settings/database-reset', info: { title: 'Resetear Base de Datos', parent: 'Configuración', icon: TbDatabase } },
+  { prefix: '/admin/settings', info: { title: 'Configuración', icon: TbSettings } },
+];
+
+function getCurrentSection(pathname: string): AdminSectionInfo {
+  const match = ADMIN_SECTION_ROUTES.find((route) =>
+    route.exact
+      ? pathname === route.prefix
+      : pathname === route.prefix || pathname.startsWith(route.prefix.endsWith('/') ? route.prefix : `${route.prefix}/`),
+  );
+  return match?.info ?? { title: 'Panel Administrativo', icon: TbLayoutDashboard };
+}
+
 export function Header() {
+  const pathname = usePathname();
+  const currentSection = useMemo(() => getCurrentSection(pathname || '/admin'), [pathname]);
+  const SectionIcon = currentSection.icon;
   const { toggleMobileSidebar } = useAdminNavStore();
   const { company, fetchCompany } = useCompanyStore();
 
@@ -91,7 +148,7 @@ export function Header() {
     pendingWebOrders.length + lowStockProducts.length + unbilledOrders.length;
 
   return (
-    <header className="h-[52px] bg-black border-b border-[#262626] px-4 sm:px-6 flex items-center justify-between sticky top-0 z-30 text-white">
+    <header className="h-[52px] bg-brand-primary border-b border-white/15 px-4 sm:px-6 flex items-center justify-between sticky top-0 z-30 text-white">
       {/* Lado Izquierdo: Botón Menú Móvil + Logo de la empresa + Indicador de Empresa */}
       <div className="flex items-center gap-2 sm:gap-3">
         {/* Botón de Menú Móvil (solo en móviles y tablets: lg:hidden) */}
@@ -107,7 +164,7 @@ export function Header() {
         {/* Logo de la empresa (solo visible en móviles y tablets: lg:hidden) */}
         <Link 
           href="/admin" 
-          className="lg:hidden w-7 h-7 rounded-lg bg-[#de2a2a] text-white font-black text-sm flex items-center justify-center shadow-2xs hover:bg-red-700 transition-colors shrink-0"
+          className="lg:hidden w-7 h-7 rounded-lg bg-brand-accent text-white font-black text-sm flex items-center justify-center shadow-2xs hover:bg-red-700 transition-colors shrink-0"
           title="Ir al Dashboard"
           aria-label="Inicio del Dashboard"
         >
@@ -117,15 +174,22 @@ export function Header() {
         {/* Divisor vertical fino (solo en móviles y tablets) */}
         <div className="lg:hidden h-4.5 w-px bg-white/15 shrink-0" />
 
-        {/* Identificador de Empresa */}
+        {/* Indicador de Sección Actual */}
         <div 
           className="flex items-center gap-2 px-2.5 py-1.5 rounded-lg border border-[#262626] bg-white/5 text-xs font-semibold text-white select-none"
-          title={company?.legalName || company?.name || 'Empresa'}
+          title={currentSection.parent ? `${currentSection.parent} / ${currentSection.title}` : currentSection.title}
         >
-          <TbBuilding size={15} className="text-[#de2a2a] shrink-0" />
-          <span className="truncate max-w-[160px] sm:max-w-[240px] font-bold text-white">
-            {company?.name || 'Cooperativa Gourmet'}
-          </span>
+          <SectionIcon size={15} className="text-brand-accent shrink-0" />
+          <div className="flex items-center gap-1.5 min-w-0">
+            {currentSection.parent && (
+              <span className="hidden sm:inline text-neutral-400 font-medium whitespace-nowrap">
+                {currentSection.parent} /
+              </span>
+            )}
+            <span className="truncate max-w-[170px] sm:max-w-[280px] font-bold text-white">
+              {currentSection.title}
+            </span>
+          </div>
         </div>
       </div>
 
@@ -136,7 +200,7 @@ export function Header() {
           href="/"
           title="Ver tienda"
           aria-label="Ver tienda"
-          className="flex items-center gap-1.5 text-xs font-semibold text-white border border-white/20 p-2 lg:px-3 lg:py-1.5 rounded-lg bg-white/5 hover:bg-[#de2a2a] hover:border-[#de2a2a] transition-colors cursor-pointer"
+          className="flex items-center gap-1.5 text-xs font-semibold text-white border border-white/20 p-2 lg:px-3 lg:py-1.5 rounded-lg bg-white/5 hover:bg-brand-accent hover:border-brand-accent transition-colors cursor-pointer"
         >
           <TbBuildingStore size={16} className="shrink-0" />
           <span className="hidden lg:inline">Ver tienda</span>
@@ -156,7 +220,7 @@ export function Header() {
           >
             <TbBell size={20} />
             {totalAlerts > 0 ? (
-              <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 bg-[#de2a2a] text-white text-[10px] font-black rounded-full flex items-center justify-center border-2 border-black">
+              <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 bg-brand-accent text-white text-[10px] font-black rounded-full flex items-center justify-center border-2 border-black">
                 {totalAlerts > 99 ? '99+' : totalAlerts}
               </span>
             ) : (
@@ -167,7 +231,7 @@ export function Header() {
           {notifOpen && (
             <div className="absolute right-0 mt-2 w-80 sm:w-96 bg-white text-[#242424] rounded-2xl shadow-xl border border-gray-200 overflow-hidden z-50 animate-in fade-in zoom-in-95 duration-150">
               {/* Header del panel de notificaciones */}
-              <div className="px-4 py-3 bg-black text-white border-b border-[#262626] flex items-center justify-between">
+              <div className="px-4 py-3 bg-brand-primary text-white border-b border-white/15 flex items-center justify-between">
                 <div>
                   <h3 className="text-xs font-bold text-white uppercase tracking-wide">
                     Centro de Alertas

@@ -353,6 +353,17 @@ export function BannersManager() {
                                 >
                                   <TbExternalLink size={12} />
                                 </Link>
+                                <span
+                                  className={`font-sans text-[10px] font-bold px-1.5 py-0.5 rounded shrink-0 ${
+                                    principalSlot.linkMode === 'button'
+                                      ? 'bg-red-50 text-brand-accent border border-red-200'
+                                      : 'bg-gray-100 text-gray-600 border border-gray-200'
+                                  }`}
+                                >
+                                  {principalSlot.linkMode === 'button'
+                                    ? `Botón: ${principalSlot.buttonText || 'Ver más'}`
+                                    : 'Clic en imagen'}
+                                </span>
                               </>
                             ) : (
                               <span className="text-gray-400 italic">Sin enlace asignado</span>
@@ -557,6 +568,17 @@ export function BannersManager() {
                                 >
                                   <TbExternalLink size={12} />
                                 </Link>
+                                <span
+                                  className={`font-sans text-[10px] font-bold px-1.5 py-0.5 rounded shrink-0 ${
+                                    slot.linkMode === 'button'
+                                      ? 'bg-red-50 text-brand-accent border border-red-200'
+                                      : 'bg-gray-100 text-gray-600 border border-gray-200'
+                                  }`}
+                                >
+                                  {slot.linkMode === 'button'
+                                    ? `Botón: ${slot.buttonText || 'Ver más'}`
+                                    : 'Clic en imagen'}
+                                </span>
                               </>
                             ) : (
                               <span className="text-gray-400 italic">Sin enlace asignado</span>

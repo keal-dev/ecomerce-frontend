@@ -49,7 +49,7 @@ export default function CartPage() {
   if (!mounted) {
     return (
       <div className="min-h-[60vh] bg-white flex flex-col items-center justify-center gap-3">
-        <TbLoader2 className="animate-spin text-[#de2a2a]" size={36} />
+        <TbLoader2 className="animate-spin text-brand-accent" size={36} />
         <p className="text-xs font-medium uppercase tracking-wider text-neutral-500">Cargando tu carrito...</p>
       </div>
     );
@@ -60,7 +60,7 @@ export default function CartPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-6">
         {/* Breadcrumb */}
         <nav className="flex items-center gap-1.5 text-[11px] uppercase tracking-wider text-neutral-500 mb-5">
-          <Link href="/" className="hover:text-[#de2a2a] transition-colors">
+          <Link href="/" className="hover:text-brand-accent transition-colors">
             Inicio
           </Link>
           <TbChevronRight size={13} className="text-neutral-400" />
@@ -86,7 +86,7 @@ export default function CartPage() {
                 <button
                   type="button"
                   onClick={clearCart}
-                  className="text-xs text-[#de2a2a] hover:text-red-700 font-bold uppercase tracking-wider inline-flex items-center gap-1 cursor-pointer transition-colors"
+                  className="text-xs text-brand-accent hover:text-red-700 font-bold uppercase tracking-wider inline-flex items-center gap-1 cursor-pointer transition-colors"
                 >
                   <TbTrash size={15} />
                   <span>Vaciar carrito</span>

@@ -56,7 +56,7 @@ export const HelpCategoryCards = ({
           <button
             type="button"
             onClick={() => onSelectCategory('all')}
-            className="text-xs font-bold uppercase tracking-wider text-[#de2a2a] hover:underline cursor-pointer"
+            className="text-xs font-bold uppercase tracking-wider text-brand-accent hover:underline cursor-pointer"
           >
             Ver todos los temas
           </button>
@@ -75,7 +75,7 @@ export const HelpCategoryCards = ({
               onClick={() => onSelectCategory(isSelected ? 'all' : cat.id)}
               className={`p-5 rounded-none border text-left transition-all duration-200 cursor-pointer flex flex-col justify-between ${
                 isSelected
-                  ? 'border-[#de2a2a] ring-1 ring-[#de2a2a] bg-[#f8f8f8]'
+                  ? 'border-brand-accent ring-1 ring-brand-accent bg-[#f8f8f8]'
                   : 'bg-white border-[#d9d9d9] hover:border-black'
               }`}
             >
@@ -83,7 +83,7 @@ export const HelpCategoryCards = ({
                 <div
                   className={`w-11 h-11 rounded-none flex items-center justify-center mb-3 border transition-colors ${
                     isSelected
-                      ? 'bg-[#de2a2a] text-white border-[#de2a2a]'
+                      ? 'bg-brand-accent text-white border-brand-accent'
                       : 'bg-[#f8f8f8] text-black border-[#d9d9d9]'
                   }`}
                 >
@@ -99,7 +99,7 @@ export const HelpCategoryCards = ({
 
               <span
                 className={`mt-4 text-[11px] font-bold uppercase tracking-wider inline-flex items-center ${
-                  isSelected ? 'text-[#de2a2a]' : 'text-neutral-500'
+                  isSelected ? 'text-brand-accent' : 'text-neutral-500'
                 }`}
               >
                 {isSelected ? '✓ Tema filtrado' : 'Ver preguntas →'}

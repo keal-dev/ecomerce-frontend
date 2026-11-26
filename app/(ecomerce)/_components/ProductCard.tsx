@@ -87,7 +87,7 @@ export const ProductCard = ({ product }: { product: Product }) => {
             AGOTADO
           </span>
         ) : product.discount && product.discount > 0 ? (
-          <span className="absolute top-2.5 left-2.5 z-10 bg-[#de2a2a] text-white text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-none">
+          <span className="absolute top-2.5 left-2.5 z-10 bg-brand-accent text-white text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-none">
             -{product.discount}%
           </span>
         ) : null}
@@ -99,11 +99,11 @@ export const ProductCard = ({ product }: { product: Product }) => {
           title={isFav ? 'Quitar de favoritos' : 'Agregar a favoritos'}
           className={`absolute top-2.5 right-2.5 p-1.5 z-10 transition-all cursor-pointer ${
             isFav
-              ? 'bg-white text-[#de2a2a] shadow-xs'
-              : 'bg-white/85 hover:bg-white text-neutral-400 hover:text-[#de2a2a] opacity-0 group-hover:opacity-100'
+              ? 'bg-white text-brand-accent shadow-xs'
+              : 'bg-white/85 hover:bg-white text-neutral-400 hover:text-brand-accent opacity-0 group-hover:opacity-100'
           }`}
         >
-          <FaHeart size={13} className={isFav ? 'fill-[#de2a2a] text-[#de2a2a]' : ''} />
+          <FaHeart size={13} className={isFav ? 'fill-brand-accent text-brand-accent' : ''} />
         </button>
 
         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -121,7 +121,7 @@ export const ProductCard = ({ product }: { product: Product }) => {
       {/* Info del Producto */}
       <div className="p-3.5 flex flex-col flex-1 justify-between gap-3">
         <div>
-          <h3 className="text-[#020202] text-[13px] sm:text-sm font-semibold line-clamp-2 leading-snug group-hover:text-[#de2a2a] transition-colors">
+          <h3 className="text-[#020202] text-[13px] sm:text-sm font-semibold line-clamp-2 leading-snug group-hover:text-brand-accent transition-colors">
             {product.title}
           </h3>
           <p className="text-[11px] text-neutral-500 line-clamp-1 mt-1">
@@ -133,7 +133,7 @@ export const ProductCard = ({ product }: { product: Product }) => {
           <div className="flex flex-wrap items-baseline gap-2">
             <span
               className={`text-base sm:text-[17px] font-extrabold tracking-tight ${
-                hasDiscount ? 'text-[#de2a2a]' : 'text-black'
+                hasDiscount ? 'text-brand-accent' : 'text-black'
               }`}
             >
               {symbol} {Number(product.price || 0).toFixed(2)}
@@ -156,7 +156,7 @@ export const ProductCard = ({ product }: { product: Product }) => {
             type="button"
             disabled={isOutOfStock}
             onClick={handleQuickAdd}
-            className="w-full h-10 bg-black hover:bg-[#de2a2a] disabled:bg-[#6f719b] text-white text-[11px] font-bold uppercase tracking-widest rounded-none transition-colors flex items-center justify-center gap-1.5 cursor-pointer disabled:cursor-not-allowed"
+            className="w-full h-10 bg-black hover:bg-brand-accent disabled:bg-[#6f719b] text-white text-[11px] font-bold uppercase tracking-widest rounded-none transition-colors flex items-center justify-center gap-1.5 cursor-pointer disabled:cursor-not-allowed"
           >
             {isOutOfStock ? (
               <span>AGOTADO</span>

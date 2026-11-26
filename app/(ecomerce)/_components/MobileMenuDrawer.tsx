@@ -106,9 +106,9 @@ export const MobileMenuDrawer = ({ isOpen, onClose }: MobileMenuDrawerProps) => 
       {/* Panel lateral deslizante */}
       <div className="relative w-[320px] max-w-[85vw] bg-white h-full shadow-2xl flex flex-col z-50 overflow-hidden transform transition-transform duration-300 ease-out">
         
-        {/* Cabecera del Menú Móvil (Estilo Licorería Negro/Rojo) */}
+        {/* Cabecera del Menú Móvil */}
         <div 
-          className="p-4 flex items-center justify-between border-b border-[#262626] bg-black text-white"
+          className="p-4 flex items-center justify-between border-b border-white/15 bg-brand-primary text-white"
         >
           <div className="flex items-center gap-3">
             <Show when="signed-in">
@@ -136,7 +136,7 @@ export const MobileMenuDrawer = ({ isOpen, onClose }: MobileMenuDrawerProps) => 
                     <button 
                       type="button" 
                       onClick={onClose} 
-                      className="text-xs font-bold uppercase text-[#de2a2a] hover:underline cursor-pointer"
+                      className="text-xs font-bold uppercase text-brand-accent hover:underline cursor-pointer"
                     >
                       Ingresa
                     </button>
@@ -192,9 +192,9 @@ export const MobileMenuDrawer = ({ isOpen, onClose }: MobileMenuDrawerProps) => 
             <Link
               href="/rastreo"
               onClick={onClose}
-              className="flex items-center gap-3.5 px-5 py-2.5 hover:bg-red-50/60 text-[#de2a2a] font-semibold transition-colors"
+              className="flex items-center gap-3.5 px-5 py-2.5 hover:bg-red-50/60 text-brand-accent font-semibold transition-colors"
             >
-              <TbTruckDelivery size={20} className="text-[#de2a2a]" />
+              <TbTruckDelivery size={20} className="text-brand-accent" />
               <span>Rastrea tu pedido</span>
             </Link>
 
@@ -253,7 +253,7 @@ export const MobileMenuDrawer = ({ isOpen, onClose }: MobileMenuDrawerProps) => 
               className="w-full flex items-center justify-between px-5 py-2.5 hover:bg-gray-50 text-left font-medium text-gray-900 cursor-pointer"
             >
               <div className="flex items-center gap-3.5">
-                <TbCategory size={20} className="text-[#de2a2a]" />
+                <TbCategory size={20} className="text-brand-accent" />
                 <span className="font-bold uppercase text-xs tracking-wider">Categorías</span>
               </div>
               <TbChevronDown 
@@ -268,7 +268,7 @@ export const MobileMenuDrawer = ({ isOpen, onClose }: MobileMenuDrawerProps) => 
               <div className="bg-gray-50/70 border-y border-gray-100 py-1 pl-12 pr-4 space-y-1">
                 {isLoading && categories.length === 0 ? (
                   <div className="py-4 flex items-center gap-2 text-xs text-gray-500">
-                    <div className="w-4 h-4 border-2 border-[#de2a2a] border-t-transparent rounded-full animate-spin" />
+                    <div className="w-4 h-4 border-2 border-brand-accent border-t-transparent rounded-full animate-spin" />
                     <span>Cargando categorías...</span>
                   </div>
                 ) : categories.length === 0 ? (
@@ -284,7 +284,7 @@ export const MobileMenuDrawer = ({ isOpen, onClose }: MobileMenuDrawerProps) => 
                         key={cat.id}
                         href={cat.href || `/category/${cat.id}`}
                         onClick={onClose}
-                        className="flex items-center justify-between py-2 text-[13px] text-gray-700 hover:text-[#de2a2a] transition-colors"
+                        className="flex items-center justify-between py-2 text-[13px] text-gray-700 hover:text-brand-accent transition-colors"
                       >
                         <div className="flex items-center gap-2.5 truncate">
                           {cat.icon && (cat.icon.startsWith('http') || cat.icon.startsWith('data:')) ? (
@@ -299,7 +299,7 @@ export const MobileMenuDrawer = ({ isOpen, onClose }: MobileMenuDrawerProps) => 
                           <span className="truncate">{cat.name}</span>
                         </div>
                         {cat.badge && (
-                          <span className="bg-[#de2a2a] text-white text-[9px] font-bold px-1.5 py-0.5 uppercase shrink-0">
+                          <span className="bg-brand-accent text-white text-[9px] font-bold px-1.5 py-0.5 uppercase shrink-0">
                             {cat.badge}
                           </span>
                         )}
@@ -312,7 +312,7 @@ export const MobileMenuDrawer = ({ isOpen, onClose }: MobileMenuDrawerProps) => 
                   <Link
                     href="/categories"
                     onClick={onClose}
-                    className="text-xs font-bold uppercase tracking-wider text-[#de2a2a] hover:underline flex items-center gap-1"
+                    className="text-xs font-bold uppercase tracking-wider text-brand-accent hover:underline flex items-center gap-1"
                   >
                     Ver todas las categorías <TbChevronRight size={13} />
                   </Link>

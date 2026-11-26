@@ -85,9 +85,9 @@ export const Navbar = () => {
   );
 
   return (
-    <header className="w-full sticky top-0 z-40 bg-black text-white border-b border-[#262626]">
+    <header className="w-full sticky top-0 z-40 bg-brand-primary text-white border-b border-white/15">
       {/* Fila principal */}
-      <div className="w-full py-5 sm:py-6 bg-black">
+      <div className="w-full py-5 sm:py-6 bg-brand-primary">
         <div className="max-w-7xl mx-auto px-4 md:px-7 relative">
 
         {/* Mobile Search Overlay */}
@@ -151,7 +151,7 @@ export const Navbar = () => {
                 <SignUpButton mode="modal">
                   <button
                     type="button"
-                    className="hover:text-[#de2a2a] font-semibold uppercase tracking-wider text-[11px] cursor-pointer transition-colors"
+                    className="hover:text-brand-accent font-semibold uppercase tracking-wider text-[11px] cursor-pointer transition-colors"
                   >
                     Regístrate
                   </button>
@@ -160,7 +160,7 @@ export const Navbar = () => {
                 <SignInButton mode="modal">
                   <button
                     type="button"
-                    className="px-3 py-1.5 bg-white text-black hover:bg-[#de2a2a] hover:text-white font-bold uppercase tracking-wider text-[11px] cursor-pointer transition-colors"
+                    className="px-3 py-1.5 bg-white text-black hover:bg-brand-accent hover:text-white font-bold uppercase tracking-wider text-[11px] cursor-pointer transition-colors"
                   >
                     Ingresa
                   </button>
@@ -172,7 +172,7 @@ export const Navbar = () => {
               {canAccessSalesPanel && (
                 <Link
                   href="/admin"
-                  className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-white bg-white/10 hover:bg-[#de2a2a] border border-white/20 hover:border-[#de2a2a] p-2 lg:px-3 lg:py-1.5 transition-colors cursor-pointer"
+                  className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-white bg-white/10 hover:bg-brand-accent border border-white/20 hover:border-brand-accent p-2 lg:px-3 lg:py-1.5 transition-colors cursor-pointer"
                   aria-label="Panel de ventas"
                 >
                   <TbBuildingStore size={16} />
@@ -182,12 +182,12 @@ export const Navbar = () => {
 
               <Link
                 href="/favoritos"
-                className="p-2 hover:text-[#de2a2a] relative transition-colors flex items-center justify-center cursor-pointer"
+                className="p-2 hover:text-brand-accent relative transition-colors flex items-center justify-center cursor-pointer"
                 aria-label="Favoritos"
               >
                 <TbHeart size={20} />
                 {mounted && totalFavorites > 0 && (
-                  <span className="absolute -top-0.5 -right-0.5 bg-[#de2a2a] text-white text-[10px] font-bold h-4 min-w-[16px] px-1 flex items-center justify-center rounded-full leading-none">
+                  <span className="absolute -top-0.5 -right-0.5 bg-brand-accent text-white text-[10px] font-bold h-4 min-w-[16px] px-1 flex items-center justify-center rounded-full leading-none">
                     {totalFavorites > 99 ? '99+' : totalFavorites}
                   </span>
                 )}
@@ -212,22 +212,22 @@ export const Navbar = () => {
                   if (next) loadCustomerOrders();
                 }}
                 aria-label="Notificaciones"
-                className="p-2 hover:text-[#de2a2a] text-white relative transition-colors cursor-pointer"
+                className="p-2 hover:text-brand-accent text-white relative transition-colors cursor-pointer"
               >
                 <TbBell size={20} />
-                <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-[#de2a2a] rounded-full" />
+                <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-brand-accent rounded-full" />
               </button>
 
               {notifOpen && (
                 <div className="absolute right-0 mt-2 w-80 bg-white text-[#020202] shadow-2xl border border-[#d9d9d9] overflow-hidden z-50 text-left font-normal animate-in fade-in duration-150">
-                  <div className="px-4 py-3 bg-black text-white flex items-center justify-between">
+                  <div className="px-4 py-3 bg-brand-primary text-white flex items-center justify-between">
                     <span className="text-xs font-display font-bold uppercase tracking-wider">
                       Notificaciones
                     </span>
                     <Link
                       href="/mis-compras"
                       onClick={() => setNotifOpen(false)}
-                      className="text-[11px] font-semibold text-[#de2a2a] hover:underline"
+                      className="text-[11px] font-semibold text-brand-accent hover:underline"
                     >
                       Ver mis compras
                     </Link>
@@ -270,7 +270,7 @@ export const Navbar = () => {
                       onClick={() => setNotifOpen(false)}
                       className="p-3.5 hover:bg-neutral-50 flex items-start gap-3 transition-colors"
                     >
-                      <div className="p-2 bg-[#fff5f5] text-[#de2a2a] shrink-0 mt-0.5">
+                      <div className="p-2 bg-[#fff5f5] text-brand-accent shrink-0 mt-0.5">
                         <TbTag size={17} />
                       </div>
                       <div className="min-w-0 flex-1">
@@ -319,7 +319,7 @@ export const Navbar = () => {
                 Carrito
               </span>
               {mounted && totalCartItems > 0 && (
-                <span className="bg-[#de2a2a] text-white text-[10px] font-bold h-4 min-w-[16px] px-1 flex items-center justify-center rounded-full leading-none">
+                <span className="bg-brand-accent text-white text-[10px] font-bold h-4 min-w-[16px] px-1 flex items-center justify-center rounded-full leading-none">
                   {totalCartItems > 99 ? '99+' : totalCartItems}
                 </span>
               )}
@@ -330,7 +330,7 @@ export const Navbar = () => {
       </div>
 
       {/* Barra inferior de categorías (Desktop) */}
-      <div className="hidden lg:block bg-black border-t border-[#262626]">
+      <div className="hidden lg:block bg-brand-primary border-t border-white/15">
         <div className="max-w-7xl mx-auto px-4 md:px-7">
           <nav className="flex items-center justify-between h-12 gap-4">
             <div className="flex items-center gap-6">
@@ -338,8 +338,8 @@ export const Navbar = () => {
                 href="/"
                 className={`text-[11px] font-bold uppercase tracking-wider transition-colors whitespace-nowrap ${
                   pathname === '/'
-                    ? 'text-[#de2a2a]'
-                    : 'text-white hover:text-[#de2a2a]'
+                    ? 'text-brand-accent'
+                    : 'text-white hover:text-brand-accent'
                 }`}
               >
                 INICIO
@@ -355,8 +355,8 @@ export const Navbar = () => {
                 href="/ofertas"
                 className={`text-[11px] font-bold uppercase tracking-wider transition-colors whitespace-nowrap ${
                   pathname.startsWith('/ofertas')
-                    ? 'text-[#de2a2a]'
-                    : 'text-white hover:text-[#de2a2a]'
+                    ? 'text-brand-accent'
+                    : 'text-white hover:text-brand-accent'
                 }`}
               >
                 OFERTAS
@@ -365,8 +365,8 @@ export const Navbar = () => {
                 href="/brands"
                 className={`text-[11px] font-bold uppercase tracking-wider transition-colors whitespace-nowrap ${
                   pathname === '/brands' || pathname.startsWith('/brand/')
-                    ? 'text-[#de2a2a]'
-                    : 'text-white hover:text-[#de2a2a]'
+                    ? 'text-brand-accent'
+                    : 'text-white hover:text-brand-accent'
                 }`}
               >
                 MARCAS
@@ -378,7 +378,7 @@ export const Navbar = () => {
                 href="/historial"
                 className={`text-[11px] font-semibold uppercase tracking-wider transition-colors whitespace-nowrap ${
                   pathname.startsWith('/historial')
-                    ? 'text-[#de2a2a]'
+                    ? 'text-brand-accent'
                     : 'text-neutral-300 hover:text-white'
                 }`}
               >
@@ -388,7 +388,7 @@ export const Navbar = () => {
                 href="/mis-compras"
                 className={`text-[11px] font-semibold uppercase tracking-wider transition-colors whitespace-nowrap ${
                   pathname.startsWith('/mis-compras')
-                    ? 'text-[#de2a2a]'
+                    ? 'text-brand-accent'
                     : 'text-neutral-300 hover:text-white'
                 }`}
               >

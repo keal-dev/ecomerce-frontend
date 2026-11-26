@@ -98,13 +98,13 @@ export const Footer = () => {
   const cleanPhone = rawPhone.replace(/[^0-9+]/g, '');
 
   return (
-    <footer className="bg-black border-t border-[#262626] text-neutral-300">
+    <footer className="bg-brand-primary border-t border-white/15 text-neutral-300">
       {/* 1. Value Proposition Banner */}
-      <div className="border-b border-[#262626] bg-[#0a0a0a]">
+      <div className="border-b border-white/15 bg-black/25">
         <div className="max-w-7xl mx-auto px-4 md:px-7 py-8">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             <div className="flex items-start gap-3.5 p-2">
-              <div className="w-11 h-11 bg-[#141414] border border-[#262626] text-[#de2a2a] flex items-center justify-center shrink-0">
+              <div className="w-11 h-11 bg-[#141414] border border-[#262626] text-brand-accent flex items-center justify-center shrink-0">
                 <TbTruckDelivery size={22} />
               </div>
               <div>
@@ -118,7 +118,7 @@ export const Footer = () => {
             </div>
 
             <div className="flex items-start gap-3.5 p-2">
-              <div className="w-11 h-11 bg-[#141414] border border-[#262626] text-[#de2a2a] flex items-center justify-center shrink-0">
+              <div className="w-11 h-11 bg-[#141414] border border-[#262626] text-brand-accent flex items-center justify-center shrink-0">
                 <TbShieldCheck size={22} />
               </div>
               <div>
@@ -132,7 +132,7 @@ export const Footer = () => {
             </div>
 
             <div className="flex items-start gap-3.5 p-2">
-              <div className="w-11 h-11 bg-[#141414] border border-[#262626] text-[#de2a2a] flex items-center justify-center shrink-0">
+              <div className="w-11 h-11 bg-[#141414] border border-[#262626] text-brand-accent flex items-center justify-center shrink-0">
                 <TbCreditCard size={22} />
               </div>
               <div>
@@ -146,7 +146,7 @@ export const Footer = () => {
             </div>
 
             <div className="flex items-start gap-3.5 p-2">
-              <div className="w-11 h-11 bg-[#141414] border border-[#262626] text-[#de2a2a] flex items-center justify-center shrink-0">
+              <div className="w-11 h-11 bg-[#141414] border border-[#262626] text-brand-accent flex items-center justify-center shrink-0">
                 <TbHeadset size={22} />
               </div>
               <div>
@@ -216,12 +216,12 @@ export const Footer = () => {
                       value={newsletterEmail}
                       onChange={(e) => setNewsletterEmail(e.target.value)}
                       placeholder="Ingresa tu correo electrónico"
-                      className="w-full bg-black border border-[#333333] rounded-none py-2.5 pl-9 pr-3 text-xs text-white placeholder-neutral-500 outline-none focus:border-[#de2a2a] transition-colors"
+                      className="w-full bg-black border border-[#333333] rounded-none py-2.5 pl-9 pr-3 text-xs text-white placeholder-neutral-500 outline-none focus:border-brand-accent transition-colors"
                     />
                   </div>
                   <button
                     type="submit"
-                    className="bg-[#de2a2a] hover:bg-red-700 text-white font-bold uppercase tracking-wider text-[11px] px-4 rounded-none transition-colors flex items-center gap-1 cursor-pointer"
+                    className="bg-brand-accent hover:bg-red-700 text-white font-bold uppercase tracking-wider text-[11px] px-4 rounded-none transition-colors flex items-center gap-1 cursor-pointer"
                   >
                     Unirme <TbChevronRight size={14} />
                   </button>
@@ -240,33 +240,33 @@ export const Footer = () => {
               </span>
 
               <div className="flex items-center gap-2.5">
-                <div className="w-6 h-6 bg-[#141414] border border-[#262626] flex items-center justify-center text-[#de2a2a] shrink-0">
+                <div className="w-6 h-6 bg-[#141414] border border-[#262626] flex items-center justify-center text-brand-accent shrink-0">
                   <TbBrandWhatsapp size={14} />
                 </div>
                 <span className="text-neutral-400">WhatsApp / Teléfono:</span>
                 <a
                   href={`tel:${cleanPhone}`}
-                  className="font-semibold text-white hover:text-[#de2a2a] transition-colors"
+                  className="font-semibold text-white hover:text-brand-accent transition-colors"
                 >
                   {rawPhone}
                 </a>
               </div>
 
               <div className="flex items-center gap-2.5">
-                <div className="w-6 h-6 bg-[#141414] border border-[#262626] flex items-center justify-center text-[#de2a2a] shrink-0">
+                <div className="w-6 h-6 bg-[#141414] border border-[#262626] flex items-center justify-center text-brand-accent shrink-0">
                   <TbMail size={14} />
                 </div>
                 <span className="text-neutral-400">Correo:</span>
                 <a
                   href={`mailto:${company?.email || 'soporte@mitienda.com'}`}
-                  className="font-semibold text-white hover:text-[#de2a2a] transition-colors"
+                  className="font-semibold text-white hover:text-brand-accent transition-colors"
                 >
                   {company?.email || 'soporte@mitienda.com'}
                 </a>
               </div>
 
               <div className="flex items-start gap-2.5">
-                <div className="w-6 h-6 bg-[#141414] border border-[#262626] flex items-center justify-center text-[#de2a2a] shrink-0 mt-0.5">
+                <div className="w-6 h-6 bg-[#141414] border border-[#262626] flex items-center justify-center text-brand-accent shrink-0 mt-0.5">
                   <TbMapPin size={14} />
                 </div>
                 <span className="text-neutral-400">Ubicación:</span>
@@ -342,7 +342,7 @@ export const Footer = () => {
                   href="/libro-de-reclamaciones"
                   className="hover:text-white transition-colors font-bold text-white flex items-center gap-1.5 pt-1"
                 >
-                  <TbBook size={14} className="text-[#de2a2a]" />
+                  <TbBook size={14} className="text-brand-accent" />
                   <span>Libro de Reclamaciones</span>
                 </Link>
               </li>
@@ -371,7 +371,7 @@ export const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link href="/ofertas" className="hover:text-red-400 transition-colors text-[#de2a2a] font-bold uppercase">
+                <Link href="/ofertas" className="hover:text-red-400 transition-colors text-brand-accent font-bold uppercase">
                   Ofertas especiales
                 </Link>
               </li>
@@ -415,7 +415,7 @@ export const Footer = () => {
               <span>Boleta y Factura Electrónica SUNAT</span>
             </div>
             <div className="flex items-center gap-1.5 text-neutral-300">
-              <TbShieldLock size={15} className="text-[#de2a2a]" />
+              <TbShieldLock size={15} className="text-brand-accent" />
               <span>Cifrado SSL 256 bits Seguro</span>
             </div>
           </div>
@@ -442,10 +442,10 @@ export const Footer = () => {
 
             <Link
               href="/libro-de-reclamaciones"
-              className="flex items-center gap-3 px-4 py-2 bg-[#0d0d0d] border border-[#262626] hover:border-[#de2a2a] transition-colors group shrink-0"
+              className="flex items-center gap-3 px-4 py-2 bg-[#0d0d0d] border border-[#262626] hover:border-brand-accent transition-colors group shrink-0"
               title="Libro de Reclamaciones Virtual conforme a las disposiciones de INDECOPI (Ley N° 29571)"
             >
-              <div className="w-8 h-8 bg-[#de2a2a]/15 text-[#de2a2a] flex items-center justify-center shrink-0">
+              <div className="w-8 h-8 bg-brand-accent/15 text-brand-accent flex items-center justify-center shrink-0">
                 <TbBook size={18} />
               </div>
               <div className="text-left">
@@ -465,7 +465,7 @@ export const Footer = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Facebook Oficial"
-                  className="w-9 h-9 bg-[#141414] hover:bg-[#de2a2a] text-neutral-300 hover:text-white border border-[#262626] flex items-center justify-center transition-colors"
+                  className="w-9 h-9 bg-[#141414] hover:bg-brand-accent text-neutral-300 hover:text-white border border-[#262626] flex items-center justify-center transition-colors"
                 >
                   <FaFacebookF size={13} />
                 </a>
@@ -476,7 +476,7 @@ export const Footer = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Instagram Oficial"
-                  className="w-9 h-9 bg-[#141414] hover:bg-[#de2a2a] text-neutral-300 hover:text-white border border-[#262626] flex items-center justify-center transition-colors"
+                  className="w-9 h-9 bg-[#141414] hover:bg-brand-accent text-neutral-300 hover:text-white border border-[#262626] flex items-center justify-center transition-colors"
                 >
                   <FaInstagram size={14} />
                 </a>
@@ -487,7 +487,7 @@ export const Footer = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="TikTok Oficial"
-                  className="w-9 h-9 bg-[#141414] hover:bg-[#de2a2a] text-neutral-300 hover:text-white border border-[#262626] flex items-center justify-center transition-colors"
+                  className="w-9 h-9 bg-[#141414] hover:bg-brand-accent text-neutral-300 hover:text-white border border-[#262626] flex items-center justify-center transition-colors"
                 >
                   <TbBrandTiktok size={15} />
                 </a>

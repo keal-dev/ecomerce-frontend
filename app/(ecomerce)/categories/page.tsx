@@ -62,7 +62,7 @@ export default function AllCategoriesPage() {
       <div className="max-w-7xl mx-auto px-4 md:px-7 py-8">
         {/* Breadcrumbs */}
         <nav className="flex items-center gap-2 text-[11px] uppercase tracking-wider text-neutral-500 mb-6">
-          <Link href="/" className="hover:text-[#de2a2a] transition-colors">
+          <Link href="/" className="hover:text-brand-accent transition-colors">
             Inicio
           </Link>
           <TbChevronRight size={12} />
@@ -70,9 +70,9 @@ export default function AllCategoriesPage() {
         </nav>
 
         {/* Header Editorial */}
-        <div className="bg-black text-white border-b-4 border-[#de2a2a] p-6 sm:p-8 mb-8 flex flex-col md:flex-row md:items-center justify-between gap-5">
+        <div className="bg-black text-white border-b-4 border-brand-accent p-6 sm:p-8 mb-8 flex flex-col md:flex-row md:items-center justify-between gap-5">
           <div>
-            <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#de2a2a] block mb-1.5">
+            <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-brand-accent block mb-1.5">
               Explora nuestra cooperativa
             </span>
             <h1 className="font-display text-2xl sm:text-4xl font-extrabold uppercase tracking-tight text-white">
@@ -124,7 +124,7 @@ export default function AllCategoriesPage() {
               <button
                 type="button"
                 onClick={() => setSearchTerm('')}
-                className="mt-4 px-5 py-2 bg-[#de2a2a] text-white text-xs font-bold uppercase tracking-wider rounded-none cursor-pointer"
+                className="mt-4 px-5 py-2 bg-brand-accent text-white text-xs font-bold uppercase tracking-wider rounded-none cursor-pointer"
               >
                 Limpiar búsqueda
               </button>
@@ -147,7 +147,7 @@ export default function AllCategoriesPage() {
                   className="group bg-white rounded-none p-5 border border-[#d9d9d9] hover:border-black transition-all duration-200 flex flex-col items-center justify-center text-center relative overflow-hidden"
                 >
                   {cat.badge && (
-                    <span className="absolute top-2 right-2 bg-[#de2a2a] text-white text-[9px] font-bold px-2 py-0.5 rounded-none uppercase tracking-wider">
+                    <span className="absolute top-2 right-2 bg-brand-accent text-white text-[9px] font-bold px-2 py-0.5 rounded-none uppercase tracking-wider">
                       {cat.badge}
                     </span>
                   )}
@@ -169,7 +169,7 @@ export default function AllCategoriesPage() {
                     )}
                   </div>
 
-                  <span className="font-display text-xs sm:text-sm font-bold uppercase tracking-tight text-black group-hover:text-[#de2a2a] transition-colors line-clamp-2 w-full text-center">
+                  <span className="font-display text-xs sm:text-sm font-bold uppercase tracking-tight text-black group-hover:text-brand-accent transition-colors line-clamp-2 w-full text-center">
                     {cat.name}
                   </span>
                 </Link>

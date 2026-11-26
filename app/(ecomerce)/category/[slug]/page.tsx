@@ -112,11 +112,11 @@ export default function CategoryDetailPage({ params }: CategoryPageProps) {
       <div className="max-w-7xl mx-auto px-4 md:px-7 py-8">
         {/* Breadcrumb */}
         <nav className="flex items-center gap-2 text-[11px] uppercase tracking-wider text-neutral-500 mb-6 flex-wrap">
-          <Link href="/" className="hover:text-[#de2a2a] transition-colors">
+          <Link href="/" className="hover:text-brand-accent transition-colors">
             Inicio
           </Link>
           <TbChevronRight size={12} />
-          <Link href="/categories" className="hover:text-[#de2a2a] transition-colors">
+          <Link href="/categories" className="hover:text-brand-accent transition-colors">
             Categorías
           </Link>
           <TbChevronRight size={12} />
@@ -124,7 +124,7 @@ export default function CategoryDetailPage({ params }: CategoryPageProps) {
         </nav>
 
         {/* Encabezado de la Categoría */}
-        <div className="bg-black text-white rounded-none p-6 sm:p-8 border-b-4 border-[#de2a2a] mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="bg-black text-white rounded-none p-6 sm:p-8 border-b-4 border-brand-accent mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="flex items-center gap-4">
             <div className="w-16 h-16 rounded-none bg-white flex items-center justify-center p-2.5 text-black border border-[#262626] shrink-0">
               {isImage && currentCategory?.icon ? (
@@ -144,7 +144,7 @@ export default function CategoryDetailPage({ params }: CategoryPageProps) {
                   {categoryName}
                 </h1>
                 {currentCategory?.badge && (
-                  <span className="bg-[#de2a2a] text-white text-[10px] font-bold px-2.5 py-0.5 rounded-none uppercase tracking-wider">
+                  <span className="bg-brand-accent text-white text-[10px] font-bold px-2.5 py-0.5 rounded-none uppercase tracking-wider">
                     {currentCategory.badge}
                   </span>
                 )}
@@ -157,7 +157,7 @@ export default function CategoryDetailPage({ params }: CategoryPageProps) {
 
           <Link
             href="/categories"
-            className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-white border border-[#262626] hover:border-[#de2a2a] hover:text-[#de2a2a] px-4 py-2.5 transition-colors self-start md:self-center"
+            className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-white border border-[#262626] hover:border-brand-accent hover:text-brand-accent px-4 py-2.5 transition-colors self-start md:self-center"
           >
             <TbArrowLeft size={14} />
             Ver todas las categorías
@@ -189,7 +189,7 @@ export default function CategoryDetailPage({ params }: CategoryPageProps) {
             </p>
             <Link
               href="/"
-              className="inline-block bg-[#de2a2a] hover:bg-red-700 text-white font-bold uppercase tracking-widest text-xs px-6 py-3 rounded-none transition-colors"
+              className="inline-block bg-brand-accent hover:bg-red-700 text-white font-bold uppercase tracking-widest text-xs px-6 py-3 rounded-none transition-colors"
             >
               Volver a la tienda
             </Link>

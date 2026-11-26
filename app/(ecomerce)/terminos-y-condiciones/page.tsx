@@ -29,7 +29,7 @@ export default function TerminosYCondicionesPage() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-6">
         {/* Breadcrumb */}
         <nav className="flex items-center gap-1.5 text-[11px] uppercase tracking-wider text-neutral-500 mb-5">
-          <Link href="/" className="hover:text-[#de2a2a] transition-colors">
+          <Link href="/" className="hover:text-brand-accent transition-colors">
             Inicio
           </Link>
           <TbChevronRight size={13} className="text-neutral-400" />
@@ -37,13 +37,13 @@ export default function TerminosYCondicionesPage() {
         </nav>
 
         {/* Encabezado */}
-        <div className="bg-black text-white rounded-none border-b-4 border-[#de2a2a] p-6 sm:p-8 mb-6">
+        <div className="bg-black text-white rounded-none border-b-4 border-brand-accent p-6 sm:p-8 mb-6">
           <div className="flex items-start gap-4">
-            <div className="p-3 bg-[#de2a2a] text-white rounded-none shrink-0">
+            <div className="p-3 bg-brand-accent text-white rounded-none shrink-0">
               <TbFileText size={28} />
             </div>
             <div>
-              <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#de2a2a]">
+              <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-brand-accent">
                 Marco Legal y Condiciones de Compra
               </span>
               <h1 className="font-display text-2xl sm:text-3xl font-extrabold uppercase tracking-tight text-white mt-1">
@@ -127,7 +127,7 @@ export default function TerminosYCondicionesPage() {
             </div>
             <p>
               Todos nuestros vinos, chocolates, derivados del cacao y cafés son elaborados y envasados bajo estrictos estándares de calidad y trazabilidad. Para conocer el procedimiento detallado de cambios, sustituciones y devoluciones, por favor consulta nuestra{' '}
-              <Link href="/devoluciones" className="text-[#de2a2a] font-bold hover:underline">
+              <Link href="/devoluciones" className="text-brand-accent font-bold hover:underline">
                 Política de Cambios y Devoluciones
               </Link>.
             </p>
@@ -154,7 +154,7 @@ export default function TerminosYCondicionesPage() {
             </div>
             <Link
               href="/ayuda"
-              className="inline-flex items-center justify-center gap-1.5 px-5 py-2.5 bg-[#de2a2a] hover:bg-red-700 text-white rounded-none text-xs font-bold uppercase tracking-wider transition-colors shrink-0"
+              className="inline-flex items-center justify-center gap-1.5 px-5 py-2.5 bg-brand-accent hover:bg-red-700 text-white rounded-none text-xs font-bold uppercase tracking-wider transition-colors shrink-0"
             >
               <TbHelpCircle size={16} />
               Centro de Ayuda

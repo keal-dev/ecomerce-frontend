@@ -43,12 +43,12 @@ export const SearchHeader = ({
         <button
           type="button"
           onClick={onOpenMobileFilters}
-          className="lg:hidden flex items-center gap-1.5 px-3 py-2 bg-black text-white hover:bg-[#de2a2a] text-xs font-bold uppercase tracking-wider rounded-none cursor-pointer transition-colors"
+          className="lg:hidden flex items-center gap-1.5 px-3 py-2 bg-black text-white hover:bg-brand-accent text-xs font-bold uppercase tracking-wider rounded-none cursor-pointer transition-colors"
         >
           <TbFilter size={15} />
           <span>Filtros</span>
           {activeFilterCount > 0 && (
-            <span className="w-4 h-4 rounded-none bg-[#de2a2a] text-white text-[10px] flex items-center justify-center font-bold">
+            <span className="w-4 h-4 rounded-none bg-brand-accent text-white text-[10px] flex items-center justify-center font-bold">
               {activeFilterCount}
             </span>
           )}

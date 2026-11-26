@@ -22,10 +22,10 @@ export function DealsHeroBanner({
   ];
 
   return (
-    <div className="relative overflow-hidden rounded-none bg-black text-white border-b-4 border-[#de2a2a] p-6 sm:p-8 mb-6">
+    <div className="relative overflow-hidden rounded-none bg-brand-primary text-white border-b-4 border-brand-accent p-6 sm:p-8 mb-6">
       <div className="relative z-10 max-w-3xl">
-        <div className="inline-flex items-center gap-1.5 text-[#de2a2a] text-[11px] font-bold uppercase tracking-[0.2em] mb-2">
-          <TbBolt size={14} className="text-[#de2a2a]" />
+        <div className="inline-flex items-center gap-1.5 text-brand-accent text-[11px] font-bold uppercase tracking-[0.2em] mb-2">
+          <TbBolt size={14} className="text-brand-accent" />
           <span>Promociones Exclusivas</span>
         </div>
 
@@ -49,7 +49,7 @@ export function DealsHeroBanner({
                 onClick={() => onTabChange(tab.id)}
                 className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-none text-xs font-bold uppercase tracking-wider transition-all cursor-pointer ${
                   isActive
-                    ? 'bg-[#de2a2a] text-white'
+                    ? 'bg-brand-accent text-white'
                     : 'bg-neutral-900 hover:bg-neutral-800 text-white border border-[#262626] hover:border-white'
                 }`}
               >

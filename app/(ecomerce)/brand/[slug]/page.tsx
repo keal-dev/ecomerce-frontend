@@ -72,11 +72,11 @@ export default function BrandDetailPage({ params }: BrandPageProps) {
       <div className="max-w-7xl mx-auto px-4 md:px-7 py-8">
         {/* Breadcrumb */}
         <nav className="flex items-center gap-2 text-[11px] uppercase tracking-wider text-neutral-500 mb-6 flex-wrap">
-          <Link href="/" className="hover:text-[#de2a2a] transition-colors">
+          <Link href="/" className="hover:text-brand-accent transition-colors">
             Inicio
           </Link>
           <TbChevronRight size={12} />
-          <Link href="/brands" className="hover:text-[#de2a2a] transition-colors">
+          <Link href="/brands" className="hover:text-brand-accent transition-colors">
             Marcas Oficiales
           </Link>
           <TbChevronRight size={12} />
@@ -84,7 +84,7 @@ export default function BrandDetailPage({ params }: BrandPageProps) {
         </nav>
 
         {/* Encabezado de la Marca */}
-        <div className="bg-black text-white rounded-none p-6 md:p-8 border-b-4 border-[#de2a2a] mb-8 flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div className="bg-black text-white rounded-none p-6 md:p-8 border-b-4 border-brand-accent mb-8 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="flex items-center gap-5">
             <div className="w-20 h-20 rounded-none bg-white flex items-center justify-center p-2.5 text-black border border-[#262626] shrink-0">
               {currentBrand?.logoUrl ? (
@@ -127,7 +127,7 @@ export default function BrandDetailPage({ params }: BrandPageProps) {
                     href={currentBrand.website.startsWith('http') ? currentBrand.website : `https://${currentBrand.website}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-[#de2a2a] font-bold uppercase tracking-wider hover:underline"
+                    className="inline-flex items-center gap-1 text-brand-accent font-bold uppercase tracking-wider hover:underline"
                   >
                     <span>Sitio oficial</span>
                     <TbExternalLink size={12} />
@@ -139,7 +139,7 @@ export default function BrandDetailPage({ params }: BrandPageProps) {
 
           <Link
             href="/brands"
-            className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-white border border-[#262626] hover:border-[#de2a2a] hover:text-[#de2a2a] px-4 py-2.5 transition-colors self-start md:self-center"
+            className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-white border border-[#262626] hover:border-brand-accent hover:text-brand-accent px-4 py-2.5 transition-colors self-start md:self-center"
           >
             <TbArrowLeft size={15} />
             <span>Ver todas las marcas</span>
@@ -185,7 +185,7 @@ export default function BrandDetailPage({ params }: BrandPageProps) {
               </p>
               <Link
                 href="/"
-                className="inline-flex items-center gap-2 mt-5 px-6 py-2.5 bg-[#de2a2a] hover:bg-red-700 text-white font-bold uppercase tracking-widest text-xs rounded-none transition-colors"
+                className="inline-flex items-center gap-2 mt-5 px-6 py-2.5 bg-brand-accent hover:bg-red-700 text-white font-bold uppercase tracking-widest text-xs rounded-none transition-colors"
               >
                 <span>Explorar catálogo</span>
               </Link>

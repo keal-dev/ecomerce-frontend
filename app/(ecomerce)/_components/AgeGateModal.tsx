@@ -59,7 +59,7 @@ export const AgeGateModal = () => {
       <div className="w-full max-w-md bg-white text-[#020202] border border-[#262626] shadow-2xl overflow-hidden">
         {/* Cabecera Negra */}
         <div className="bg-black text-white px-6 py-5 text-center border-b border-[#262626]">
-          <div className="inline-flex items-center justify-center w-12 h-12 bg-[#de2a2a] text-white font-display font-extrabold text-lg mb-3">
+          <div className="inline-flex items-center justify-center w-12 h-12 bg-brand-accent text-white font-display font-extrabold text-lg mb-3">
             +18
           </div>
           <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-neutral-400">
@@ -76,8 +76,8 @@ export const AgeGateModal = () => {
         {/* Contenido */}
         <div className="p-6 text-center space-y-5">
           {denied ? (
-            <div className="p-4 bg-[#fff5f5] border border-[#de2a2a]/40 text-left space-y-2">
-              <div className="flex items-center gap-2 text-[#de2a2a] font-bold text-xs uppercase">
+            <div className="p-4 bg-[#fff5f5] border border-brand-accent/40 text-left space-y-2">
+              <div className="flex items-center gap-2 text-brand-accent font-bold text-xs uppercase">
                 <TbAlertTriangle size={18} />
                 <span>Acceso Restringido</span>
               </div>
@@ -96,7 +96,7 @@ export const AgeGateModal = () => {
             <button
               type="button"
               onClick={handleConfirm}
-              className="w-full h-12 bg-[#de2a2a] hover:bg-red-700 text-white text-xs font-bold uppercase tracking-widest transition-colors rounded-none cursor-pointer flex items-center justify-center gap-2"
+              className="w-full h-12 bg-brand-accent hover:bg-red-700 text-white text-xs font-bold uppercase tracking-widest transition-colors rounded-none cursor-pointer flex items-center justify-center gap-2"
             >
               <TbShieldCheck size={18} />
               <span>SÍ, SOY MAYOR DE 18 AÑOS</span>

@@ -37,7 +37,7 @@ export function DealsProductGrid({
             <button
               type="button"
               onClick={onOpenMobileFilters}
-              className="lg:hidden inline-flex items-center gap-1.5 px-3 py-2 bg-black hover:bg-[#de2a2a] text-white text-xs font-bold uppercase tracking-wider rounded-none transition-colors cursor-pointer"
+              className="lg:hidden inline-flex items-center gap-1.5 px-3 py-2 bg-black hover:bg-brand-accent text-white text-xs font-bold uppercase tracking-wider rounded-none transition-colors cursor-pointer"
             >
               <TbFilter size={14} />
               <span>Filtros</span>
@@ -104,7 +104,7 @@ export function DealsProductGrid({
           <button
             type="button"
             onClick={onResetFilters}
-            className="px-6 py-2.5 bg-[#de2a2a] hover:bg-red-700 text-white rounded-none text-xs font-bold uppercase tracking-widest transition-colors cursor-pointer"
+            className="px-6 py-2.5 bg-brand-accent hover:bg-red-700 text-white rounded-none text-xs font-bold uppercase tracking-widest transition-colors cursor-pointer"
           >
             Ver todas las ofertas
           </button>

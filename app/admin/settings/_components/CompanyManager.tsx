@@ -14,23 +14,36 @@ import {
   TbBrandTiktok,
   TbFileText,
   TbPhoto,
-  TbTrash
+  TbTrash,
+  TbPalette,
+  TbRefresh,
 } from 'react-icons/tb';
 import { useCompanyStore } from '@/stores/company.store';
 import { UpdateCompanyDto } from '@/types/company.types';
 
-// 10 Colores Base con más cuerpo, saturación y presencia comercial (sin perder contraste con texto oscuro)
-const BRAND_BASE_COLORS = [
-  { name: 'Amarillo Mercado', hex: '#FFE600' },
-  { name: 'Azul Celeste Vivo', hex: '#38BDF8' },
-  { name: 'Verde Esmeralda', hex: '#4ADE80' },
-  { name: 'Naranja Comercial', hex: '#FB923C' },
-  { name: 'Púrpura Lavanda', hex: '#A78BFA' },
-  { name: 'Rosa Vibrante', hex: '#F472B6' },
-  { name: 'Turquesa Eléctrico', hex: '#22D3EE' },
-  { name: 'Lima Ácido', hex: '#A3E635' },
-  { name: 'Ámbar Dorado', hex: '#FBBF24' },
-  { name: 'Gris Titanio', hex: '#CBD5E1' },
+const DEFAULT_PRIMARY_COLOR = '#000000';
+const DEFAULT_ACCENT_COLOR = '#DE2A2A';
+
+const PRIMARY_DARK_COLORS = [
+  { name: 'Negro Editorial', hex: '#000000' },
+  { name: 'Obsidiana', hex: '#111111' },
+  { name: 'Grafito', hex: '#18181B' },
+  { name: 'Azul Noche', hex: '#0F172A' },
+  { name: 'Bosque Profundo', hex: '#0F291E' },
+  { name: 'Cacao Oscuro', hex: '#231712' },
+  { name: 'Burdeos Oscuro', hex: '#2A0F14' },
+  { name: 'Índigo Nocturno', hex: '#1E1B4B' },
+];
+
+const ACCENT_ACTION_COLORS = [
+  { name: 'Rojo Carmesí', hex: '#DE2A2A' },
+  { name: 'Vino Tinto', hex: '#9F1239' },
+  { name: 'Verde Esmeralda', hex: '#059669' },
+  { name: 'Café Cobre', hex: '#B45309' },
+  { name: 'Azul Real', hex: '#2563EB' },
+  { name: 'Terracota', hex: '#C2410C' },
+  { name: 'Púrpura Editorial', hex: '#7C3AED' },
+  { name: 'Petróleo', hex: '#0F766E' },
 ];
 
 export function CompanyManager() {
@@ -42,7 +55,8 @@ export function CompanyManager() {
     taxId: '',
     logoUrl: '',
     logoPublicId: '',
-    primaryColor: '#ffe600',
+    primaryColor: DEFAULT_PRIMARY_COLOR,
+    accentColor: DEFAULT_ACCENT_COLOR,
     slogan: '',
     email: '',
     phone: '',
@@ -66,13 +80,20 @@ export function CompanyManager() {
 
   useEffect(() => {
     if (company) {
+      const resolvedPrimary =
+        company.primaryColor && company.primaryColor.toLowerCase() !== '#ffe600'
+          ? company.primaryColor
+          : DEFAULT_PRIMARY_COLOR;
+      const resolvedAccent = company.accentColor || DEFAULT_ACCENT_COLOR;
+
       setFormData({
         name: company.name || 'Cooperativa Gourmet',
         legalName: company.legalName || '',
         taxId: company.taxId || '',
         logoUrl: company.logoUrl || '',
         logoPublicId: company.logoPublicId || '',
-        primaryColor: company.primaryColor || '#ffe600',
+        primaryColor: resolvedPrimary,
+        accentColor: resolvedAccent,
         slogan: company.slogan || '',
         email: company.email || '',
         phone: company.phone || '',
@@ -87,6 +108,19 @@ export function CompanyManager() {
     }
   }, [company]);
 
+  const applyLiveColor = (key: 'primaryColor' | 'accentColor', hex: string) => {
+    setFormData((prev) => ({ ...prev, [key]: hex }));
+    document.documentElement.style.setProperty(
+      key === 'primaryColor' ? '--brand-primary' : '--brand-accent',
+      hex,
+    );
+  };
+
+  const handleRestoreDefaultColors = () => {
+    applyLiveColor('primaryColor', DEFAULT_PRIMARY_COLOR);
+    applyLiveColor('accentColor', DEFAULT_ACCENT_COLOR);
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -96,6 +130,9 @@ export function CompanyManager() {
 
     if (name === 'primaryColor' && value) {
       document.documentElement.style.setProperty('--brand-primary', value);
+    }
+    if (name === 'accentColor' && value) {
+      document.documentElement.style.setProperty('--brand-accent', value);
     }
   };
 
@@ -340,65 +377,163 @@ export function CompanyManager() {
               </div>
             </div>
 
-            {/* 10 Colores Base del Sistema */}
-            <div>
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 mb-2">
-                <div>
-                  <label className="block text-xs font-bold text-gray-800">
-                    Color Principal de Marca (10 Colores Base)
-                  </label>
-                  <p className="text-[11px] text-gray-500">
-                    Tonalidades calibradas para garantizar la visibilidad de los textos e íconos.
-                  </p>
+            {/* Paleta Dual de Marca (Color Principal Oscuro + Color de Acento) */}
+            <div className="pt-2 border-t border-gray-100 space-y-5">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                <div className="flex items-center gap-2">
+                  <TbPalette size={17} className="text-gray-700 shrink-0" />
+                  <div>
+                    <h3 className="text-xs font-bold text-gray-900">
+                      Colores del Sistema (Tienda y Panel Admin)
+                    </h3>
+                    <p className="text-[11px] text-gray-500">
+                      Por defecto Negro y Rojo. Los cambios se previsualizan al instante y se guardan al pulsar «Guardar Cambios».
+                    </p>
+                  </div>
                 </div>
-                <div className="flex items-center gap-1.5 self-start sm:self-auto bg-gray-50 border border-gray-200/90 px-2 py-0.5 rounded-md">
-                  <span
-                    className="w-2.5 h-2.5 rounded-full border border-black/15 shrink-0"
-                    style={{ backgroundColor: formData.primaryColor }}
-                  />
-                  <span className="text-[11px] font-bold text-gray-800">
-                    {BRAND_BASE_COLORS.find((c) => c.hex.toLowerCase() === formData.primaryColor?.toLowerCase())?.name || 'Personalizado'}
-                  </span>
-                  <span className="font-mono text-[10px] text-gray-400">
-                    {formData.primaryColor?.toUpperCase()}
-                  </span>
+
+                <button
+                  type="button"
+                  onClick={handleRestoreDefaultColors}
+                  className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-gray-200 bg-gray-50 hover:bg-gray-100 text-[11px] font-bold text-gray-700 transition-colors cursor-pointer self-start sm:self-auto shrink-0"
+                >
+                  <TbRefresh size={13} />
+                  <span>Restaurar Negro y Rojo</span>
+                </button>
+              </div>
+
+              {/* 1. Color Principal (Oscuro) */}
+              <div className="space-y-2">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <div>
+                    <label className="block text-xs font-bold text-gray-800">
+                      1. Color Principal (Navbar, Footer y Sidebar Admin)
+                    </label>
+                    <p className="text-[11px] text-gray-500">
+                      Usa tonos oscuros para mantener el contraste de textos blancos.
+                    </p>
+                  </div>
+
+                  <label className="flex items-center gap-1.5 bg-gray-50 border border-gray-200 px-2.5 py-1 rounded-lg cursor-pointer">
+                    <input
+                      type="color"
+                      value={formData.primaryColor || DEFAULT_PRIMARY_COLOR}
+                      onChange={(e) => applyLiveColor('primaryColor', e.target.value)}
+                      className="w-5 h-5 rounded border-0 bg-transparent p-0 cursor-pointer"
+                      aria-label="Selector libre de color principal"
+                    />
+                    <span className="text-[11px] font-bold text-gray-800">
+                      {PRIMARY_DARK_COLORS.find((c) => c.hex.toLowerCase() === formData.primaryColor?.toLowerCase())?.name || 'Personalizado'}
+                    </span>
+                    <span className="font-mono text-[10px] text-gray-500">
+                      {(formData.primaryColor || DEFAULT_PRIMARY_COLOR).toUpperCase()}
+                    </span>
+                  </label>
+                </div>
+
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5">
+                  {PRIMARY_DARK_COLORS.map((color) => {
+                    const isSelected = formData.primaryColor?.toLowerCase() === color.hex.toLowerCase();
+                    return (
+                      <button
+                        key={color.hex}
+                        type="button"
+                        onClick={() => applyLiveColor('primaryColor', color.hex)}
+                        className={`px-2.5 py-1.5 rounded-lg border text-left transition-all cursor-pointer flex items-center gap-2 ${
+                          isSelected
+                            ? 'border-gray-900 ring-1 ring-gray-900 bg-gray-50 font-semibold'
+                            : 'border-gray-200 bg-white hover:border-gray-300'
+                        }`}
+                      >
+                        <span
+                          className="w-4 h-4 rounded border border-black/15 shrink-0 flex items-center justify-center"
+                          style={{ backgroundColor: color.hex }}
+                        >
+                          {isSelected && <TbCheck size={10} className="text-white stroke-2" />}
+                        </span>
+                        <span className="text-[11px] text-gray-800 truncate">{color.name}</span>
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
 
-              {/* Grid compacto de 10 colores base */}
-              <div className="grid grid-cols-2 sm:grid-cols-5 gap-1.5">
-                {BRAND_BASE_COLORS.map((color) => {
-                  const isSelected = formData.primaryColor?.toLowerCase() === color.hex.toLowerCase();
-                  return (
-                    <button
-                      key={color.hex}
-                      type="button"
-                      title={`${color.name} (${color.hex})`}
-                      onClick={() => {
-                        setFormData((prev) => ({ ...prev, primaryColor: color.hex }));
-                        document.documentElement.style.setProperty('--brand-primary', color.hex);
-                      }}
-                      className={`px-2 py-1.5 rounded-lg border text-left transition-all duration-150 cursor-pointer flex items-center gap-1.5 relative ${
-                        isSelected 
-                          ? 'border-gray-900 ring-1 ring-gray-900 bg-gray-50 shadow-2xs font-semibold' 
-                          : 'border-gray-200/90 bg-white hover:border-gray-300 hover:bg-gray-50/60'
-                      }`}
-                    >
-                      <div 
-                        className="w-3.5 h-3.5 rounded border border-black/15 shadow-2xs shrink-0 flex items-center justify-center"
-                        style={{ backgroundColor: color.hex }}
-                      >
-                        {isSelected && (
-                          <TbCheck size={10} className="text-gray-900 stroke-2" />
-                        )}
-                      </div>
+              {/* 2. Color de Acento (Botones y Activos) */}
+              <div className="space-y-2">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <div>
+                    <label className="block text-xs font-bold text-gray-800">
+                      2. Color de Acento (Botones de Compra, Ofertas y Activos)
+                    </label>
+                    <p className="text-[11px] text-gray-500">
+                      Destaca llamados a la acción, etiquetas y secciones activas.
+                    </p>
+                  </div>
 
-                      <span className="text-[11px] text-gray-800 leading-tight truncate">
-                        {color.name}
-                      </span>
-                    </button>
-                  );
-                })}
+                  <label className="flex items-center gap-1.5 bg-gray-50 border border-gray-200 px-2.5 py-1 rounded-lg cursor-pointer">
+                    <input
+                      type="color"
+                      value={formData.accentColor || DEFAULT_ACCENT_COLOR}
+                      onChange={(e) => applyLiveColor('accentColor', e.target.value)}
+                      className="w-5 h-5 rounded border-0 bg-transparent p-0 cursor-pointer"
+                      aria-label="Selector libre de color de acento"
+                    />
+                    <span className="text-[11px] font-bold text-gray-800">
+                      {ACCENT_ACTION_COLORS.find((c) => c.hex.toLowerCase() === formData.accentColor?.toLowerCase())?.name || 'Personalizado'}
+                    </span>
+                    <span className="font-mono text-[10px] text-gray-500">
+                      {(formData.accentColor || DEFAULT_ACCENT_COLOR).toUpperCase()}
+                    </span>
+                  </label>
+                </div>
+
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5">
+                  {ACCENT_ACTION_COLORS.map((color) => {
+                    const isSelected = formData.accentColor?.toLowerCase() === color.hex.toLowerCase();
+                    return (
+                      <button
+                        key={color.hex}
+                        type="button"
+                        onClick={() => applyLiveColor('accentColor', color.hex)}
+                        className={`px-2.5 py-1.5 rounded-lg border text-left transition-all cursor-pointer flex items-center gap-2 ${
+                          isSelected
+                            ? 'border-gray-900 ring-1 ring-gray-900 bg-gray-50 font-semibold'
+                            : 'border-gray-200 bg-white hover:border-gray-300'
+                        }`}
+                      >
+                        <span
+                          className="w-4 h-4 rounded border border-black/15 shrink-0 flex items-center justify-center"
+                          style={{ backgroundColor: color.hex }}
+                        >
+                          {isSelected && <TbCheck size={10} className="text-white stroke-2" />}
+                        </span>
+                        <span className="text-[11px] text-gray-800 truncate">{color.name}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Mini Vista Previa en Vivo */}
+              <div className="rounded-xl border border-gray-200 overflow-hidden bg-white">
+                <div
+                  className="px-4 py-2.5 text-white flex items-center justify-between transition-colors"
+                  style={{ backgroundColor: formData.primaryColor || DEFAULT_PRIMARY_COLOR }}
+                >
+                  <div className="flex items-center gap-4 text-[11px] font-bold uppercase tracking-wider">
+                    <span className="font-display">{formData.name || 'Cooperativa Gourmet'}</span>
+                    <span style={{ color: formData.accentColor || DEFAULT_ACCENT_COLOR }}>
+                      Inicio
+                    </span>
+                    <span className="text-neutral-300 font-normal">Catálogo</span>
+                  </div>
+                  <span
+                    className="px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-white"
+                    style={{ backgroundColor: formData.accentColor || DEFAULT_ACCENT_COLOR }}
+                  >
+                    Comprar ahora
+                  </span>
+                </div>
               </div>
             </div>
           </div>

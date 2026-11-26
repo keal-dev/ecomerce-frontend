@@ -182,7 +182,7 @@ export const PredictiveSearchBar = ({
                 <button
                   type="button"
                   onClick={clearQueries}
-                  className="text-[11px] text-neutral-500 hover:text-[#de2a2a] cursor-pointer"
+                  className="text-[11px] text-neutral-500 hover:text-brand-accent cursor-pointer"
                 >
                   Borrar historial
                 </button>
@@ -207,7 +207,7 @@ export const PredictiveSearchBar = ({
                         e.stopPropagation();
                         removeQuery(item);
                       }}
-                      className="text-neutral-400 hover:text-[#de2a2a] p-1 cursor-pointer"
+                      className="text-neutral-400 hover:text-brand-accent p-1 cursor-pointer"
                     >
                       <TbX size={14} />
                     </button>
@@ -222,7 +222,7 @@ export const PredictiveSearchBar = ({
             <div>
               {isLoading ? (
                 <div className="flex items-center justify-center py-8 gap-2 text-xs text-neutral-500">
-                  <TbLoader2 className="animate-spin text-[#de2a2a]" size={20} />
+                  <TbLoader2 className="animate-spin text-brand-accent" size={20} />
                   <span>Buscando en nuestro catálogo...</span>
                 </div>
               ) : suggestions.length > 0 ? (
@@ -251,7 +251,7 @@ export const PredictiveSearchBar = ({
                             {symbol} {Number(p.price).toFixed(2)}
                           </span>
                           {p.discount && Number(p.discount) > 0 && (
-                            <span className="text-[10px] font-bold text-white bg-[#de2a2a] px-1">
+                            <span className="text-[10px] font-bold text-white bg-brand-accent px-1">
                               -{p.discount}%
                             </span>
                           )}
@@ -263,7 +263,7 @@ export const PredictiveSearchBar = ({
                   <button
                     type="button"
                     onClick={() => handleExecuteSearch(query)}
-                    className="w-full mt-3 py-2.5 px-3 bg-black hover:bg-[#de2a2a] text-white text-xs font-bold uppercase tracking-wider rounded-none flex items-center justify-center gap-2 transition-colors cursor-pointer"
+                    className="w-full mt-3 py-2.5 px-3 bg-black hover:bg-brand-accent text-white text-xs font-bold uppercase tracking-wider rounded-none flex items-center justify-center gap-2 transition-colors cursor-pointer"
                   >
                     <span>Ver todos los resultados para &quot;{query}&quot;</span>
                     <TbArrowRight size={14} />
@@ -275,7 +275,7 @@ export const PredictiveSearchBar = ({
                   <button
                     type="button"
                     onClick={() => handleExecuteSearch(query)}
-                    className="mt-2 text-[#de2a2a] font-bold uppercase underline cursor-pointer"
+                    className="mt-2 text-brand-accent font-bold uppercase underline cursor-pointer"
                   >
                     Buscar de todos modos
                   </button>
@@ -356,7 +356,7 @@ export const PredictiveSearchBar = ({
                 <button
                   type="button"
                   onClick={clearQueries}
-                  className="text-[11px] text-neutral-500 hover:text-[#de2a2a] cursor-pointer"
+                  className="text-[11px] text-neutral-500 hover:text-brand-accent cursor-pointer"
                 >
                   Borrar historial
                 </button>
@@ -373,8 +373,8 @@ export const PredictiveSearchBar = ({
                       onClick={() => handleExecuteSearch(item)}
                       className="flex items-center gap-2 text-xs text-neutral-700 font-medium text-left flex-1 cursor-pointer"
                     >
-                      <TbSearch size={14} className="text-neutral-400 group-hover:text-[#de2a2a]" />
-                      <span className="group-hover:text-[#de2a2a]">{item}</span>
+                      <TbSearch size={14} className="text-neutral-400 group-hover:text-brand-accent" />
+                      <span className="group-hover:text-brand-accent">{item}</span>
                     </button>
                     <button
                       type="button"
@@ -398,7 +398,7 @@ export const PredictiveSearchBar = ({
             <div>
               {isLoading && suggestions.length === 0 ? (
                 <div className="flex items-center justify-center py-6 gap-2 text-xs text-neutral-500">
-                  <TbLoader2 className="animate-spin text-[#de2a2a]" size={18} />
+                  <TbLoader2 className="animate-spin text-brand-accent" size={18} />
                   <span>Buscando en nuestro catálogo...</span>
                 </div>
               ) : suggestions.length > 0 ? (
@@ -424,7 +424,7 @@ export const PredictiveSearchBar = ({
                       </div>
 
                       <div className="flex-1 min-w-0">
-                        <p className="text-xs font-semibold text-black line-clamp-1 group-hover:text-[#de2a2a] transition-colors">
+                        <p className="text-xs font-semibold text-black line-clamp-1 group-hover:text-brand-accent transition-colors">
                           {p.title}
                         </p>
                         <div className="flex items-center gap-2 mt-0.5">
@@ -438,7 +438,7 @@ export const PredictiveSearchBar = ({
                             {symbol} {Number(p.price).toFixed(2)}
                           </span>
                           {p.discount && Number(p.discount) > 0 && (
-                            <span className="text-[10px] font-bold text-white bg-[#de2a2a] px-1">
+                            <span className="text-[10px] font-bold text-white bg-brand-accent px-1">
                               -{p.discount}%
                             </span>
                           )}
@@ -452,7 +452,7 @@ export const PredictiveSearchBar = ({
 
                       <TbArrowRight
                         size={15}
-                        className="text-neutral-300 group-hover:text-[#de2a2a] group-hover:translate-x-0.5 transition-all shrink-0"
+                        className="text-neutral-300 group-hover:text-brand-accent group-hover:translate-x-0.5 transition-all shrink-0"
                       />
                     </Link>
                   ))}
@@ -476,7 +476,7 @@ export const PredictiveSearchBar = ({
                   <button
                     type="button"
                     onClick={() => handleExecuteSearch(query)}
-                    className="mt-2 text-xs font-bold uppercase text-[#de2a2a] hover:underline cursor-pointer"
+                    className="mt-2 text-xs font-bold uppercase text-brand-accent hover:underline cursor-pointer"
                   >
                     Buscar de todos modos →
                   </button>

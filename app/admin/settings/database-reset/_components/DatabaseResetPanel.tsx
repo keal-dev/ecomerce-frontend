@@ -117,7 +117,7 @@ export function DatabaseResetPanel() {
   if (!authLoading && !isSuperAdmin) {
     return (
       <div className="bg-white rounded-xl border border-red-200 p-6 sm:p-8 text-center max-w-xl mx-auto">
-        <div className="w-12 h-12 rounded-full bg-red-50 text-[#de2a2a] flex items-center justify-center mx-auto mb-3">
+        <div className="w-12 h-12 rounded-full bg-red-50 text-brand-accent flex items-center justify-center mx-auto mb-3">
           <TbLock size={24} />
         </div>
         <h2 className="text-lg font-black text-gray-900">Acceso Restringido</h2>
@@ -133,12 +133,12 @@ export function DatabaseResetPanel() {
       {/* Cabecera de advertencia crítica */}
       <div className="bg-white rounded-xl border border-gray-200 p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="flex items-start gap-3.5">
-          <div className="w-11 h-11 rounded-lg bg-red-50 text-[#de2a2a] border border-red-100 flex items-center justify-center shrink-0">
+          <div className="w-11 h-11 rounded-lg bg-red-50 text-brand-accent border border-red-100 flex items-center justify-center shrink-0">
             <TbDatabase size={22} />
           </div>
           <div>
             <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-black text-white text-[10px] font-bold tracking-wide uppercase mb-1.5">
-              <TbAlertTriangle size={12} className="text-[#de2a2a]" />
+              <TbAlertTriangle size={12} className="text-brand-accent" />
               <span>Zona Crítica · Solo Super Admin</span>
             </div>
             <h1 className="text-xl sm:text-2xl font-black text-gray-900 tracking-tight">
@@ -199,7 +199,7 @@ export function DatabaseResetPanel() {
 
       {/* Error al cargar estadísticas o al ejecutar reset */}
       {(statsError || resetError) && (
-        <div className="bg-red-50 border border-red-200 rounded-xl p-4 flex items-start gap-3 text-[#de2a2a]">
+        <div className="bg-red-50 border border-red-200 rounded-xl p-4 flex items-start gap-3 text-brand-accent">
           <TbAlertTriangle size={18} className="shrink-0 mt-0.5" />
           <div className="text-xs font-semibold leading-relaxed">
             {resetError || statsError}
@@ -214,7 +214,7 @@ export function DatabaseResetPanel() {
           <div>
             <div className="flex items-center justify-between gap-2 pb-3 border-b border-gray-100">
               <div className="flex items-center gap-2">
-                <span className="w-7 h-7 rounded-lg bg-red-50 text-[#de2a2a] flex items-center justify-center">
+                <span className="w-7 h-7 rounded-lg bg-red-50 text-brand-accent flex items-center justify-center">
                   <TbTrash size={15} />
                 </span>
                 <div>
@@ -224,7 +224,7 @@ export function DatabaseResetPanel() {
                   </p>
                 </div>
               </div>
-              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-red-100 text-[#de2a2a]">
+              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-red-100 text-brand-accent">
                 Irreversible
               </span>
             </div>
@@ -356,7 +356,7 @@ export function DatabaseResetPanel() {
             checked={resetCompany}
             onChange={(e) => setResetCompany(e.target.checked)}
             disabled={isResetting}
-            className="mt-0.5 h-4 w-4 rounded border-gray-300 text-[#de2a2a] focus:ring-[#de2a2a]"
+            className="mt-0.5 h-4 w-4 rounded border-gray-300 text-brand-accent focus:ring-brand-accent"
           />
           <div>
             <div className="text-xs font-bold text-gray-900">
@@ -374,7 +374,7 @@ export function DatabaseResetPanel() {
             className="block text-xs font-bold text-gray-800"
           >
             Escribe{' '}
-            <span className="font-mono px-1.5 py-0.5 rounded bg-red-50 text-[#de2a2a] border border-red-200 select-all">
+            <span className="font-mono px-1.5 py-0.5 rounded bg-red-50 text-brand-accent border border-red-200 select-all">
               {REQUIRED_PHRASE}
             </span>{' '}
             para continuar:
@@ -388,7 +388,7 @@ export function DatabaseResetPanel() {
             disabled={isResetting}
             autoComplete="off"
             spellCheck={false}
-            className="w-full px-3.5 py-2.5 text-xs font-mono font-bold uppercase tracking-wider rounded-lg border border-gray-300 bg-white text-gray-900 focus:outline-none focus:border-[#de2a2a] focus:ring-2 focus:ring-[#de2a2a]/20"
+            className="w-full px-3.5 py-2.5 text-xs font-mono font-bold uppercase tracking-wider rounded-lg border border-gray-300 bg-white text-gray-900 focus:outline-none focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/20"
           />
         </div>
 
@@ -399,7 +399,7 @@ export function DatabaseResetPanel() {
           <button
             type="submit"
             disabled={!isPhraseValid || isResetting}
-            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg bg-[#de2a2a] hover:bg-[#b91c1c] text-white text-xs font-black tracking-wide transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed shrink-0"
+            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg bg-brand-accent hover:bg-[#b91c1c] text-white text-xs font-black tracking-wide transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed shrink-0"
           >
             <TbTrash size={16} />
             <span>Eliminar y Resetear Base de Datos</span>
@@ -413,7 +413,7 @@ export function DatabaseResetPanel() {
           <div className="bg-white rounded-xl border border-gray-200 max-w-md w-full p-5 sm:p-6 shadow-2xl space-y-4">
             <div className="flex items-start justify-between gap-3">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg bg-red-50 text-[#de2a2a] flex items-center justify-center shrink-0">
+                <div className="w-10 h-10 rounded-lg bg-red-50 text-brand-accent flex items-center justify-center shrink-0">
                   <TbAlertTriangle size={22} />
                 </div>
                 <div>
@@ -464,7 +464,7 @@ export function DatabaseResetPanel() {
                 type="button"
                 onClick={handleExecuteReset}
                 disabled={isResetting}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#de2a2a] hover:bg-[#b91c1c] text-white text-xs font-black cursor-pointer disabled:opacity-60"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-brand-accent hover:bg-[#b91c1c] text-white text-xs font-black cursor-pointer disabled:opacity-60"
               >
                 {isResetting ? (
                   <>

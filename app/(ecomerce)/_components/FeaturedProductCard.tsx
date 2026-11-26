@@ -43,7 +43,7 @@ export const FeaturedProductCard = ({ product }: { product: Product }) => {
       {/* Top Banner Tag */}
       <div className="bg-black text-white px-4 py-2.5 flex items-center justify-between text-[11px] font-bold uppercase tracking-wider">
         <span className="flex items-center gap-1.5">
-          <TbFlame size={15} className="text-[#de2a2a]" /> OFERTA DESTACADA
+          <TbFlame size={15} className="text-brand-accent" /> OFERTA DESTACADA
         </span>
         <span className="flex items-center gap-1 text-[10px] font-semibold text-[#f3ff34]">
           <TbClock size={13} /> POR TIEMPO LIMITADO
@@ -58,7 +58,7 @@ export const FeaturedProductCard = ({ product }: { product: Product }) => {
           className="w-full md:w-1/2 aspect-square max-h-60 flex items-center justify-center p-4 bg-[#f8f8f8] overflow-hidden shrink-0 relative"
         >
           {product.discount && product.discount > 0 ? (
-            <span className="absolute top-2.5 left-2.5 bg-[#de2a2a] text-white text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5">
+            <span className="absolute top-2.5 left-2.5 bg-brand-accent text-white text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5">
               -{product.discount}%
             </span>
           ) : null}
@@ -84,7 +84,7 @@ export const FeaturedProductCard = ({ product }: { product: Product }) => {
             )}
 
             <Link href={href} onClick={() => addViewedId(product.id)}>
-              <h3 className="font-display text-base md:text-lg font-extrabold uppercase text-black line-clamp-2 leading-tight group-hover:text-[#de2a2a] transition-colors mb-2">
+              <h3 className="font-display text-base md:text-lg font-extrabold uppercase text-black line-clamp-2 leading-tight group-hover:text-brand-accent transition-colors mb-2">
                 {product.title}
               </h3>
             </Link>
@@ -100,7 +100,7 @@ export const FeaturedProductCard = ({ product }: { product: Product }) => {
             )}
 
             <div className="flex items-baseline gap-2.5">
-              <span className="text-2xl sm:text-3xl font-extrabold text-[#de2a2a] tracking-tight">
+              <span className="text-2xl sm:text-3xl font-extrabold text-brand-accent tracking-tight">
                 {symbol} {Number(product.price || 0).toFixed(2)}
               </span>
             </div>
@@ -111,7 +111,7 @@ export const FeaturedProductCard = ({ product }: { product: Product }) => {
               type="button"
               disabled={isOutOfStock}
               onClick={handleQuickAdd}
-              className="h-11 bg-[#de2a2a] hover:bg-red-700 disabled:bg-[#6f719b] text-white font-bold text-[11px] uppercase tracking-widest rounded-none transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
+              className="h-11 bg-brand-accent hover:bg-red-700 disabled:bg-[#6f719b] text-white font-bold text-[11px] uppercase tracking-widest rounded-none transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
             >
               <TbPlus size={15} />
               <span>{isOutOfStock ? 'AGOTADO' : 'AGREGAR'}</span>

@@ -150,7 +150,7 @@ export const HelpFaqAccordion = ({
     >
       <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-[#d9d9d9] pb-4 mb-6 gap-2">
         <div className="flex items-center gap-2.5 flex-wrap">
-          <TbSparkles className="text-[#de2a2a]" size={20} />
+          <TbSparkles className="text-brand-accent" size={20} />
           <h2 className="font-display text-lg sm:text-xl font-extrabold uppercase tracking-tight text-black">
             {isSearching ? 'Resultados de búsqueda' : 'Preguntas Frecuentes'}
           </h2>
@@ -169,7 +169,7 @@ export const HelpFaqAccordion = ({
             <button
               type="button"
               onClick={onClearSearch}
-              className="text-xs text-[#de2a2a] hover:text-red-700 font-bold uppercase tracking-wider inline-flex items-center gap-1 cursor-pointer"
+              className="text-xs text-brand-accent hover:text-red-700 font-bold uppercase tracking-wider inline-flex items-center gap-1 cursor-pointer"
             >
               <TbX size={14} />
               <span>Limpiar filtro</span>
@@ -193,7 +193,7 @@ export const HelpFaqAccordion = ({
             <button
               type="button"
               onClick={onClearSearch}
-              className="mt-4 px-5 py-2 bg-[#de2a2a] hover:bg-red-700 text-white text-xs font-bold uppercase tracking-wider rounded-none transition-colors cursor-pointer"
+              className="mt-4 px-5 py-2 bg-brand-accent hover:bg-red-700 text-white text-xs font-bold uppercase tracking-wider rounded-none transition-colors cursor-pointer"
             >
               Ver todas las preguntas
             </button>
@@ -225,7 +225,7 @@ export const HelpFaqAccordion = ({
                   <TbChevronDown
                     size={18}
                     className={`shrink-0 transition-transform duration-200 ${
-                      isOpen ? 'rotate-180 text-[#de2a2a]' : 'text-neutral-500'
+                      isOpen ? 'rotate-180 text-brand-accent' : 'text-neutral-500'
                     }`}
                   />
                 </button>

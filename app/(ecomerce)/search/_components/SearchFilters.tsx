@@ -40,7 +40,7 @@ export const SearchFilters = ({
       {/* Título de Filtros y botón limpiar */}
       <div className="flex items-center justify-between border-b border-[#d9d9d9] pb-3">
         <div className="flex items-center gap-2">
-          <TbFilter size={17} className="text-[#de2a2a]" />
+          <TbFilter size={17} className="text-brand-accent" />
           <h2 className="font-display text-sm font-extrabold uppercase tracking-tight text-black">
             Filtros
           </h2>
@@ -50,7 +50,7 @@ export const SearchFilters = ({
           <button
             type="button"
             onClick={onResetFilters}
-            className="text-xs text-[#de2a2a] hover:text-red-700 font-bold uppercase tracking-wider inline-flex items-center gap-1 cursor-pointer"
+            className="text-xs text-brand-accent hover:text-red-700 font-bold uppercase tracking-wider inline-flex items-center gap-1 cursor-pointer"
           >
             <TbX size={14} />
             <span>Limpiar</span>
@@ -114,7 +114,7 @@ export const SearchFilters = ({
             type="checkbox"
             checked={filters.onlyFreeShipping}
             onChange={(e) => onFilterChange({ onlyFreeShipping: e.target.checked })}
-            className="w-4 h-4 rounded-none accent-[#de2a2a] cursor-pointer"
+            className="w-4 h-4 rounded-none accent-brand-accent cursor-pointer"
           />
           <TbTruckDelivery size={16} className="text-[#2e9e7b]" />
           <span>Envío gratis</span>
@@ -125,7 +125,7 @@ export const SearchFilters = ({
             type="checkbox"
             checked={filters.onlyFull}
             onChange={(e) => onFilterChange({ onlyFull: e.target.checked })}
-            className="w-4 h-4 rounded-none accent-[#de2a2a] cursor-pointer"
+            className="w-4 h-4 rounded-none accent-brand-accent cursor-pointer"
           />
           <span className="text-[#2e9e7b] font-bold italic flex items-center text-xs">
             <TbBolt size={14} className="mr-0.5" /> EXPRESS
@@ -138,9 +138,9 @@ export const SearchFilters = ({
             type="checkbox"
             checked={filters.onlyDeals}
             onChange={(e) => onFilterChange({ onlyDeals: e.target.checked })}
-            className="w-4 h-4 rounded-none accent-[#de2a2a] cursor-pointer"
+            className="w-4 h-4 rounded-none accent-brand-accent cursor-pointer"
           />
-          <TbPercentage size={16} className="text-[#de2a2a]" />
+          <TbPercentage size={16} className="text-brand-accent" />
           <span>Solo ofertas y descuentos</span>
         </label>
       </div>

@@ -30,9 +30,9 @@ export const HelpHeader = ({
   };
 
   return (
-    <div className="bg-black text-white rounded-none border-b-4 border-[#de2a2a] p-6 sm:p-10 mb-8 text-center relative overflow-hidden">
+    <div className="bg-black text-white rounded-none border-b-4 border-brand-accent p-6 sm:p-10 mb-8 text-center relative overflow-hidden">
       <div className="relative max-w-2xl mx-auto">
-        <span className="inline-block text-[11px] font-bold text-[#de2a2a] uppercase tracking-[0.2em] mb-2">
+        <span className="inline-block text-[11px] font-bold text-brand-accent uppercase tracking-[0.2em] mb-2">
           Centro de Ayuda y Soporte
         </span>
         <h1 className="font-display text-2xl sm:text-4xl font-extrabold uppercase tracking-tight text-white">
@@ -70,7 +70,7 @@ export const HelpHeader = ({
 
           <button
             type="submit"
-            className="px-6 py-3.5 bg-[#de2a2a] hover:bg-red-700 text-white text-xs font-bold uppercase tracking-widest transition-colors cursor-pointer shrink-0 rounded-none"
+            className="px-6 py-3.5 bg-brand-accent hover:bg-red-700 text-white text-xs font-bold uppercase tracking-widest transition-colors cursor-pointer shrink-0 rounded-none"
           >
             Buscar
           </button>
@@ -86,7 +86,7 @@ export const HelpHeader = ({
               key={tag}
               type="button"
               onClick={() => onSelectQuickTag(tag)}
-              className="text-[11px] bg-neutral-900 hover:bg-[#de2a2a] text-white border border-[#262626] hover:border-[#de2a2a] font-bold px-3 py-1.5 rounded-none transition-colors cursor-pointer"
+              className="text-[11px] bg-neutral-900 hover:bg-brand-accent text-white border border-[#262626] hover:border-brand-accent font-bold px-3 py-1.5 rounded-none transition-colors cursor-pointer"
             >
               {tag}
             </button>

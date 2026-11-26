@@ -66,8 +66,8 @@ export const ProductCarousel = ({
   const renderAction = () => {
     if (!headerAction) return null;
     const baseCls = darkSurface
-      ? 'text-xs font-bold uppercase tracking-widest text-white hover:text-[#de2a2a] underline underline-offset-4 transition-colors cursor-pointer shrink-0'
-      : 'text-xs font-bold uppercase tracking-widest text-black hover:text-[#de2a2a] underline underline-offset-4 transition-colors cursor-pointer shrink-0';
+      ? 'text-xs font-bold uppercase tracking-widest text-white hover:text-brand-accent underline underline-offset-4 transition-colors cursor-pointer shrink-0'
+      : 'text-xs font-bold uppercase tracking-widest text-black hover:text-brand-accent underline underline-offset-4 transition-colors cursor-pointer shrink-0';
 
     if (headerAction.onClick) {
       return (
@@ -87,7 +87,7 @@ export const ProductCarousel = ({
     <div className="flex items-end justify-between gap-4 mb-6">
       <div>
         {eyebrow && (
-          <span className="block text-[11px] font-bold uppercase tracking-[0.2em] text-[#de2a2a] mb-1">
+          <span className="block text-[11px] font-bold uppercase tracking-[0.2em] text-brand-accent mb-1">
             {eyebrow}
           </span>
         )}

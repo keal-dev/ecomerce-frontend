@@ -407,11 +407,20 @@ export default function CheckoutPage() {
           },
           style: {
             logo: company?.logoUrl || '',
-            bannerColor: '#000000',
-            buttonBackground: '#de2a2a',
-            menuColor: '#000000',
-            linksColor: '#de2a2a',
-            priceColor: '#000000',
+            bannerColor:
+              company?.primaryColor && company.primaryColor.toLowerCase() !== '#ffe600'
+                ? company.primaryColor
+                : '#000000',
+            buttonBackground: company?.accentColor || '#de2a2a',
+            menuColor:
+              company?.primaryColor && company.primaryColor.toLowerCase() !== '#ffe600'
+                ? company.primaryColor
+                : '#000000',
+            linksColor: company?.accentColor || '#de2a2a',
+            priceColor:
+              company?.primaryColor && company.primaryColor.toLowerCase() !== '#ffe600'
+                ? company.primaryColor
+                : '#000000',
           },
         });
 
@@ -430,7 +439,7 @@ export default function CheckoutPage() {
   if (!mounted) {
     return (
       <div className="min-h-[60vh] bg-white flex flex-col items-center justify-center gap-3">
-        <TbLoader2 className="animate-spin text-[#de2a2a]" size={36} />
+        <TbLoader2 className="animate-spin text-brand-accent" size={36} />
         <p className="text-xs font-medium uppercase tracking-wider text-neutral-500">
           Cargando pasarela de pago segura...
         </p>
@@ -478,7 +487,7 @@ export default function CheckoutPage() {
               </div>
               <div className="flex justify-between pt-1 text-sm">
                 <span className="font-bold uppercase text-black">Total Pagado:</span>
-                <span className="font-display font-extrabold text-[#de2a2a] text-lg">
+                <span className="font-display font-extrabold text-brand-accent text-lg">
                   {currencySymbol} {orderCompleted.total.toFixed(2)}
                 </span>
               </div>
@@ -516,7 +525,7 @@ export default function CheckoutPage() {
             <div className="pt-2 flex flex-col sm:flex-row gap-3 justify-center items-center">
               <Link
                 href={`/rastreo?order=${encodeURIComponent(orderCompleted.orderNumber)}`}
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#de2a2a] hover:bg-red-700 text-white rounded-none text-xs font-bold uppercase tracking-widest transition-colors"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-brand-accent hover:bg-red-700 text-white rounded-none text-xs font-bold uppercase tracking-widest transition-colors"
               >
                 <TbTruckDelivery size={18} />
                 <span>Rastrear pedido</span>
@@ -557,7 +566,7 @@ export default function CheckoutPage() {
           </p>
           <Link
             href="/"
-            className="inline-block px-6 py-3 bg-[#de2a2a] hover:bg-red-700 text-white rounded-none text-xs font-bold uppercase tracking-widest transition-colors"
+            className="inline-block px-6 py-3 bg-brand-accent hover:bg-red-700 text-white rounded-none text-xs font-bold uppercase tracking-widest transition-colors"
           >
             Explorar Catálogo
           </Link>
@@ -574,7 +583,7 @@ export default function CheckoutPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         {/* Breadcrumb */}
         <nav className="flex items-center gap-1.5 text-[11px] uppercase tracking-wider text-neutral-500 mb-6">
-          <Link href="/cart" className="hover:text-[#de2a2a] transition-colors flex items-center gap-1">
+          <Link href="/cart" className="hover:text-brand-accent transition-colors flex items-center gap-1">
             <TbArrowLeft size={13} />
             Volver al Carrito
           </Link>
@@ -586,7 +595,7 @@ export default function CheckoutPage() {
           {/* COLUMNA IZQUIERDA: Formulario de Datos y Entrega */}
           <div className="lg:col-span-7 space-y-6">
             {errorMessage && (
-              <div className="p-4 bg-red-50 border border-[#de2a2a] rounded-none text-[#de2a2a] text-xs font-bold flex items-center gap-2">
+              <div className="p-4 bg-red-50 border border-brand-accent rounded-none text-brand-accent text-xs font-bold flex items-center gap-2">
                 <TbAlertCircle size={18} className="shrink-0" />
                 <span>{errorMessage}</span>
               </div>
@@ -595,7 +604,7 @@ export default function CheckoutPage() {
             {/* 1. Datos Personales y Comprobante */}
             <div className="bg-white rounded-none border border-[#d9d9d9] p-5 sm:p-6 space-y-4">
               <div className="flex items-center gap-2 border-b border-[#d9d9d9] pb-3">
-                <TbUser className="text-[#de2a2a]" size={20} />
+                <TbUser className="text-brand-accent" size={20} />
                 <h2 className="font-display font-extrabold uppercase tracking-tight text-black text-sm">
                   1. Datos del Comprador y Comprobante
                 </h2>
@@ -703,7 +712,7 @@ export default function CheckoutPage() {
             {/* 2. Dirección de Entrega (Ubigeo Automático) */}
             <div className="bg-white rounded-none border border-[#d9d9d9] p-5 sm:p-6 space-y-4">
               <div className="flex items-center gap-2 border-b border-[#d9d9d9] pb-3">
-                <TbMapPin className="text-[#de2a2a]" size={20} />
+                <TbMapPin className="text-brand-accent" size={20} />
                 <h2 className="font-display font-extrabold uppercase tracking-tight text-black text-sm">
                   2. Dirección de Entrega y Delivery
                 </h2>
@@ -811,14 +820,14 @@ export default function CheckoutPage() {
             <div className="bg-white rounded-none border border-[#d9d9d9] p-5 sm:p-6 space-y-4">
               <div className="flex items-center justify-between border-b border-[#d9d9d9] pb-3">
                 <div className="flex items-center gap-2">
-                  <TbCreditCard className="text-[#de2a2a]" size={20} />
+                  <TbCreditCard className="text-brand-accent" size={20} />
                   <h2 className="font-display font-extrabold uppercase tracking-tight text-black text-sm">
                     3. Método de Pago
                   </h2>
                 </div>
                 <div className="flex items-center gap-2 text-neutral-400">
                   <FaCcVisa size={22} className="text-black" />
-                  <FaCcMastercard size={22} className="text-[#de2a2a]" />
+                  <FaCcMastercard size={22} className="text-brand-accent" />
                   <FaCcAmex size={22} className="text-neutral-700" />
                 </div>
               </div>
@@ -855,7 +864,7 @@ export default function CheckoutPage() {
                   </div>
                   <div className="flex items-center gap-2.5 pt-2.5 border-t border-[#d9d9d9]">
                     <FaCcVisa size={24} className="text-black" />
-                    <FaCcMastercard size={24} className="text-[#de2a2a]" />
+                    <FaCcMastercard size={24} className="text-brand-accent" />
                     <FaCcAmex size={24} className="text-neutral-700" />
                     <span className="text-[10px] text-neutral-500 ml-auto font-bold uppercase">
                       Pago en cuotas
@@ -881,7 +890,7 @@ export default function CheckoutPage() {
                   />
                   <div className="flex items-start justify-between gap-2">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-none bg-[#de2a2a] text-white flex items-center justify-center shrink-0">
+                      <div className="w-10 h-10 rounded-none bg-brand-accent text-white flex items-center justify-center shrink-0">
                         <TbQrcode size={22} />
                       </div>
                       <div>
@@ -979,7 +988,7 @@ export default function CheckoutPage() {
               <button
                 type="submit"
                 disabled={isProcessing}
-                className="w-full py-3.5 px-4 bg-[#de2a2a] hover:bg-red-700 disabled:bg-neutral-300 text-white text-xs font-bold uppercase tracking-widest rounded-none transition-colors flex items-center justify-center gap-2 cursor-pointer"
+                className="w-full py-3.5 px-4 bg-brand-accent hover:bg-red-700 disabled:bg-neutral-300 text-white text-xs font-bold uppercase tracking-widest rounded-none transition-colors flex items-center justify-center gap-2 cursor-pointer"
               >
                 {isProcessing ? (
                   <>

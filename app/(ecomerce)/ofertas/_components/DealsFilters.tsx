@@ -46,7 +46,7 @@ export function DealsFilters({
       {/* Cabecera de Filtros */}
       <div className="flex items-center justify-between pb-3 border-b border-[#d9d9d9]">
         <div className="flex items-center gap-2">
-          <TbFilter size={17} className="text-[#de2a2a]" />
+          <TbFilter size={17} className="text-brand-accent" />
           <h2 className="font-display text-sm font-extrabold uppercase tracking-tight text-black">
             Filtrar Promos
           </h2>
@@ -55,7 +55,7 @@ export function DealsFilters({
           <button
             type="button"
             onClick={onResetFilters}
-            className="text-[11px] font-bold uppercase tracking-wider text-[#de2a2a] hover:underline flex items-center gap-1 cursor-pointer"
+            className="text-[11px] font-bold uppercase tracking-wider text-brand-accent hover:underline flex items-center gap-1 cursor-pointer"
           >
             <TbX size={13} />
             <span>Limpiar</span>
@@ -66,7 +66,7 @@ export function DealsFilters({
       {/* 1. Porcentaje de Descuento */}
       <div>
         <h3 className="text-[11px] font-bold uppercase tracking-widest text-black mb-2.5 flex items-center gap-1.5">
-          <TbPercentage size={14} className="text-[#de2a2a]" />
+          <TbPercentage size={14} className="text-brand-accent" />
           <span>Porcentaje de Descuento</span>
         </h3>
         <div className="space-y-1">
@@ -87,7 +87,7 @@ export function DealsFilters({
                     name="minDiscount"
                     checked={active}
                     onChange={() => onFilterChange({ minDiscount: tier.value })}
-                    className="accent-[#de2a2a] cursor-pointer"
+                    className="accent-brand-accent cursor-pointer"
                   />
                   <span>{tier.label}</span>
                 </div>
@@ -131,7 +131,7 @@ export function DealsFilters({
                   <span className="truncate">{cat.name}</span>
                   <span
                     className={`text-[10px] px-1.5 py-0.2 rounded-none font-bold shrink-0 ml-1 ${
-                      active ? 'bg-[#de2a2a] text-white' : 'bg-[#f8f8f8] text-neutral-500 border border-[#d9d9d9]'
+                      active ? 'bg-brand-accent text-white' : 'bg-[#f8f8f8] text-neutral-500 border border-[#d9d9d9]'
                     }`}
                   >
                     {cat.count}
@@ -154,7 +154,7 @@ export function DealsFilters({
             type="checkbox"
             checked={filters.onlyFreeShipping}
             onChange={(e) => onFilterChange({ onlyFreeShipping: e.target.checked })}
-            className="w-4 h-4 rounded-none accent-[#de2a2a] cursor-pointer"
+            className="w-4 h-4 rounded-none accent-brand-accent cursor-pointer"
           />
           <TbTruckDelivery size={16} className="text-[#2e9e7b]" />
           <span>Envío gratis</span>
@@ -165,7 +165,7 @@ export function DealsFilters({
             type="checkbox"
             checked={filters.onlyFull}
             onChange={(e) => onFilterChange({ onlyFull: e.target.checked })}
-            className="w-4 h-4 rounded-none accent-[#de2a2a] cursor-pointer"
+            className="w-4 h-4 rounded-none accent-brand-accent cursor-pointer"
           />
           <TbBolt size={16} className="text-[#2e9e7b]" />
           <span>Envío EXPRESS inmediato</span>

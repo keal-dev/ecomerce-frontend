@@ -173,7 +173,7 @@ export default function OffersPage() {
       <div className="max-w-7xl mx-auto px-4 md:px-7 pt-6">
         {/* Breadcrumb de Navegación */}
         <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-[11px] uppercase tracking-wider text-neutral-500 mb-5">
-          <Link href="/" className="hover:text-[#de2a2a] transition-colors">
+          <Link href="/" className="hover:text-brand-accent transition-colors">
             Inicio
           </Link>
           <TbChevronRight size={13} className="text-neutral-400" />
@@ -190,7 +190,7 @@ export default function OffersPage() {
         {/* Contenido Principal con Layout de 2 Columnas (Filtros + Grid) */}
         {isLoading && products.length === 0 ? (
           <div className="min-h-[40vh] flex flex-col items-center justify-center space-y-3 text-neutral-500">
-            <TbLoader2 size={32} className="animate-spin text-[#de2a2a]" />
+            <TbLoader2 size={32} className="animate-spin text-brand-accent" />
             <p className="text-xs font-bold uppercase tracking-wider">Cargando promos del día...</p>
           </div>
         ) : (
@@ -257,7 +257,7 @@ export default function OffersPage() {
               <button
                 type="button"
                 onClick={() => setIsMobileFiltersOpen(false)}
-                className="w-full py-3 bg-[#de2a2a] hover:bg-red-700 text-white rounded-none text-xs font-bold uppercase tracking-widest transition-colors cursor-pointer"
+                className="w-full py-3 bg-brand-accent hover:bg-red-700 text-white rounded-none text-xs font-bold uppercase tracking-widest transition-colors cursor-pointer"
               >
                 Ver resultados ({filteredAndSortedProducts.length})
               </button>

@@ -41,7 +41,7 @@ export const CartItemRow = ({
         <div className="flex-1 min-w-0">
           <Link
             href={href}
-            className="text-xs sm:text-sm font-bold text-black hover:text-[#de2a2a] transition-colors line-clamp-2 leading-snug"
+            className="text-xs sm:text-sm font-bold text-black hover:text-brand-accent transition-colors line-clamp-2 leading-snug"
           >
             {item.title}
           </Link>
@@ -122,7 +122,7 @@ export const CartItemRow = ({
           onClick={() => onRemove(item.id)}
           title="Eliminar producto"
           aria-label="Eliminar del carrito"
-          className="p-2 text-neutral-400 hover:text-[#de2a2a] border border-transparent hover:border-[#de2a2a] rounded-none transition-colors cursor-pointer"
+          className="p-2 text-neutral-400 hover:text-brand-accent border border-transparent hover:border-brand-accent rounded-none transition-colors cursor-pointer"
         >
           <TbTrash size={16} />
         </button>

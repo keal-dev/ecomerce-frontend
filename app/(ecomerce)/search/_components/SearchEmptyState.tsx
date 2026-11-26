@@ -61,7 +61,7 @@ export const SearchEmptyState = ({
 
           <Link
             href="/ofertas"
-            className="px-5 py-2.5 bg-[#de2a2a] hover:bg-red-700 text-white text-xs font-bold uppercase tracking-widest rounded-none transition-colors flex items-center gap-1.5"
+            className="px-5 py-2.5 bg-brand-accent hover:bg-red-700 text-white text-xs font-bold uppercase tracking-widest rounded-none transition-colors flex items-center gap-1.5"
           >
             <TbFlame size={14} />
             <span>Ver ofertas</span>
@@ -81,7 +81,7 @@ export const SearchEmptyState = ({
       {recommendedProducts.length > 0 && (
         <div className="bg-white rounded-none border border-[#d9d9d9] p-5 sm:p-6">
           <div className="flex items-center gap-2 mb-5 pb-3 border-b border-[#d9d9d9]">
-            <TbFlame className="text-[#de2a2a]" size={20} />
+            <TbFlame className="text-brand-accent" size={20} />
             <h3 className="font-display text-sm sm:text-base font-extrabold uppercase tracking-tight text-black">
               Recomendados de nuestra cooperativa
             </h3>

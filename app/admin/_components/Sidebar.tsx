@@ -26,30 +26,31 @@ interface NavItem {
   name: string;
   href: string;
   icon: React.ElementType;
+  iconColor: string;
   badge?: string;
 }
 
 // Bloque 1: Operaciones y Ventas
 const operationsLinks: NavItem[] = [
-  { name: 'Pedidos Online', href: '/admin/orders', icon: TbPackage, badge: 'Web' },
-  { name: 'Punto de Venta (POS)', href: '/admin/sales', icon: TbShoppingCart },
-  { name: 'Facturación', href: '/admin/billing', icon: TbReceipt },
-  { name: 'Inventario', href: '/admin/inventory', icon: TbClipboardList },
-  { name: 'Compras', href: '/admin/purchases', icon: TbTruckDelivery },
-  { name: 'Proveedores', href: '/admin/suppliers', icon: TbBuildingStore },
-  { name: 'Reclamaciones', href: '/admin/claims', icon: TbBook },
+  { name: 'Pedidos Online', href: '/admin/orders', icon: TbPackage, iconColor: 'text-emerald-400', badge: 'Web' },
+  { name: 'Punto de Venta (POS)', href: '/admin/sales', icon: TbShoppingCart, iconColor: 'text-amber-400' },
+  { name: 'Facturación', href: '/admin/billing', icon: TbReceipt, iconColor: 'text-teal-400' },
+  { name: 'Inventario', href: '/admin/inventory', icon: TbClipboardList, iconColor: 'text-sky-400' },
+  { name: 'Compras', href: '/admin/purchases', icon: TbTruckDelivery, iconColor: 'text-orange-400' },
+  { name: 'Proveedores', href: '/admin/suppliers', icon: TbBuildingStore, iconColor: 'text-violet-400' },
+  { name: 'Reclamaciones', href: '/admin/claims', icon: TbBook, iconColor: 'text-pink-400' },
 ];
 
 // Bloque 2: Mantenimientos y Catálogo (Exclusivo SUPER_ADMIN)
 const catalogLinks: NavItem[] = [
-  { name: 'Productos', href: '/admin/products', icon: TbBox },
-  { name: 'Categorías', href: '/admin/categories', icon: TbCategory },
-  { name: 'Marcas', href: '/admin/brands', icon: TbTag },
+  { name: 'Productos', href: '/admin/products', icon: TbBox, iconColor: 'text-cyan-400' },
+  { name: 'Categorías', href: '/admin/categories', icon: TbCategory, iconColor: 'text-indigo-400' },
+  { name: 'Marcas', href: '/admin/brands', icon: TbTag, iconColor: 'text-fuchsia-400' },
 ];
 
 // Bloque 3: Otros (Exclusivo SUPER_ADMIN)
 const otherLinks: NavItem[] = [
-  { name: 'Configuración', href: '/admin/settings', icon: TbSettings },
+  { name: 'Configuración', href: '/admin/settings', icon: TbSettings, iconColor: 'text-slate-300' },
 ];
 
 function SidebarInner({ onClose }: { onClose?: () => void }) {
@@ -77,10 +78,10 @@ function SidebarInner({ onClose }: { onClose?: () => void }) {
 
   return (
     <div 
-      className="flex flex-col h-full bg-black transition-colors duration-300"
+      className="flex flex-col h-full bg-brand-primary transition-colors duration-300"
     >
-      {/* Logo Header: Negro puro matching el cuerpo del sidebar */}
-      <div className="h-[52px] bg-black border-b border-[#262626] flex items-center justify-between px-3 shrink-0">
+      {/* Logo Header: matching el cuerpo del sidebar */}
+      <div className="h-[52px] bg-brand-primary border-b border-white/15 flex items-center justify-between px-3 shrink-0">
         <Link 
           href="/admin" 
           onClick={onClose}
@@ -116,7 +117,7 @@ function SidebarInner({ onClose }: { onClose?: () => void }) {
       </div>
 
       {/* Navigation Sections */}
-      <nav className="flex-1 px-2.5 py-2.5 space-y-2.5 overflow-y-auto bg-black">
+      <nav className="flex-1 px-2.5 py-4 space-y-2.5 overflow-y-auto bg-brand-primary">
         {/* Dashboard Principal */}
         <div>
           <Link
@@ -124,14 +125,14 @@ function SidebarInner({ onClose }: { onClose?: () => void }) {
             onClick={onClose}
             className={`flex items-center justify-between px-2.5 py-1.5 rounded-lg text-[13px] transition-all duration-150 ${
               isDashboardActive
-                ? 'bg-[#de2a2a] text-white font-semibold shadow-xs'
-                : 'text-neutral-400 hover:bg-white/10 hover:text-white font-medium'
+                ? 'bg-brand-accent text-white font-semibold shadow-xs'
+                : 'text-neutral-300 hover:bg-white/10 hover:text-white font-medium'
             }`}
           >
             <div className="flex items-center gap-2">
               <TbLayoutDashboard 
                 size={17} 
-                className={isDashboardActive ? 'text-white' : 'text-neutral-400'} 
+                className={isDashboardActive ? 'text-white' : 'text-rose-400'} 
               />
               <span>Dashboard</span>
             </div>
@@ -152,14 +153,14 @@ function SidebarInner({ onClose }: { onClose?: () => void }) {
                   onClick={onClose}
                   className={`flex items-center justify-between px-2.5 py-1.5 rounded-lg text-[13px] transition-all duration-150 ${
                     isActive
-                      ? 'bg-[#de2a2a] text-white font-semibold shadow-xs'
-                      : 'text-neutral-400 hover:bg-white/10 hover:text-white font-medium'
+                      ? 'bg-brand-accent text-white font-semibold shadow-xs'
+                      : 'text-neutral-300 hover:bg-white/10 hover:text-white font-medium'
                   }`}
                 >
                   <div className="flex items-center gap-2">
                     <Icon 
                       size={16.5} 
-                      className={isActive ? 'text-white' : 'text-neutral-400'} 
+                      className={isActive ? 'text-white' : item.iconColor} 
                     />
                     <span>{item.name}</span>
                   </div>
@@ -198,14 +199,14 @@ function SidebarInner({ onClose }: { onClose?: () => void }) {
                       onClick={onClose}
                       className={`flex items-center justify-between px-2.5 py-1.5 rounded-lg text-[13px] transition-all duration-150 ${
                         isActive
-                          ? 'bg-[#de2a2a] text-white font-semibold shadow-xs'
-                          : 'text-neutral-400 hover:bg-white/10 hover:text-white font-medium'
+                          ? 'bg-brand-accent text-white font-semibold shadow-xs'
+                          : 'text-neutral-300 hover:bg-white/10 hover:text-white font-medium'
                       }`}
                     >
                       <div className="flex items-center gap-2">
                         <Icon 
                           size={16.5} 
-                          className={isActive ? 'text-white' : 'text-neutral-400'} 
+                          className={isActive ? 'text-white' : item.iconColor} 
                         />
                         <span>{item.name}</span>
                       </div>
@@ -246,14 +247,14 @@ function SidebarInner({ onClose }: { onClose?: () => void }) {
                       onClick={onClose}
                       className={`flex items-center justify-between px-2.5 py-1.5 rounded-lg text-[13px] transition-all duration-150 ${
                         isActive
-                          ? 'bg-[#de2a2a] text-white font-semibold shadow-xs'
-                          : 'text-neutral-400 hover:bg-white/10 hover:text-white font-medium'
+                          ? 'bg-brand-accent text-white font-semibold shadow-xs'
+                          : 'text-neutral-300 hover:bg-white/10 hover:text-white font-medium'
                       }`}
                     >
                       <div className="flex items-center gap-2">
                         <Icon 
                           size={16.5} 
-                          className={isActive ? 'text-white' : 'text-neutral-400'} 
+                          className={isActive ? 'text-white' : item.iconColor} 
                         />
                         <span>{item.name}</span>
                       </div>
@@ -275,7 +276,7 @@ export function Sidebar() {
   return (
     <>
       {/* 1. Sidebar Fijo para Escritorio (>= lg) */}
-      <aside className="hidden lg:flex w-56 shrink-0 flex-col bg-black border-r border-[#262626] fixed inset-y-0 left-0 z-30 h-screen">
+      <aside className="hidden lg:flex w-[225px] shrink-0 flex-col bg-brand-primary border-r border-white/15 fixed inset-y-0 left-0 z-30 h-screen">
         <SidebarInner />
       </aside>
 
@@ -290,7 +291,7 @@ export function Sidebar() {
           />
 
           {/* Drawer contenedor que se desliza desde la izquierda */}
-          <aside className="fixed inset-y-0 left-0 z-50 w-64 bg-black border-r border-[#262626] shadow-2xl animate-in slide-in-from-left duration-200 h-screen">
+          <aside className="fixed inset-y-0 left-0 z-50 w-64 bg-brand-primary border-r border-white/15 shadow-2xl animate-in slide-in-from-left duration-200 h-screen">
             <SidebarInner onClose={closeMobileSidebar} />
           </aside>
         </div>

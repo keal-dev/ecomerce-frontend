@@ -73,9 +73,9 @@ const statusConfig: Record<
   },
   cancelled: {
     label: 'Cancelado',
-    bg: 'bg-[#de2a2a]',
+    bg: 'bg-brand-accent',
     text: 'text-white',
-    border: 'border-[#de2a2a]',
+    border: 'border-brand-accent',
     icon: TbAlertCircle,
   },
 };
@@ -205,7 +205,7 @@ function MisComprasContent() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6">
         {/* Breadcrumb */}
         <div className="flex items-center gap-2 text-[11px] uppercase tracking-wider text-neutral-500 mb-5">
-          <Link href="/" className="hover:text-[#de2a2a] transition-colors">
+          <Link href="/" className="hover:text-brand-accent transition-colors">
             Inicio
           </Link>
           <TbChevronRight size={12} />
@@ -216,7 +216,7 @@ function MisComprasContent() {
         <div className="bg-white rounded-none border border-[#d9d9d9] p-5 sm:p-7 mb-6">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-              <div className="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.2em] text-[#de2a2a] mb-1.5">
+              <div className="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.2em] text-brand-accent mb-1.5">
                 <TbPackage size={15} />
                 <span>Historial de Pedidos</span>
               </div>
@@ -230,7 +230,7 @@ function MisComprasContent() {
 
             <Link
               href="/rastreo"
-              className="inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-black hover:bg-[#de2a2a] text-white rounded-none text-xs font-bold uppercase tracking-wider transition-colors shrink-0"
+              className="inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-black hover:bg-brand-accent text-white rounded-none text-xs font-bold uppercase tracking-wider transition-colors shrink-0"
             >
               <TbTruckDelivery size={17} />
               <span>Rastreo en tiempo real</span>
@@ -265,7 +265,7 @@ function MisComprasContent() {
               <button
                 type="submit"
                 disabled={loading || !searchQuery.trim()}
-                className="px-6 py-2.5 bg-[#de2a2a] hover:bg-red-700 disabled:opacity-50 text-white rounded-none text-xs font-bold uppercase tracking-widest transition-colors shrink-0 cursor-pointer"
+                className="px-6 py-2.5 bg-brand-accent hover:bg-red-700 disabled:opacity-50 text-white rounded-none text-xs font-bold uppercase tracking-widest transition-colors shrink-0 cursor-pointer"
               >
                 {loading ? 'Consultando...' : 'Consultar'}
               </button>
@@ -276,7 +276,7 @@ function MisComprasContent() {
                 : 'Si compraste como invitado, ingresa tu número de orden exacto o inicia sesión para ver todo tu historial.'}
             </p>
             {authNotice && (
-              <div className="mt-3 p-3 rounded-none bg-red-50 border border-[#de2a2a] text-[#de2a2a] text-xs font-medium flex items-start gap-2">
+              <div className="mt-3 p-3 rounded-none bg-red-50 border border-brand-accent text-brand-accent text-xs font-medium flex items-start gap-2">
                 <TbAlertCircle size={16} className="shrink-0 mt-0.5" />
                 <span>{authNotice}</span>
               </div>
@@ -315,7 +315,7 @@ function MisComprasContent() {
         {/* Listado de Pedidos */}
         {loading ? (
           <div className="bg-[#f8f8f8] rounded-none border border-[#d9d9d9] p-12 text-center">
-            <div className="w-8 h-8 border-2 border-[#de2a2a] border-t-transparent rounded-full animate-spin mx-auto mb-3" />
+            <div className="w-8 h-8 border-2 border-brand-accent border-t-transparent rounded-full animate-spin mx-auto mb-3" />
             <p className="text-xs font-bold uppercase tracking-wider text-neutral-600">
               Buscando tus pedidos...
             </p>
@@ -329,7 +329,7 @@ function MisComprasContent() {
               <button
                 type="button"
                 onClick={() => loadOrders(searchQuery)}
-                className="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-[#de2a2a] hover:underline cursor-pointer"
+                className="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-brand-accent hover:underline cursor-pointer"
               >
                 <TbRefresh size={14} />
                 <span>Actualizar</span>
@@ -432,7 +432,7 @@ function MisComprasContent() {
                   {/* Fila inferior: Envío, Total y Acciones */}
                   <div className="pt-4 border-t border-[#d9d9d9] flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                     <div className="flex items-center gap-2 text-xs text-neutral-600">
-                      <TbMapPin size={15} className="text-[#de2a2a] shrink-0" />
+                      <TbMapPin size={15} className="text-brand-accent shrink-0" />
                       <span className="truncate">
                         Envío a:{' '}
                         <strong className="text-black">
@@ -469,7 +469,7 @@ function MisComprasContent() {
 
                       <Link
                         href={`/rastreo?order=${encodeURIComponent(ord.orderNumber)}`}
-                        className="inline-flex items-center gap-2 px-4 py-2 bg-[#de2a2a] hover:bg-red-700 text-white rounded-none text-xs font-bold uppercase tracking-wider transition-colors"
+                        className="inline-flex items-center gap-2 px-4 py-2 bg-brand-accent hover:bg-red-700 text-white rounded-none text-xs font-bold uppercase tracking-wider transition-colors"
                       >
                         <TbTruckDelivery size={16} />
                         <span>Rastrear</span>
@@ -500,7 +500,7 @@ function MisComprasContent() {
               </Link>
               <Link
                 href="/"
-                className="px-5 py-2.5 bg-[#de2a2a] hover:bg-red-700 text-white rounded-none text-xs font-bold uppercase tracking-wider transition-colors"
+                className="px-5 py-2.5 bg-brand-accent hover:bg-red-700 text-white rounded-none text-xs font-bold uppercase tracking-wider transition-colors"
               >
                 Explorar Catálogo
               </Link>

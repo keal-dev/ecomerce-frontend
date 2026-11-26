@@ -103,7 +103,7 @@ function TrackingContent() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6">
         {/* Breadcrumb */}
         <nav className="flex items-center gap-1.5 text-[11px] uppercase tracking-wider text-neutral-500 mb-6">
-          <Link href="/" className="hover:text-[#de2a2a] transition-colors flex items-center gap-1">
+          <Link href="/" className="hover:text-brand-accent transition-colors flex items-center gap-1">
             <TbArrowLeft size={13} />
             Inicio
           </Link>
@@ -112,11 +112,11 @@ function TrackingContent() {
         </nav>
 
         {/* Hero Card */}
-        <div className="bg-black text-white rounded-none border-b-4 border-[#de2a2a] p-6 sm:p-10 mb-8 text-center">
-          <div className="inline-flex p-3 bg-[#de2a2a] text-white rounded-none mb-4">
+        <div className="bg-black text-white rounded-none border-b-4 border-brand-accent p-6 sm:p-10 mb-8 text-center">
+          <div className="inline-flex p-3 bg-brand-accent text-white rounded-none mb-4">
             <TbTruckDelivery size={32} />
           </div>
-          <span className="block text-[11px] font-bold uppercase tracking-[0.2em] text-[#de2a2a] mb-1">
+          <span className="block text-[11px] font-bold uppercase tracking-[0.2em] text-brand-accent mb-1">
             Seguimiento en vivo
           </span>
           <h1 className="font-display text-2xl sm:text-4xl font-extrabold uppercase tracking-tight text-white">
@@ -141,7 +141,7 @@ function TrackingContent() {
             <button
               type="submit"
               disabled={loading}
-              className="px-5 py-3 bg-[#de2a2a] hover:bg-red-700 disabled:bg-neutral-600 text-white text-xs font-bold uppercase tracking-widest rounded-none transition-colors flex items-center gap-1.5 cursor-pointer shrink-0"
+              className="px-5 py-3 bg-brand-accent hover:bg-red-700 disabled:bg-neutral-600 text-white text-xs font-bold uppercase tracking-widest rounded-none transition-colors flex items-center gap-1.5 cursor-pointer shrink-0"
             >
               {loading ? (
                 <TbRefresh className="animate-spin" size={18} />
@@ -166,7 +166,7 @@ function TrackingContent() {
                     setOrderQuery(ro.orderNumber);
                     fetchTracking(ro.orderNumber);
                   }}
-                  className="px-2.5 py-1 bg-neutral-900 hover:bg-[#de2a2a] border border-[#262626] hover:border-[#de2a2a] text-white rounded-none font-mono text-[11px] font-bold transition-colors cursor-pointer"
+                  className="px-2.5 py-1 bg-neutral-900 hover:bg-brand-accent border border-[#262626] hover:border-brand-accent text-white rounded-none font-mono text-[11px] font-bold transition-colors cursor-pointer"
                 >
                   {ro.orderNumber}
                 </button>
@@ -176,15 +176,15 @@ function TrackingContent() {
 
           <div className="mt-4 text-xs text-neutral-400">
             ¿No tienes a la mano tu número de pedido?{' '}
-            <Link href="/mis-compras" className="text-[#de2a2a] font-bold hover:underline">
+            <Link href="/mis-compras" className="text-brand-accent font-bold hover:underline">
               Búscalo en Mis Compras
             </Link>
             {' '}con tu cuenta o correo.
           </div>
 
           {error && (
-            <div className="mt-4 max-w-md mx-auto p-3.5 bg-red-950/80 border border-[#de2a2a] rounded-none text-white text-xs font-medium flex items-center gap-2 text-left">
-              <TbAlertCircle size={18} className="text-[#de2a2a] shrink-0" />
+            <div className="mt-4 max-w-md mx-auto p-3.5 bg-red-950/80 border border-brand-accent rounded-none text-white text-xs font-medium flex items-center gap-2 text-left">
+              <TbAlertCircle size={18} className="text-brand-accent shrink-0" />
               <span>{error}</span>
             </div>
           )}
@@ -228,7 +228,7 @@ function TrackingContent() {
 
               {/* TIMELINE / LÍNEA DE TIEMPO DE ESTADOS */}
               {isCancelled ? (
-                <div className="mt-6 p-4 bg-red-50 rounded-none border border-[#de2a2a] text-[#de2a2a] text-xs flex items-center gap-3">
+                <div className="mt-6 p-4 bg-red-50 rounded-none border border-brand-accent text-brand-accent text-xs flex items-center gap-3">
                   <TbAlertCircle size={22} className="shrink-0" />
                   <div>
                     <strong className="font-bold uppercase block text-sm">Pedido Cancelado</strong>
@@ -275,7 +275,7 @@ function TrackingContent() {
                           key={st.step}
                           className={`p-4 rounded-none border transition-all ${
                             isCurrent
-                              ? 'bg-red-50/50 border-[#de2a2a]'
+                              ? 'bg-red-50/50 border-brand-accent'
                               : isCompleted
                                 ? 'bg-[#2e9e7b]/5 border-[#2e9e7b]'
                                 : 'bg-[#f8f8f8] border-[#d9d9d9] opacity-60'
@@ -284,7 +284,7 @@ function TrackingContent() {
                           <div
                             className={`w-9 h-9 rounded-none flex items-center justify-center mb-2.5 ${
                               isCurrent
-                                ? 'bg-[#de2a2a] text-white'
+                                ? 'bg-brand-accent text-white'
                                 : isCompleted
                                   ? 'bg-[#2e9e7b] text-white'
                                   : 'bg-neutral-200 text-neutral-500'
@@ -311,7 +311,7 @@ function TrackingContent() {
               {/* Productos comprados */}
               <div className="md:col-span-7 bg-white rounded-none border border-[#d9d9d9] p-5 space-y-3">
                 <h3 className="font-display text-xs font-extrabold uppercase tracking-wider text-black flex items-center gap-1.5 border-b border-[#d9d9d9] pb-2.5">
-                  <TbPackage className="text-[#de2a2a]" size={16} />
+                  <TbPackage className="text-brand-accent" size={16} />
                   <span>Artículos en tu compra ({order.items?.length || 0})</span>
                 </h3>
 
@@ -357,7 +357,7 @@ function TrackingContent() {
               <div className="md:col-span-5 space-y-4">
                 <div className="bg-white rounded-none border border-[#d9d9d9] p-5 space-y-3 text-xs">
                   <h3 className="font-display font-extrabold uppercase tracking-wider text-black flex items-center gap-1.5 border-b border-[#d9d9d9] pb-2.5">
-                    <TbMapPin className="text-[#de2a2a]" size={16} />
+                    <TbMapPin className="text-brand-accent" size={16} />
                     <span>Lugar de Entrega</span>
                   </h3>
                   <div>
@@ -411,7 +411,7 @@ function TrackingContent() {
                 {/* Ayuda y Soporte */}
                 <div className="bg-[#f8f8f8] rounded-none border border-[#d9d9d9] p-4 text-xs text-black space-y-2">
                   <div className="flex items-center gap-1.5 font-bold uppercase">
-                    <TbHelpCircle size={16} className="text-[#de2a2a]" />
+                    <TbHelpCircle size={16} className="text-brand-accent" />
                     <span>¿Necesitas ayuda con tu entrega?</span>
                   </div>
                   <p className="text-[11px] text-neutral-600 leading-relaxed">
@@ -440,7 +440,7 @@ function TrackingContent() {
             </div>
 
             <div className="bg-[#f8f8f8] p-5 rounded-none border border-[#d9d9d9] space-y-2">
-              <div className="w-8 h-8 rounded-none bg-[#de2a2a] text-white flex items-center justify-center font-bold">
+              <div className="w-8 h-8 rounded-none bg-brand-accent text-white flex items-center justify-center font-bold">
                 2
               </div>
               <h4 className="font-display font-extrabold uppercase text-black text-sm">
@@ -474,7 +474,7 @@ export default function TrackingPage() {
     <Suspense
       fallback={
         <div className="min-h-screen bg-white py-20 text-center text-neutral-500">
-          <TbRefresh className="w-8 h-8 mx-auto animate-spin text-[#de2a2a] mb-2" />
+          <TbRefresh className="w-8 h-8 mx-auto animate-spin text-brand-accent mb-2" />
           <p className="text-xs font-bold uppercase tracking-wider">Cargando módulo de rastreo...</p>
         </div>
       }
