@@ -2,9 +2,8 @@
 
 import React, { useEffect, useState, use } from 'react';
 import Link from 'next/link';
-import { 
-  TbChevronRight, 
-  TbAward, 
+import {
+  TbChevronRight,
   TbArrowLeft,
   TbExternalLink,
   TbBuildingStore,
@@ -22,7 +21,7 @@ export default function BrandDetailPage({ params }: BrandPageProps) {
   const resolvedParams = use(params);
   const slug = resolvedParams.slug;
 
-  const { brands, fetchBrands, isLoading: brandsLoading } = useBrandStore();
+  const { brands, fetchBrands } = useBrandStore();
   const [products, setProducts] = useState<Product[]>([]);
   const [isProductsLoading, setIsProductsLoading] = useState(true);
 
@@ -30,14 +29,13 @@ export default function BrandDetailPage({ params }: BrandPageProps) {
     fetchBrands();
   }, [fetchBrands]);
 
-  // Encontrar la marca por slug o id
   const currentBrand = brands.find((b) => {
-    const slugFromName = b.name.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-    return (
-      b.id === slug ||
-      b.slug === slug ||
-      slugFromName === slug
-    );
+    const slugFromName = b.name
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-|-$/g, '');
+    return b.id === slug || b.slug === slug || slugFromName === slug;
   });
 
   useEffect(() => {
@@ -70,146 +68,150 @@ export default function BrandDetailPage({ params }: BrandPageProps) {
   const initials = brandName.slice(0, 2).toUpperCase();
 
   return (
-    <div className="max-w-7xl mx-auto px-4 md:px-7 py-8">
-      {/* Breadcrumb */}
-      <nav className="flex items-center gap-2 text-xs text-gray-500 mb-6 flex-wrap">
-        <Link href="/" className="hover:text-[#3483fa] transition-colors">
-          Inicio
-        </Link>
-        <TbChevronRight size={12} />
-        <Link href="/brands" className="hover:text-[#3483fa] transition-colors">
-          Marcas Oficiales
-        </Link>
-        <TbChevronRight size={12} />
-        <span className="text-gray-800 font-medium capitalize">{brandName}</span>
-      </nav>
+    <div className="min-h-screen bg-white">
+      <div className="max-w-7xl mx-auto px-4 md:px-7 py-8">
+        {/* Breadcrumb */}
+        <nav className="flex items-center gap-2 text-[11px] uppercase tracking-wider text-neutral-500 mb-6 flex-wrap">
+          <Link href="/" className="hover:text-[#de2a2a] transition-colors">
+            Inicio
+          </Link>
+          <TbChevronRight size={12} />
+          <Link href="/brands" className="hover:text-[#de2a2a] transition-colors">
+            Marcas Oficiales
+          </Link>
+          <TbChevronRight size={12} />
+          <span className="text-black font-bold capitalize">{brandName}</span>
+        </nav>
 
-      {/* Encabezado de la Marca */}
-      <div className="bg-white rounded-2xl p-6 md:p-8 border border-gray-100 shadow-2xs mb-8 flex flex-col md:flex-row md:items-center justify-between gap-6">
-        <div className="flex items-center gap-5">
-          <div className="w-20 h-20 rounded-2xl bg-gray-50 flex items-center justify-center p-3 text-gray-800 border border-gray-100 shadow-2xs shrink-0">
-            {currentBrand?.logoUrl ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                src={currentBrand.logoUrl}
-                alt={brandName}
-                className="max-h-16 max-w-full object-contain"
-              />
-            ) : (
-              <span className="font-black text-2xl text-gray-900 tracking-tight">
-                {initials}
-              </span>
-            )}
-          </div>
-
-          <div>
-            <div className="flex items-center gap-2.5 flex-wrap">
-              <h1 className="text-2xl md:text-3xl font-light text-[#333] capitalize">
-                {brandName}
-              </h1>
-              <span className="bg-[#00a650] text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider">
-                Tienda Oficial
-              </span>
-            </div>
-
-            {currentBrand?.description && (
-              <p className="text-xs text-gray-600 mt-1.5 max-w-xl leading-relaxed">
-                {currentBrand.description}
-              </p>
-            )}
-
-            <div className="flex items-center gap-4 mt-2 text-xs text-gray-500">
-              <span>
-                {products.length} {products.length === 1 ? 'producto disponible' : 'productos disponibles'}
-              </span>
-
-              {currentBrand?.website && (
-                <a
-                  href={currentBrand.website.startsWith('http') ? currentBrand.website : `https://${currentBrand.website}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 text-[#3483fa] hover:underline"
-                >
-                  <span>Sitio oficial</span>
-                  <TbExternalLink size={12} />
-                </a>
+        {/* Encabezado de la Marca */}
+        <div className="bg-black text-white rounded-none p-6 md:p-8 border-b-4 border-[#de2a2a] mb-8 flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <div className="flex items-center gap-5">
+            <div className="w-20 h-20 rounded-none bg-white flex items-center justify-center p-2.5 text-black border border-[#262626] shrink-0">
+              {currentBrand?.logoUrl ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={currentBrand.logoUrl}
+                  alt={brandName}
+                  className="max-h-16 max-w-full object-contain"
+                />
+              ) : (
+                <span className="font-display font-black text-2xl text-black tracking-tight">
+                  {initials}
+                </span>
               )}
             </div>
-          </div>
-        </div>
 
-        <Link
-          href="/brands"
-          className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#3483fa] hover:text-blue-700 transition-colors self-start md:self-center"
-        >
-          <TbArrowLeft size={15} />
-          <span>Ver todas las marcas</span>
-        </Link>
-      </div>
-
-      {/* Catálogo de Productos de la Marca */}
-      <div>
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-bold text-gray-900">
-            Catálogo de {brandName}
-          </h2>
-          <span className="text-xs text-gray-400">
-            {products.length} items
-          </span>
-        </div>
-
-        {isProductsLoading ? (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-            {Array.from({ length: 10 }).map((_, i) => (
-              <div
-                key={i}
-                className="bg-white rounded-lg p-4 border border-gray-100 shadow-2xs animate-pulse flex flex-col justify-between h-72"
-              >
-                <div className="w-full aspect-square bg-gray-100 rounded-md mb-3" />
-                <div className="space-y-2">
-                  <div className="h-4 bg-gray-100 rounded w-1/2" />
-                  <div className="h-3 bg-gray-100 rounded w-full" />
-                </div>
+            <div>
+              <div className="flex items-center gap-2.5 flex-wrap">
+                <h1 className="font-display text-2xl md:text-3xl font-extrabold uppercase tracking-tight text-white">
+                  {brandName}
+                </h1>
+                <span className="bg-[#2e9e7b] text-white text-[10px] font-bold px-2.5 py-0.5 rounded-none uppercase tracking-wider">
+                  Marca Oficial
+                </span>
               </div>
-            ))}
-          </div>
-        ) : products.length === 0 ? (
-          <div className="bg-white rounded-2xl p-12 text-center border border-gray-100 shadow-2xs max-w-md mx-auto">
-            <div className="w-14 h-14 rounded-full bg-blue-50 text-[#3483fa] flex items-center justify-center mx-auto mb-3">
-              <TbBuildingStore size={26} />
+
+              {currentBrand?.description && (
+                <p className="text-xs text-neutral-300 mt-1.5 max-w-xl leading-relaxed">
+                  {currentBrand.description}
+                </p>
+              )}
+
+              <div className="flex items-center gap-4 mt-2 text-xs text-neutral-400">
+                <span>
+                  {products.length} {products.length === 1 ? 'producto disponible' : 'productos disponibles'}
+                </span>
+
+                {currentBrand?.website && (
+                  <a
+                    href={currentBrand.website.startsWith('http') ? currentBrand.website : `https://${currentBrand.website}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-[#de2a2a] font-bold uppercase tracking-wider hover:underline"
+                  >
+                    <span>Sitio oficial</span>
+                    <TbExternalLink size={12} />
+                  </a>
+                )}
+              </div>
             </div>
-            <h3 className="text-base font-bold text-gray-800">
-              No hay productos registrados para {brandName}
-            </h3>
-            <p className="text-xs text-gray-500 mt-1 max-w-sm mx-auto">
-              Pronto se incorporarán artículos de esta marca al catálogo.
-            </p>
-            <Link
-              href="/"
-              className="inline-flex items-center gap-2 mt-5 px-4 py-2 bg-brand text-gray-900 font-bold text-xs rounded-xl shadow-2xs hover:bg-yellow-400 transition-colors"
-            >
-              <span>Explorar otros productos</span>
-            </Link>
           </div>
-        ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-            {products.map((product) => (
-              <ProductCard
-                key={product.id}
-                product={{
-                  id: product.id,
-                  title: product.title,
-                  price: Number(product.price),
-                  originalPrice: product.originalPrice ? Number(product.originalPrice) : undefined,
-                  discount: product.discount ?? undefined,
-                  freeShipping: product.freeShipping,
-                  full: product.full,
-                  imageUrl: product.imageUrl,
-                }}
-              />
-            ))}
+
+          <Link
+            href="/brands"
+            className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-white border border-[#262626] hover:border-[#de2a2a] hover:text-[#de2a2a] px-4 py-2.5 transition-colors self-start md:self-center"
+          >
+            <TbArrowLeft size={15} />
+            <span>Ver todas las marcas</span>
+          </Link>
+        </div>
+
+        {/* Catálogo de Productos de la Marca */}
+        <div>
+          <div className="flex items-center justify-between mb-5 pb-2 border-b border-[#d9d9d9]">
+            <h2 className="font-display text-lg font-extrabold uppercase tracking-tight text-black">
+              Catálogo de {brandName}
+            </h2>
+            <span className="text-xs font-bold uppercase tracking-wider text-neutral-500">
+              {products.length} items
+            </span>
           </div>
-        )}
+
+          {isProductsLoading ? (
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+              {Array.from({ length: 10 }).map((_, i) => (
+                <div
+                  key={i}
+                  className="bg-[#f8f8f8] rounded-none p-4 border border-[#d9d9d9] animate-pulse flex flex-col justify-between h-72"
+                >
+                  <div className="w-full aspect-square bg-neutral-200 mb-3" />
+                  <div className="space-y-2">
+                    <div className="h-4 bg-neutral-200 w-1/2" />
+                    <div className="h-3 bg-neutral-200 w-full" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : products.length === 0 ? (
+            <div className="bg-[#f8f8f8] rounded-none p-12 text-center border border-[#d9d9d9] max-w-md mx-auto">
+              <div className="w-14 h-14 rounded-none bg-black text-white flex items-center justify-center mx-auto mb-4">
+                <TbBuildingStore size={26} />
+              </div>
+              <h3 className="font-display text-base font-extrabold uppercase text-black">
+                No hay productos registrados para {brandName}
+              </h3>
+              <p className="text-xs text-neutral-600 mt-1 max-w-sm mx-auto">
+                Pronto se incorporarán productos de esta marca a nuestro catálogo.
+              </p>
+              <Link
+                href="/"
+                className="inline-flex items-center gap-2 mt-5 px-6 py-2.5 bg-[#de2a2a] hover:bg-red-700 text-white font-bold uppercase tracking-widest text-xs rounded-none transition-colors"
+              >
+                <span>Explorar catálogo</span>
+              </Link>
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+              {products.map((product) => (
+                <ProductCard
+                  key={product.id}
+                  product={{
+                    id: product.id,
+                    title: product.title,
+                    slug: product.slug,
+                    price: Number(product.price),
+                    originalPrice: product.originalPrice ? Number(product.originalPrice) : undefined,
+                    discount: product.discount ?? undefined,
+                    freeShipping: product.freeShipping,
+                    full: product.full,
+                    imageUrl: product.imageUrl,
+                    stock: product.stock,
+                  }}
+                />
+              ))}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

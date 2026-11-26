@@ -47,15 +47,15 @@ export default function AyudaPage() {
   };
 
   return (
-    <div className="min-h-screen pb-16">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-4">
+    <div className="min-h-screen bg-white pb-16">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-6">
         {/* Breadcrumb */}
-        <nav className="flex items-center gap-1.5 text-xs text-gray-500 mb-4 font-light">
-          <Link href="/" className="hover:text-[#3483fa] transition-colors">
+        <nav className="flex items-center gap-1.5 text-[11px] uppercase tracking-wider text-neutral-500 mb-5">
+          <Link href="/" className="hover:text-[#de2a2a] transition-colors">
             Inicio
           </Link>
-          <TbChevronRight size={13} className="text-gray-400" />
-          <span className="text-gray-800 font-medium">Ayuda</span>
+          <TbChevronRight size={13} className="text-neutral-400" />
+          <span className="text-black font-bold">Ayuda</span>
         </nav>
 
         {/* Banner principal con buscador */}

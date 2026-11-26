@@ -83,47 +83,47 @@ export const BrandsCarousel = ({
   };
 
   return (
-    <div className="max-w-7xl mx-auto py-8 px-4 md:px-7">
-      <div className="flex items-end justify-between mb-4">
-        <div className="flex items-center gap-3">
-          <h2 className="text-2xl font-light text-[#666]">{title}</h2>
-          {hasRealBrands && (
-            <span className="text-xs bg-gray-200/80 text-gray-600 px-2 py-0.5 rounded-full font-medium hidden sm:inline-block">
-              {activeBrands.length} {activeBrands.length === 1 ? 'marca' : 'marcas'}
-            </span>
-          )}
+    <section className="max-w-7xl mx-auto py-8 px-4 md:px-7">
+      <div className="flex items-end justify-between gap-4 mb-6">
+        <div>
+          <span className="block text-[11px] font-bold uppercase tracking-[0.2em] text-[#de2a2a] mb-1">
+            ETIQUETAS SELECTAS
+          </span>
+          <h2 className="font-display text-2xl sm:text-3xl font-extrabold uppercase tracking-tight text-black leading-none">
+            {title}
+          </h2>
         </div>
-        <Link href="/brands" className="text-[#3483fa] text-sm font-medium hover:text-blue-700 transition-colors">
-          Ver todas las marcas
+        <Link
+          href="/brands"
+          className="text-xs font-bold uppercase tracking-widest text-black hover:text-[#de2a2a] underline underline-offset-4 transition-colors shrink-0"
+        >
+          VER TODAS
         </Link>
       </div>
 
       <div className="relative group/carousel">
-        {/* Botón flecha izquierda */}
         {canScrollLeft && (
           <button
             type="button"
             onClick={() => handleScroll('left')}
             aria-label="Ver marcas anteriores"
-            className="absolute -left-3.5 top-1/2 -translate-y-1/2 z-20 w-9 h-9 md:w-10 md:h-10 bg-white rounded-full shadow-lg border border-gray-100 flex items-center justify-center text-gray-700 hover:text-black hover:scale-105 active:scale-95 transition-all cursor-pointer"
+            className="absolute -left-2 md:-left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 bg-white border border-[#d9d9d9] hover:bg-black hover:text-white hover:border-black flex items-center justify-center text-black shadow-md transition-colors cursor-pointer rounded-none"
           >
-            <TbChevronLeft size={22} />
+            <TbChevronLeft size={20} />
           </button>
         )}
 
-        {/* Botón flecha derecha */}
         {canScrollRight && (
           <button
             type="button"
             onClick={() => handleScroll('right')}
             aria-label="Ver marcas siguientes"
-            className="absolute -right-3.5 top-1/2 -translate-y-1/2 z-20 w-9 h-9 md:w-10 md:h-10 bg-white rounded-full shadow-lg border border-gray-100 flex items-center justify-center text-gray-700 hover:text-black hover:scale-105 active:scale-95 transition-all cursor-pointer"
+            className="absolute -right-2 md:-right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 bg-white border border-[#d9d9d9] hover:bg-black hover:text-white hover:border-black flex items-center justify-center text-black shadow-md transition-colors cursor-pointer rounded-none"
           >
-            <TbChevronRight size={22} />
+            <TbChevronRight size={20} />
           </button>
         )}
 
-        {/* Contenedor de marcas */}
         <div
           ref={scrollContainerRef}
           onScroll={checkScroll}
@@ -138,9 +138,8 @@ export const BrandsCarousel = ({
                 <Link
                   key={brand.id}
                   href={href}
-                  className="min-w-[150px] sm:min-w-[170px] md:min-w-[190px] bg-white rounded-xl p-5 border border-gray-100 shadow-2xs hover:shadow-md transition-all duration-300 flex flex-col items-center justify-between text-center group hover:-translate-y-1 shrink-0"
+                  className="min-w-[155px] sm:min-w-[175px] md:min-w-[195px] bg-white rounded-none p-5 border border-[#e5e5e5] hover:border-black transition-colors duration-200 flex flex-col items-center justify-between text-center group shrink-0"
                 >
-                  {/* Brand Logo Container */}
                   <div className="w-16 h-16 flex items-center justify-center mb-3">
                     {brand.logoUrl ? (
                       // eslint-disable-next-line @next/next/no-img-element
@@ -150,19 +149,18 @@ export const BrandsCarousel = ({
                         className="max-h-14 max-w-full object-contain transition-transform duration-300 group-hover:scale-110"
                       />
                     ) : (
-                      <div className="w-14 h-14 rounded-2xl bg-gray-50 border border-gray-200 text-gray-800 font-black text-base flex items-center justify-center group-hover:border-[#3483fa] group-hover:text-[#3483fa] transition-colors shadow-2xs">
+                      <div className="w-14 h-14 bg-[#f8f8f8] border border-[#e5e5e5] text-black font-display font-extrabold text-base flex items-center justify-center group-hover:bg-black group-hover:text-white transition-colors">
                         {initials}
                       </div>
                     )}
                   </div>
 
-                  {/* Brand Info */}
                   <div className="w-full">
-                    <h3 className="font-semibold text-sm text-gray-900 mb-1 group-hover:text-[#3483fa] transition-colors truncate">
+                    <h3 className="font-bold text-xs uppercase tracking-wider text-black mb-1.5 group-hover:text-[#de2a2a] transition-colors truncate">
                       {brand.name}
                     </h3>
-                    <span className="inline-block text-[11px] font-semibold text-[#00a650] bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-100/60">
-                      Tienda Oficial
+                    <span className="inline-block text-[10px] font-bold uppercase tracking-wider text-white bg-black px-2 py-0.5">
+                      Oficial
                     </span>
                   </div>
                 </Link>
@@ -175,19 +173,17 @@ export const BrandsCarousel = ({
                 <Link
                   key={brand.id}
                   href={brand.href}
-                  className="min-w-[150px] sm:min-w-[170px] md:min-w-[190px] bg-white rounded-xl p-5 border border-gray-100 shadow-2xs hover:shadow-md transition-all duration-300 flex flex-col items-center justify-between text-center group hover:-translate-y-1 shrink-0"
+                  className="min-w-[155px] sm:min-w-[175px] md:min-w-[195px] bg-white rounded-none p-5 border border-[#e5e5e5] hover:border-black transition-colors duration-200 flex flex-col items-center justify-between text-center group shrink-0"
                 >
-                  {/* Brand Logo Container */}
-                  <div className="w-16 h-16 flex items-center justify-center text-gray-800 group-hover:text-black transition-colors mb-3">
-                    <Icon size={40} className="transition-transform duration-300 group-hover:scale-110" />
+                  <div className="w-16 h-16 flex items-center justify-center text-black mb-3">
+                    <Icon size={36} className="transition-transform duration-300 group-hover:scale-110" />
                   </div>
 
-                  {/* Brand Info */}
                   <div className="w-full">
-                    <h3 className="font-semibold text-sm text-gray-900 mb-1 group-hover:text-[#3483fa] transition-colors truncate">
+                    <h3 className="font-bold text-xs uppercase tracking-wider text-black mb-1.5 group-hover:text-[#de2a2a] transition-colors truncate">
                       {brand.name}
                     </h3>
-                    <span className="inline-block text-xs font-semibold text-[#00a650] bg-emerald-50 px-2 py-0.5 rounded-full">
+                    <span className="inline-block text-[10px] font-bold uppercase tracking-wider text-white bg-[#de2a2a] px-2 py-0.5">
                       {brand.discount || 'Oficial'}
                     </span>
                   </div>
@@ -197,6 +193,6 @@ export const BrandsCarousel = ({
           )}
         </div>
       </div>
-    </div>
+    </section>
   );
 };

@@ -29,7 +29,6 @@ export default function OffersPage() {
     fetchProducts();
   }, [fetchProducts]);
 
-  // Función auxiliar para calcular el porcentaje de descuento exacto
   const getProductDiscountPercent = (p: Product): number => {
     if (p.discount && p.discount > 0) return Number(p.discount);
     if (p.originalPrice && Number(p.originalPrice) > Number(p.price)) {
@@ -38,7 +37,6 @@ export default function OffersPage() {
     return 0;
   };
 
-  // Base de productos con oferta activa (descuento > 0 o precio tachado)
   const allDealProducts = useMemo(() => {
     const deals = products.filter(
       (p) =>
@@ -46,8 +44,6 @@ export default function OffersPage() {
         (getProductDiscountPercent(p) > 0 || (p.originalPrice && Number(p.originalPrice) > Number(p.price))),
     );
 
-    // Si aún hay pocos productos con descuento explícito en la base de datos,
-    // mostramos los que tienen oferta primero y completamos con el catálogo activo
     if (deals.length < 4) {
       const remaining = products.filter(
         (p) => p.isActive !== false && !deals.some((d) => d.id === p.id),
@@ -58,7 +54,6 @@ export default function OffersPage() {
     return deals;
   }, [products]);
 
-  // Manejador del cambio de pestaña rápida del banner
   const handleQuickTabChange = (tabId: string) => {
     setActiveQuickTab(tabId);
     if (tabId === 'all') {
@@ -93,7 +88,6 @@ export default function OffersPage() {
     );
   }, [filters]);
 
-  // Lista de categorías con conteo de ofertas disponibles
   const dealCategories = useMemo(() => {
     const categoryMap = new Map<string, { id: string; name: string; count: number }>();
 
@@ -115,43 +109,35 @@ export default function OffersPage() {
     return Array.from(categoryMap.values()).sort((a, b) => b.count - a.count);
   }, [allDealProducts]);
 
-  // Filtrado y Ordenamiento final de productos
   const filteredAndSortedProducts = useMemo(() => {
-    let result = allDealProducts.filter((p) => {
+    const result = allDealProducts.filter((p) => {
       const discount = getProductDiscountPercent(p);
 
-      // Filtro por descuento mínimo
       if (filters.minDiscount > 0 && discount < filters.minDiscount) {
         return false;
       }
 
-      // Filtro pestaña rápida 20 a 40
       if (activeQuickTab === '20to40' && (discount < 20 || discount > 40)) {
         return false;
       }
 
-      // Filtro por categoría
       if (filters.categoryId && p.categoryId !== filters.categoryId) {
         return false;
       }
 
-      // Filtro por envío gratis
       if (filters.onlyFreeShipping && !p.freeShipping) {
         return false;
       }
 
-      // Filtro por Full
       if (filters.onlyFull && !p.full) {
         return false;
       }
 
-      // Filtro por precio mínimo
       if (filters.minPrice.trim()) {
         const min = parseFloat(filters.minPrice);
         if (!isNaN(min) && Number(p.price) < min) return false;
       }
 
-      // Filtro por precio máximo
       if (filters.maxPrice.trim()) {
         const max = parseFloat(filters.maxPrice);
         if (!isNaN(max) && Number(p.price) > max) return false;
@@ -160,7 +146,6 @@ export default function OffersPage() {
       return true;
     });
 
-    // Ordenamiento
     return result.sort((a, b) => {
       const discA = getProductDiscountPercent(a);
       const discB = getProductDiscountPercent(b);
@@ -184,15 +169,15 @@ export default function OffersPage() {
   }, [allDealProducts, filters, activeQuickTab, sortBy]);
 
   return (
-    <div className="min-h-screen bg-slate-50/60 pb-16">
-      <div className="max-w-7xl mx-auto px-4 md:px-7 pt-4 sm:pt-6">
+    <div className="min-h-screen bg-white pb-16">
+      <div className="max-w-7xl mx-auto px-4 md:px-7 pt-6">
         {/* Breadcrumb de Navegación */}
-        <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-xs text-gray-500 mb-4 font-medium">
-          <Link href="/" className="hover:text-blue-600 transition-colors">
+        <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-[11px] uppercase tracking-wider text-neutral-500 mb-5">
+          <Link href="/" className="hover:text-[#de2a2a] transition-colors">
             Inicio
           </Link>
-          <TbChevronRight size={13} className="text-gray-400" />
-          <span className="text-gray-900 font-bold">Ofertas</span>
+          <TbChevronRight size={13} className="text-neutral-400" />
+          <span className="text-black font-bold">Promos & Ofertas</span>
         </nav>
 
         {/* Hero Banner de Ofertas */}
@@ -204,14 +189,14 @@ export default function OffersPage() {
 
         {/* Contenido Principal con Layout de 2 Columnas (Filtros + Grid) */}
         {isLoading && products.length === 0 ? (
-          <div className="min-h-[40vh] flex flex-col items-center justify-center space-y-3 text-gray-500">
-            <TbLoader2 size={32} className="animate-spin text-[#3483fa]" />
-            <p className="text-xs font-semibold">Cargando ofertas del día...</p>
+          <div className="min-h-[40vh] flex flex-col items-center justify-center space-y-3 text-neutral-500">
+            <TbLoader2 size={32} className="animate-spin text-[#de2a2a]" />
+            <p className="text-xs font-bold uppercase tracking-wider">Cargando promos del día...</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 items-start">
             {/* Columna Izquierda (1/4): Filtros en Escritorio */}
-            <aside className="hidden lg:block lg:col-span-1 sticky top-4">
+            <aside className="hidden lg:block lg:col-span-1 sticky top-24">
               <DealsFilters
                 filters={filters}
                 onFilterChange={handleFilterChange}
@@ -239,36 +224,40 @@ export default function OffersPage() {
       {isMobileFiltersOpen && (
         <div className="fixed inset-0 z-50 lg:hidden flex">
           <div
-            className="fixed inset-0 bg-black/50 backdrop-blur-xs transition-opacity"
+            className="fixed inset-0 bg-black/60 backdrop-blur-xs transition-opacity"
             onClick={() => setIsMobileFiltersOpen(false)}
           />
-          <div className="relative ml-auto w-full max-w-xs bg-white h-full shadow-2xl p-4 overflow-y-auto z-10 flex flex-col justify-between">
-            <div className="space-y-4">
-              <div className="flex items-center justify-between pb-3 border-b border-gray-100">
-                <h3 className="text-sm font-bold text-gray-900">Filtros de Ofertas</h3>
+          <div className="relative ml-auto w-full max-w-xs bg-white h-full shadow-2xl overflow-y-auto z-10 flex flex-col justify-between rounded-none border-l border-[#d9d9d9]">
+            <div>
+              <div className="flex items-center justify-between p-4 bg-black text-white border-b border-[#262626]">
+                <h3 className="font-display text-sm font-extrabold uppercase tracking-wider">
+                  Filtros de Promos
+                </h3>
                 <button
                   type="button"
                   onClick={() => setIsMobileFiltersOpen(false)}
-                  className="p-1.5 text-gray-400 hover:text-gray-700 rounded-lg hover:bg-gray-100"
+                  className="p-1 text-neutral-300 hover:text-white cursor-pointer"
                 >
-                  <TbX size={18} />
+                  <TbX size={20} />
                 </button>
               </div>
 
-              <DealsFilters
-                filters={filters}
-                onFilterChange={handleFilterChange}
-                onResetFilters={handleResetFilters}
-                categories={dealCategories}
-                hasActiveFilters={hasActiveFilters}
-              />
+              <div className="p-4">
+                <DealsFilters
+                  filters={filters}
+                  onFilterChange={handleFilterChange}
+                  onResetFilters={handleResetFilters}
+                  categories={dealCategories}
+                  hasActiveFilters={hasActiveFilters}
+                />
+              </div>
             </div>
 
-            <div className="pt-4 border-t border-gray-100 sticky bottom-0 bg-white">
+            <div className="p-4 border-t border-[#d9d9d9] sticky bottom-0 bg-[#f8f8f8]">
               <button
                 type="button"
                 onClick={() => setIsMobileFiltersOpen(false)}
-                className="w-full py-2.5 bg-[#3483fa] text-white rounded-xl text-xs font-bold shadow-xs hover:bg-blue-600 transition-colors"
+                className="w-full py-3 bg-[#de2a2a] hover:bg-red-700 text-white rounded-none text-xs font-bold uppercase tracking-widest transition-colors cursor-pointer"
               >
                 Ver resultados ({filteredAndSortedProducts.length})
               </button>

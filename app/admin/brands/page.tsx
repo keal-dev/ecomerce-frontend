@@ -2,7 +2,7 @@ import React from 'react';
 import { BrandsManager } from './_components/BrandsManager';
 
 export const metadata = {
-  title: 'Marcas y Fabricantes | MercadoAdmin',
+  title: 'Marcas y Fabricantes | Panel Admin',
   description: 'Gestión de marcas, fabricantes y logotipos oficiales de productos.',
 };
 

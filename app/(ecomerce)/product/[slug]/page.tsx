@@ -3,16 +3,16 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { 
-  FaBolt, 
-  FaCheck, 
-  FaShieldHalved, 
-  FaTruckFast, 
-  FaArrowRotateLeft, 
-  FaShareNodes, 
+import {
+  FaBolt,
+  FaCheck,
+  FaShieldHalved,
+  FaTruckFast,
+  FaArrowRotateLeft,
+  FaShareNodes,
   FaHeart,
   FaChevronDown,
-  FaChevronUp
+  FaChevronUp,
 } from 'react-icons/fa6';
 import { getProductById, getProducts } from '@/services/product.service';
 import { Product } from '@/types/product.types';
@@ -28,8 +28,9 @@ export default function ProductDetailPage() {
   const slugParam = (params?.slug as string) || '';
 
   const { company } = useCompanyStore();
-  const { addViewedId, viewedIds, clearHistory } = useRecentlyViewedStore();
-  const { addItem } = useCartStore();
+  const { addViewedId, viewedIds } = useRecentlyViewedStore();
+  const addItem = useCartStore((state) => state.addItem);
+  const openDrawer = useCartStore((state) => state.openDrawer);
   const { toggleFavorite, isFavorite } = useFavoritesStore();
 
   const [product, setProduct] = useState<Product | null>(null);
@@ -39,12 +40,11 @@ export default function ProductDetailPage() {
   const [quantity, setQuantity] = useState(1);
   const [copied, setCopied] = useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
-  const [addedToCart, setAddedToCart] = useState(false);
   const [showAllFeatures, setShowAllFeatures] = useState(false);
 
   const symbol = company?.currencySymbol || 'S/';
 
-  const handleAddToCart = () => {
+  const addProductToCart = () => {
     if (!product) return;
     addItem(
       {
@@ -61,12 +61,17 @@ export default function ProductDetailPage() {
       },
       quantity,
     );
-    setAddedToCart(true);
+  };
+
+  const handleAddToCart = () => {
+    if (!product || product.stock <= 0) return;
+    addProductToCart();
+    openDrawer();
   };
 
   const handleBuyNow = () => {
-    if (!product) return;
-    handleAddToCart();
+    if (!product || product.stock <= 0) return;
+    addProductToCart();
     router.push('/cart');
   };
 
@@ -77,7 +82,6 @@ export default function ProductDetailPage() {
         setLoading(true);
         setError(null);
 
-        // Cargar producto por slug o ID
         const currentProd = await getProductById(slugParam);
         if (!isMounted) return;
 
@@ -85,12 +89,10 @@ export default function ProductDetailPage() {
         setSelectedImageIndex(0);
         setShowAllFeatures(false);
 
-        // Registrar en localStorage como visto recientemente
         if (currentProd?.id) {
           addViewedId(currentProd.id);
         }
 
-        // Cargar otros productos para secciones relacionadas y recientes
         const prods = await getProducts();
         if (isMounted) {
           setAllProducts(prods || []);
@@ -123,14 +125,14 @@ export default function ProductDetailPage() {
 
   if (loading) {
     return (
-      <div className="max-w-7xl mx-auto py-16 px-4 md:px-7">
-        <div className="bg-white rounded-2xl p-8 border border-gray-100 animate-pulse flex flex-col md:flex-row gap-8">
-          <div className="w-full md:w-1/2 aspect-square bg-gray-100 rounded-xl" />
+      <div className="max-w-7xl mx-auto py-16 px-4 md:px-7 bg-white">
+        <div className="bg-white rounded-none p-8 border border-[#d9d9d9] animate-pulse flex flex-col md:flex-row gap-8">
+          <div className="w-full md:w-1/2 aspect-square bg-[#f8f8f8] rounded-none" />
           <div className="w-full md:w-1/2 flex flex-col gap-4">
-            <div className="h-6 bg-gray-100 rounded w-1/4" />
-            <div className="h-8 bg-gray-100 rounded w-3/4" />
-            <div className="h-10 bg-gray-100 rounded w-1/3 mt-4" />
-            <div className="h-24 bg-gray-100 rounded w-full mt-6" />
+            <div className="h-5 bg-neutral-200 w-1/4" />
+            <div className="h-8 bg-neutral-200 w-3/4" />
+            <div className="h-12 bg-neutral-200 w-1/3 mt-4" />
+            <div className="h-28 bg-neutral-100 w-full mt-6" />
           </div>
         </div>
       </div>
@@ -139,18 +141,20 @@ export default function ProductDetailPage() {
 
   if (error || !product) {
     return (
-      <div className="max-w-4xl mx-auto py-20 px-4 text-center">
-        <div className="bg-white rounded-2xl p-10 border border-gray-100 shadow-xs">
-          <span className="text-5xl mb-4 block">🔍</span>
-          <h2 className="text-2xl font-semibold text-gray-800 mb-2">
+      <div className="max-w-4xl mx-auto py-20 px-4 text-center bg-white">
+        <div className="bg-[#f8f8f8] rounded-none p-10 border border-[#d9d9d9]">
+          <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#de2a2a] block mb-2">
+            No disponible
+          </span>
+          <h2 className="font-display text-2xl font-extrabold uppercase tracking-tight text-black mb-2">
             Producto no encontrado
           </h2>
-          <p className="text-gray-500 mb-6">
-            El producto que buscas no existe o ha sido retirado de nuestra tienda.
+          <p className="text-sm text-neutral-600 mb-6">
+            El producto que buscas no existe o ha sido retirado de nuestro catálogo.
           </p>
           <Link
             href="/"
-            className="inline-block bg-[#3483fa] hover:bg-blue-600 text-white font-medium px-6 py-2.5 rounded-xl transition-colors shadow-xs"
+            className="inline-block bg-[#de2a2a] hover:bg-red-700 text-white text-xs font-bold uppercase tracking-widest px-6 py-3 rounded-none transition-colors"
           >
             Volver a la tienda
           </Link>
@@ -159,37 +163,35 @@ export default function ProductDetailPage() {
     );
   }
 
-  // Filtrar productos para "Basado en tu última visita" (excluyendo el actual)
   const recentlyViewedProducts = viewedIds
     .filter((id) => id !== product.id)
     .map((id) => allProducts.find((p) => p.id === id && p.isActive !== false))
     .filter((p): p is Product => !!p);
 
-  // Productos relacionados de la misma categoría o marca
   const relatedProducts = allProducts.filter(
     (p) =>
       p.id !== product.id &&
       p.isActive !== false &&
       ((product.categoryId && p.categoryId === product.categoryId) ||
-        (product.brandId && p.brandId === product.brandId))
+        (product.brandId && p.brandId === product.brandId)),
   );
 
-  // Galería de imágenes del producto
-  const fallbackImage = 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&q=80';
+  const fallbackImage =
+    'https://images.unsplash.com/photo-1511381939415-e44015466834?w=600&q=80';
   const allImages =
     product.images && product.images.length > 0
       ? product.images
       : product.imageUrl
-      ? [product.imageUrl]
-      : [fallbackImage];
+        ? [product.imageUrl]
+        : [fallbackImage];
   const activeImage = allImages[selectedImageIndex] || allImages[0] || fallbackImage;
 
   return (
-    <div className="pb-16 bg-[#f3f4f6] min-h-screen">
+    <div className="pb-16 bg-white min-h-screen">
       <div className="max-w-7xl mx-auto pt-6 px-4 md:px-7">
         {/* Breadcrumb */}
-        <nav className="text-xs text-gray-500 mb-4 flex items-center gap-1.5 flex-wrap">
-          <Link href="/" className="hover:text-[#3483fa] transition-colors">
+        <nav className="text-[11px] uppercase tracking-wider text-neutral-500 mb-5 flex items-center gap-1.5 flex-wrap">
+          <Link href="/" className="hover:text-[#de2a2a] transition-colors">
             Inicio
           </Link>
           <span>/</span>
@@ -197,7 +199,7 @@ export default function ProductDetailPage() {
             <>
               <Link
                 href={product.category.href || `/category/${product.category.id}`}
-                className="hover:text-[#3483fa] transition-colors"
+                className="hover:text-[#de2a2a] transition-colors"
               >
                 {product.category.name}
               </Link>
@@ -208,24 +210,24 @@ export default function ProductDetailPage() {
             <>
               <Link
                 href={`/brand/${product.brand.slug || product.brand.id}`}
-                className="hover:text-[#3483fa] transition-colors"
+                className="hover:text-[#de2a2a] transition-colors"
               >
                 {product.brand.name}
               </Link>
               <span>/</span>
             </>
           )}
-          <span className="text-gray-800 font-medium truncate max-w-xs md:max-w-md">
+          <span className="text-black font-bold truncate max-w-xs md:max-w-md">
             {product.title}
           </span>
         </nav>
 
         {/* Main Product Card */}
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-xs overflow-hidden p-6 md:p-8">
+        <div className="bg-white rounded-none border border-[#d9d9d9] p-5 sm:p-6 md:p-8">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12">
             {/* Left: Product Image & Gallery */}
             <div className="md:col-span-6 lg:col-span-7 flex flex-col md:flex-row gap-4 items-start">
-              {/* Miniaturas (Desktop: vertical a la izquierda, Mobile: horizontal debajo) */}
+              {/* Miniaturas */}
               {allImages.length > 1 && (
                 <div className="flex md:flex-col gap-2.5 order-2 md:order-1 overflow-x-auto md:overflow-y-auto max-h-[480px] w-full md:w-20 shrink-0 py-1">
                   {allImages.map((img, idx) => (
@@ -234,10 +236,10 @@ export default function ProductDetailPage() {
                       type="button"
                       onMouseEnter={() => setSelectedImageIndex(idx)}
                       onClick={() => setSelectedImageIndex(idx)}
-                      className={`relative aspect-square w-16 md:w-20 rounded-xl border-2 p-1 bg-white cursor-pointer transition-all shrink-0 ${
+                      className={`relative aspect-square w-16 md:w-20 rounded-none border-2 p-1 bg-[#f8f8f8] cursor-pointer transition-all shrink-0 ${
                         selectedImageIndex === idx
-                          ? 'border-[#3483fa] shadow-xs ring-2 ring-blue-500/20'
-                          : 'border-gray-200 hover:border-gray-400'
+                          ? 'border-black'
+                          : 'border-[#d9d9d9] hover:border-black'
                       }`}
                     >
                       {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -252,7 +254,17 @@ export default function ProductDetailPage() {
               )}
 
               {/* Imagen Principal Activa */}
-              <div className="flex-1 w-full order-1 md:order-2 flex flex-col items-center justify-center bg-white rounded-xl p-4 border border-gray-50 min-h-[380px] md:min-h-[480px]">
+              <div className="relative flex-1 w-full order-1 md:order-2 flex flex-col items-center justify-center bg-[#f8f8f8] rounded-none p-6 border border-[#d9d9d9] min-h-[380px] md:min-h-[480px]">
+                {product.discount && product.discount > 0 ? (
+                  <span className="absolute top-3 left-3 bg-[#de2a2a] text-white text-[11px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-none">
+                    -{product.discount}% OFF
+                  </span>
+                ) : null}
+                {product.stock <= 0 && (
+                  <span className="absolute top-3 right-3 bg-[#6f719b] text-white text-[11px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-none">
+                    Agotado
+                  </span>
+                )}
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={activeImage}
@@ -260,7 +272,7 @@ export default function ProductDetailPage() {
                   onError={(e) => {
                     (e.currentTarget as HTMLImageElement).src = fallbackImage;
                   }}
-                  className="max-h-[440px] w-auto max-w-full object-contain hover:scale-105 transition-transform duration-300"
+                  className="max-h-[430px] w-auto max-w-full object-contain hover:scale-105 transition-transform duration-300"
                 />
               </div>
             </div>
@@ -269,102 +281,109 @@ export default function ProductDetailPage() {
             <div className="md:col-span-6 lg:col-span-5 flex flex-col justify-between">
               <div>
                 {/* Meta header */}
-                <div className="flex items-center justify-between text-xs text-gray-500 mb-2">
-                  <div className="flex items-center gap-2">
+                <div className="flex items-center justify-between text-xs text-neutral-500 mb-3 pb-3 border-b border-[#d9d9d9]">
+                  <div className="flex items-center gap-2.5 flex-wrap">
                     {product.brand && (
                       <Link
                         href={`/brand/${product.brand.slug || product.brand.id}`}
-                        className="font-medium text-[#3483fa] hover:underline"
+                        className="font-bold uppercase tracking-wider text-[#de2a2a] hover:underline"
                       >
                         {product.brand.name}
                       </Link>
                     )}
-                    {product.sku && <span>SKU: {product.sku}</span>}
+                    {product.sku && (
+                      <span className="font-mono text-[11px] text-neutral-500">
+                        SKU: {product.sku}
+                      </span>
+                    )}
                   </div>
                   <div className="flex items-center gap-2">
                     <button
                       type="button"
                       onClick={() => product && toggleFavorite(product.id)}
-                      className={`flex items-center gap-1.5 px-2 py-1 rounded-full text-xs transition-all cursor-pointer ${
+                      className={`flex items-center gap-1.5 px-2.5 py-1 rounded-none border text-[11px] font-bold uppercase tracking-wider transition-all cursor-pointer ${
                         product && isFavorite(product.id)
-                          ? 'bg-rose-50 text-rose-600 font-semibold border border-rose-200'
-                          : 'text-gray-400 hover:text-gray-600 hover:bg-gray-100'
+                          ? 'bg-black text-white border-black'
+                          : 'bg-white text-neutral-600 border-[#d9d9d9] hover:border-black hover:text-black'
                       }`}
                       title={product && isFavorite(product.id) ? 'Quitar de favoritos' : 'Agregar a favoritos'}
                     >
                       <FaHeart
-                        size={13}
-                        className={product && isFavorite(product.id) ? 'text-rose-500 fill-rose-500' : 'text-gray-400'}
+                        size={12}
+                        className={product && isFavorite(product.id) ? 'text-[#de2a2a]' : 'text-neutral-400'}
                       />
                       <span>{product && isFavorite(product.id) ? 'Favorito' : 'Guardar'}</span>
                     </button>
 
                     <button
+                      type="button"
                       onClick={handleShare}
-                      className="flex items-center gap-1 text-gray-400 hover:text-gray-600 transition-colors cursor-pointer"
+                      className="flex items-center gap-1.5 px-2.5 py-1 rounded-none border border-[#d9d9d9] text-neutral-600 hover:border-black hover:text-black text-[11px] font-bold uppercase tracking-wider transition-colors cursor-pointer"
                       title="Compartir enlace"
                     >
-                      <FaShareNodes size={13} />
-                      <span>{copied ? 'Copiado!' : 'Compartir'}</span>
+                      <FaShareNodes size={12} />
+                      <span>{copied ? 'Copiado' : 'Compartir'}</span>
                     </button>
                   </div>
                 </div>
 
                 {/* Title */}
-                <h1 className="text-xl lg:text-2xl font-normal text-gray-900 leading-snug mb-3">
+                <h1 className="font-display text-2xl lg:text-3xl font-extrabold uppercase tracking-tight text-black leading-tight mb-3">
                   {product.title}
                 </h1>
 
                 {/* Badges */}
-                <div className="flex items-center gap-2 mb-4">
+                <div className="flex items-center gap-2 mb-4 flex-wrap">
                   {product.freeShipping && (
-                    <span className="text-[#00a650] text-xs font-semibold bg-emerald-50 px-2 py-0.5 rounded flex items-center gap-1">
+                    <span className="text-[#2e9e7b] text-[11px] font-bold uppercase tracking-wider bg-[#2e9e7b]/10 border border-[#2e9e7b]/30 px-2.5 py-1 rounded-none flex items-center gap-1.5">
                       <FaTruckFast size={12} /> Envío gratis
                     </span>
                   )}
                   {product.full && (
-                    <span className="text-[#00a650] text-xs font-bold italic flex items-center bg-emerald-50/70 px-2 py-0.5 rounded">
-                      <FaBolt size={10} className="mr-0.5" /> FULL
+                    <span className="text-[#2e9e7b] text-[11px] font-bold italic uppercase tracking-wider flex items-center bg-[#2e9e7b]/10 border border-[#2e9e7b]/30 px-2.5 py-1 rounded-none">
+                      <FaBolt size={10} className="mr-1" /> EXPRESS
                     </span>
                   )}
                 </div>
 
                 {/* Pricing Block */}
-                <div className="bg-gray-50/70 rounded-xl p-4 mb-6 border border-gray-100">
+                <div className="bg-[#f8f8f8] rounded-none p-5 mb-5 border border-[#d9d9d9]">
                   {product.originalPrice && product.originalPrice > product.price && (
-                    <span className="text-gray-400 text-sm line-through block mb-0.5">
+                    <span className="text-neutral-400 text-sm line-through block mb-1">
                       {symbol} {Number(product.originalPrice).toFixed(2)} PEN
                     </span>
                   )}
 
-                  <div className="flex items-baseline gap-3">
-                    <span className="text-3xl lg:text-4xl font-semibold text-gray-900 tracking-tight">
+                  <div className="flex items-baseline gap-3 flex-wrap">
+                    <span className="font-display text-3xl lg:text-4xl font-extrabold text-black tracking-tight">
                       {symbol} {Number(product.price).toFixed(2)}
                     </span>
-                    <span className="text-xs font-bold text-slate-500 bg-white border border-slate-200 px-2 py-0.5 rounded">
+                    <span className="text-[11px] font-bold uppercase text-black bg-white border border-[#d9d9d9] px-2 py-0.5 rounded-none">
                       PEN
                     </span>
                     {product.discount && product.discount > 0 ? (
-                      <span className="text-[#00a650] text-sm font-bold bg-emerald-100/80 px-2 py-0.5 rounded">
-                        {product.discount}% OFF
+                      <span className="bg-[#de2a2a] text-white text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded-none">
+                        -{product.discount}% OFF
                       </span>
                     ) : null}
                   </div>
-                  <p className="text-xs text-gray-600 mt-1.5 flex items-center gap-1.5 font-medium">
-                    <FaCheck className="text-emerald-600 shrink-0" size={11} />
-                    <span>Precio visible y final con <strong>18% IGV incluido</strong>. Emisión de Boleta o Factura.</span>
+                  <p className="text-xs text-neutral-600 mt-2.5 flex items-center gap-1.5 font-medium">
+                    <FaCheck className="text-[#2e9e7b] shrink-0" size={11} />
+                    <span>
+                      Precio final con <strong>18% IGV incluido</strong>. Boleta o Factura electrónica.
+                    </span>
                   </p>
                 </div>
 
                 {/* Stock info */}
-                <div className="mb-4">
+                <div className="mb-5">
                   {product.stock > 0 ? (
-                    <div className="flex items-center gap-2 text-sm text-[#00a650] font-medium">
-                      <FaCheck size={14} />
-                      <span>Stock disponible ({product.stock} unidades)</span>
+                    <div className="flex items-center gap-2 text-xs uppercase tracking-wider text-[#2e9e7b] font-bold">
+                      <FaCheck size={13} />
+                      <span>Stock disponible ({product.stock} unidades disponibles)</span>
                     </div>
                   ) : (
-                    <div className="text-sm text-red-500 font-medium">
+                    <div className="inline-block bg-[#6f719b] text-white text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-none">
                       Producto agotado temporalmente
                     </div>
                   )}
@@ -372,15 +391,15 @@ export default function ProductDetailPage() {
 
                 {/* Características destacadas */}
                 {product.features && product.features.length > 0 && (
-                  <div className="mb-6 bg-slate-50/90 rounded-xl p-4 border border-slate-100">
-                    <h3 className="text-xs font-bold text-gray-800 uppercase tracking-wider mb-2.5 flex items-center gap-1.5">
-                      <FaCheck className="text-[#3483fa]" size={12} />
-                      <span>Lo que tienes que saber de este producto</span>
+                  <div className="mb-6 bg-[#f8f8f8] rounded-none p-4 border border-[#d9d9d9]">
+                    <h3 className="text-[11px] font-bold text-black uppercase tracking-widest mb-2.5 flex items-center gap-1.5">
+                      <FaCheck className="text-[#de2a2a]" size={11} />
+                      <span>Notas y características</span>
                     </h3>
                     <ul className="space-y-2">
                       {(showAllFeatures ? product.features : product.features.slice(0, 5)).map((feature, idx) => (
-                        <li key={idx} className="flex items-start gap-2.5 text-xs text-gray-700 leading-relaxed">
-                          <span className="w-1.5 h-1.5 rounded-full bg-[#3483fa] mt-1.5 shrink-0" />
+                        <li key={idx} className="flex items-start gap-2.5 text-xs text-neutral-700 leading-relaxed">
+                          <span className="w-1.5 h-1.5 bg-[#de2a2a] mt-1.5 shrink-0" />
                           <span>{feature}</span>
                         </li>
                       ))}
@@ -390,7 +409,7 @@ export default function ProductDetailPage() {
                       <button
                         type="button"
                         onClick={() => setShowAllFeatures((prev) => !prev)}
-                        className="mt-3 text-xs font-semibold text-[#3483fa] hover:text-blue-700 transition-colors inline-flex items-center gap-1.5 cursor-pointer py-1"
+                        className="mt-3 text-xs font-bold uppercase tracking-wider text-[#de2a2a] hover:text-red-700 transition-colors inline-flex items-center gap-1.5 cursor-pointer py-1"
                       >
                         {showAllFeatures ? (
                           <>
@@ -410,19 +429,21 @@ export default function ProductDetailPage() {
 
                 {/* Quantity selector */}
                 {product.stock > 0 && (
-                  <div className="flex items-center gap-4 mb-6">
-                    <label className="text-xs text-gray-600 font-medium">Cantidad:</label>
+                  <div className="flex items-center gap-4 mb-5">
+                    <label className="text-xs text-black font-bold uppercase tracking-wider">
+                      Cantidad:
+                    </label>
                     <select
                       value={quantity}
                       onChange={(e) => setQuantity(Number(e.target.value))}
-                      className="border border-gray-200 rounded-lg py-1.5 px-3 text-sm font-medium focus:ring-2 focus:ring-[#3483fa]/20 focus:border-[#3483fa] outline-hidden bg-white"
+                      className="border border-[#d9d9d9] rounded-none py-2 px-3 text-sm font-bold focus:border-black outline-none bg-white cursor-pointer"
                     >
-                      {Array.from({ length: Math.min(product.stock, 6) }, (_, i) => i + 1).map(
+                      {Array.from({ length: Math.min(product.stock, 12) }, (_, i) => i + 1).map(
                         (num) => (
                           <option key={num} value={num}>
                             {num} {num === 1 ? 'unidad' : 'unidades'}
                           </option>
-                        )
+                        ),
                       )}
                     </select>
                   </div>
@@ -434,7 +455,7 @@ export default function ProductDetailPage() {
                     type="button"
                     onClick={handleBuyNow}
                     disabled={product.stock <= 0}
-                    className="w-full bg-[#3483fa] hover:bg-blue-600 disabled:bg-gray-300 text-white font-medium py-3 px-6 rounded-xl transition-all shadow-xs disabled:cursor-not-allowed text-center cursor-pointer"
+                    className="w-full bg-[#de2a2a] hover:bg-red-700 disabled:bg-neutral-300 text-white text-xs font-bold uppercase tracking-widest py-3.5 px-6 rounded-none transition-colors disabled:cursor-not-allowed text-center cursor-pointer"
                   >
                     Comprar ahora
                   </button>
@@ -443,7 +464,7 @@ export default function ProductDetailPage() {
                       type="button"
                       onClick={handleAddToCart}
                       disabled={product.stock <= 0}
-                      className="flex-1 bg-blue-50 hover:bg-blue-100 disabled:bg-gray-100 text-[#3483fa] disabled:text-gray-400 font-medium py-3 px-6 rounded-xl transition-all border border-blue-200/50 disabled:border-transparent text-center cursor-pointer"
+                      className="flex-1 bg-black hover:bg-neutral-800 disabled:bg-neutral-200 text-white disabled:text-neutral-400 text-xs font-bold uppercase tracking-widest py-3.5 px-6 rounded-none transition-colors disabled:cursor-not-allowed text-center cursor-pointer"
                     >
                       Agregar al carrito
                     </button>
@@ -453,15 +474,15 @@ export default function ProductDetailPage() {
                       onClick={() => product && toggleFavorite(product.id)}
                       title={product && isFavorite(product.id) ? 'Quitar de favoritos' : 'Agregar a favoritos'}
                       aria-label="Guardar en favoritos"
-                      className={`h-12 w-12 flex items-center justify-center shrink-0 rounded-xl transition-all border cursor-pointer ${
+                      className={`h-11 w-11 flex items-center justify-center shrink-0 rounded-none transition-all border cursor-pointer ${
                         product && isFavorite(product.id)
-                          ? 'bg-rose-50 text-rose-500 border-rose-200 hover:bg-rose-100 shadow-2xs'
-                          : 'bg-white text-gray-400 border-gray-200 hover:text-rose-500 hover:border-rose-200 hover:bg-rose-50/50'
+                          ? 'bg-black text-[#de2a2a] border-black'
+                          : 'bg-white text-neutral-500 border-[#d9d9d9] hover:text-[#de2a2a] hover:border-black'
                       }`}
                     >
                       <FaHeart
-                        size={18}
-                        className={product && isFavorite(product.id) ? 'text-rose-500 fill-rose-500' : ''}
+                        size={17}
+                        className={product && isFavorite(product.id) ? 'text-[#de2a2a]' : ''}
                       />
                     </button>
                   </div>
@@ -469,72 +490,76 @@ export default function ProductDetailPage() {
               </div>
 
               {/* Guarantees */}
-              <div className="mt-8 pt-6 border-t border-gray-100 flex flex-col gap-3 text-xs text-gray-500">
+              <div className="mt-8 pt-5 border-t border-[#d9d9d9] flex flex-col gap-3 text-xs text-neutral-600">
                 <div className="flex items-center gap-2.5">
-                  <FaArrowRotateLeft className="text-[#3483fa]" size={14} />
+                  <FaArrowRotateLeft className="text-[#de2a2a] shrink-0" size={14} />
                   <span>
-                    <strong className="text-gray-700">Devolución gratis.</strong> Tienes 30 días desde que lo recibes.
+                    <strong className="text-black">Cambio o devolución garantizada.</strong> Empaques y sellos de origen verificados.
                   </span>
                 </div>
                 <div className="flex items-center gap-2.5">
-                  <FaShieldHalved className="text-[#3483fa]" size={14} />
+                  <FaShieldHalved className="text-[#2e9e7b] shrink-0" size={14} />
                   <span>
-                    <strong className="text-gray-700">Compra Protegida.</strong> Recibe el producto que esperabas o te devolvemos tu dinero.
+                    <strong className="text-black">Calidad de origen garantizada.</strong> Productos artesanales de cooperativa y vinos (venta de alcohol +18).
                   </span>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Ficha Técnica y Especificaciones (Requerido por Culqi / Indecopi) */}
-          <div className="mt-10 pt-8 border-t border-gray-100">
-            <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-              <FaShieldHalved className="text-[#3483fa]" size={16} />
-              <span>Ficha Técnica y Especificaciones</span>
+          {/* Ficha Técnica y Especificaciones */}
+          <div className="mt-10 pt-8 border-t border-[#d9d9d9]">
+            <h2 className="font-display text-lg font-extrabold uppercase tracking-tight text-black mb-4 flex items-center gap-2">
+              <FaShieldHalved className="text-[#de2a2a]" size={16} />
+              <span>Especificaciones y Garantía</span>
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-4xl text-xs">
-              <div className="p-3.5 bg-gray-50/80 rounded-xl border border-gray-100 flex justify-between items-center">
-                <span className="text-gray-500 font-medium">Condición del producto:</span>
-                <span className="font-semibold text-gray-900">Nuevo / Sellado de fábrica</span>
+              <div className="p-3.5 bg-[#f8f8f8] rounded-none border border-[#d9d9d9] flex justify-between items-center">
+                <span className="text-neutral-500 font-medium">Estado del producto:</span>
+                <span className="font-bold text-black">Empaque sellado de origen / 100% original</span>
               </div>
-              <div className="p-3.5 bg-gray-50/80 rounded-xl border border-gray-100 flex justify-between items-center">
-                <span className="text-gray-500 font-medium">Garantía comercial:</span>
-                <span className="font-semibold text-emerald-700">12 meses de garantía oficial</span>
+              <div className="p-3.5 bg-[#f8f8f8] rounded-none border border-[#d9d9d9] flex justify-between items-center">
+                <span className="text-neutral-500 font-medium">Control de calidad:</span>
+                <span className="font-bold text-[#2e9e7b]">Calidad y frescura garantizada de origen</span>
               </div>
               {product.brand && (
-                <div className="p-3.5 bg-gray-50/80 rounded-xl border border-gray-100 flex justify-between items-center">
-                  <span className="text-gray-500 font-medium">Marca:</span>
-                  <span className="font-semibold text-[#3483fa]">{product.brand.name}</span>
+                <div className="p-3.5 bg-[#f8f8f8] rounded-none border border-[#d9d9d9] flex justify-between items-center">
+                  <span className="text-neutral-500 font-medium">Marca / Productor:</span>
+                  <span className="font-bold text-[#de2a2a] uppercase">{product.brand.name}</span>
                 </div>
               )}
               {product.sku && (
-                <div className="p-3.5 bg-gray-50/80 rounded-xl border border-gray-100 flex justify-between items-center">
-                  <span className="text-gray-500 font-medium">Código / SKU:</span>
-                  <span className="font-semibold text-gray-900 font-mono">{product.sku}</span>
+                <div className="p-3.5 bg-[#f8f8f8] rounded-none border border-[#d9d9d9] flex justify-between items-center">
+                  <span className="text-neutral-500 font-medium">Código / SKU:</span>
+                  <span className="font-bold text-black font-mono">{product.sku}</span>
                 </div>
               )}
-              <div className="p-3.5 bg-gray-50/80 rounded-xl border border-gray-100 flex justify-between items-center">
-                <span className="text-gray-500 font-medium">Disponibilidad:</span>
-                <span className="font-semibold text-emerald-600">En stock para despacho inmediato</span>
+              <div className="p-3.5 bg-[#f8f8f8] rounded-none border border-[#d9d9d9] flex justify-between items-center">
+                <span className="text-neutral-500 font-medium">Disponibilidad:</span>
+                <span className="font-bold text-[#2e9e7b]">
+                  {product.stock > 0 ? 'En stock para despacho inmediato' : 'Sin stock'}
+                </span>
               </div>
-              <div className="p-3.5 bg-gray-50/80 rounded-xl border border-gray-100 flex justify-between items-center">
-                <span className="text-gray-500 font-medium">Comprobante de Pago:</span>
-                <span className="font-semibold text-gray-900">Boleta o Factura Electrónica SUNAT</span>
+              <div className="p-3.5 bg-[#f8f8f8] rounded-none border border-[#d9d9d9] flex justify-between items-center">
+                <span className="text-neutral-500 font-medium">Comprobante de Pago:</span>
+                <span className="font-bold text-black">Boleta o Factura Electrónica SUNAT</span>
               </div>
             </div>
           </div>
 
           {/* Features Detailed Section */}
           {product.features && product.features.length > 0 && (
-            <div className="mt-8 pt-8 border-t border-gray-100">
-              <h2 className="text-lg font-bold text-gray-900 mb-4">Características principales</h2>
+            <div className="mt-8 pt-8 border-t border-[#d9d9d9]">
+              <h2 className="font-display text-lg font-extrabold uppercase tracking-tight text-black mb-4">
+                Detalles destacados
+              </h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-4xl">
                 {product.features.map((feature, idx) => (
                   <div
                     key={idx}
-                    className="flex items-center gap-3 p-3.5 bg-gray-50/70 rounded-xl border border-gray-100 text-xs font-medium text-gray-800"
+                    className="flex items-center gap-3 p-3.5 bg-[#f8f8f8] rounded-none border border-[#d9d9d9] text-xs font-medium text-[#020202]"
                   >
-                    <span className="w-2 h-2 rounded-full bg-[#3483fa] shrink-0" />
+                    <span className="w-2 h-2 bg-[#de2a2a] shrink-0" />
                     <span>{feature}</span>
                   </div>
                 ))}
@@ -542,32 +567,34 @@ export default function ProductDetailPage() {
             </div>
           )}
 
-          {/* Description Section (SIEMPRE VISIBLE Y DETALLADA) */}
-          <div className="mt-8 pt-8 border-t border-gray-100">
-            <h2 className="text-lg font-bold text-gray-900 mb-3">Descripción detallada del producto</h2>
-            <div className="text-gray-700 text-sm leading-relaxed whitespace-pre-line max-w-4xl bg-slate-50/60 p-5 rounded-2xl border border-slate-200/80 space-y-3">
+          {/* Description Section */}
+          <div className="mt-8 pt-8 border-t border-[#d9d9d9]">
+            <h2 className="font-display text-lg font-extrabold uppercase tracking-tight text-black mb-3">
+              Descripción del producto
+            </h2>
+            <div className="text-neutral-700 text-sm leading-relaxed whitespace-pre-line max-w-4xl bg-[#f8f8f8] p-5 rounded-none border border-[#d9d9d9] space-y-3">
               <p>
                 {product.description?.trim()
                   ? product.description
-                  : `Presentamos el producto ${product.title}${product.brand?.name ? ` de la reconocida marca ${product.brand.name}` : ''}. Un artículo original y certificado, fabricado bajo rigurosos estándares de calidad y durabilidad para ofrecer el máximo rendimiento en su categoría.`}
+                  : `Disfruta de ${product.title}${product.brand?.name ? ` elaborado por ${product.brand.name}` : ''}. Un producto seleccionado de nuestra cooperativa con trazabilidad y calidad garantizada de origen.`}
               </p>
 
-              <div className="pt-3 border-t border-slate-200/80 grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-slate-600">
+              <div className="pt-3 border-t border-[#d9d9d9] grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-neutral-600">
                 <div className="flex items-center gap-2">
-                  <FaCheck className="text-emerald-500 shrink-0" size={12} />
-                  <span>Producto 100% original en caja sellada de fábrica.</span>
+                  <FaCheck className="text-[#2e9e7b] shrink-0" size={12} />
+                  <span>Producto 100% original con empaque y sello de origen.</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <FaCheck className="text-emerald-500 shrink-0" size={12} />
-                  <span>Incluye garantía oficial con soporte técnico autorizado.</span>
+                  <FaCheck className="text-[#2e9e7b] shrink-0" size={12} />
+                  <span>Conservación controlada y despacho asegurado.</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <FaCheck className="text-emerald-500 shrink-0" size={12} />
+                  <FaCheck className="text-[#2e9e7b] shrink-0" size={12} />
                   <span>Emisión legal de Boleta o Factura electrónica con IGV.</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <FaCheck className="text-emerald-500 shrink-0" size={12} />
-                  <span>Envíos asegurados y protegidos a todo el territorio nacional.</span>
+                  <FaCheck className="text-[#2e9e7b] shrink-0" size={12} />
+                  <span>Venta responsable de vinos exclusiva para mayores de 18 años.</span>
                 </div>
               </div>
             </div>
@@ -577,7 +604,7 @@ export default function ProductDetailPage() {
 
       {/* Relacionados */}
       {relatedProducts.length > 0 && (
-        <div className="mt-6">
+        <div className="mt-8">
           <ProductCarousel
             title="Productos similares"
             products={relatedProducts.slice(0, 5)}
@@ -587,7 +614,7 @@ export default function ProductDetailPage() {
 
       {/* Basado en tu última visita (localStorage) */}
       {recentlyViewedProducts.length > 0 && (
-        <div className="mt-2">
+        <div className="mt-4">
           <ProductCarousel
             title="Basado en tu última visita"
             products={recentlyViewedProducts}
@@ -596,45 +623,6 @@ export default function ProductDetailPage() {
               href: '/historial',
             }}
           />
-        </div>
-      )}
-
-      {/* Modal de confirmación: Producto Agregado al Carrito */}
-      {addedToCart && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-xs p-4 animate-in fade-in duration-150">
-          <div className="bg-white rounded-2xl max-w-sm w-full p-5 shadow-2xl border border-gray-100 text-center">
-            <div className="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-3">
-              <FaCheck size={20} />
-            </div>
-
-            <h3 className="text-base font-bold text-gray-900">
-              ¡Agregado a tu carrito!
-            </h3>
-            <p className="text-xs text-gray-500 mt-1 line-clamp-2">
-              {product.title}
-            </p>
-            <p className="text-xs font-semibold text-gray-800 mt-1">
-              Cantidad: {quantity} {quantity === 1 ? 'unidad' : 'unidades'} • {symbol} {(Number(product.price) * quantity).toFixed(2)}
-            </p>
-
-            <div className="mt-5 flex flex-col gap-2">
-              <Link
-                href="/cart"
-                onClick={() => setAddedToCart(false)}
-                className="w-full py-2.5 bg-[#3483fa] hover:bg-[#2968c8] text-white text-xs font-semibold rounded-xl shadow-xs transition-colors text-center"
-              >
-                Ver mi carrito y pagar
-              </Link>
-
-              <button
-                type="button"
-                onClick={() => setAddedToCart(false)}
-                className="w-full py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-medium rounded-xl transition-colors cursor-pointer"
-              >
-                Seguir comprando
-              </button>
-            </div>
-          </div>
         </div>
       )}
     </div>

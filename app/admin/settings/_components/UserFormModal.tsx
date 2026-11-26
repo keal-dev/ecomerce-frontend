@@ -133,16 +133,16 @@ export function UserFormModal({
       {/* Modal Dialog */}
       <div className="relative w-full max-w-xl bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden z-10 animate-in zoom-in-95 duration-200">
         {/* Cabecera */}
-        <div className="px-6 py-4 bg-brand/30 border-b border-black/5 flex items-center justify-between">
+        <div className="px-6 py-4 bg-black text-white border-b border-[#262626] flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-brand text-gray-900 flex items-center justify-center shadow-xs">
+            <div className="w-10 h-10 rounded-xl bg-[#de2a2a] text-white flex items-center justify-center shadow-xs">
               <TbShield size={22} />
             </div>
             <div>
-              <h3 className="font-bold text-base text-gray-900">
+              <h3 className="font-bold text-base text-white">
                 Asignar Rol y Permisos
               </h3>
-              <p className="text-xs text-gray-500">
+              <p className="text-xs text-neutral-300">
                 Define el nivel de acceso operativo o de gerencia para este usuario
               </p>
             </div>
@@ -151,7 +151,7 @@ export function UserFormModal({
           <button
             type="button"
             onClick={onClose}
-            className="p-1.5 rounded-lg text-gray-400 hover:text-gray-700 hover:bg-black/5 transition-colors cursor-pointer"
+            className="p-1.5 rounded-lg text-neutral-300 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
             aria-label="Cerrar modal"
           >
             <TbX size={20} />

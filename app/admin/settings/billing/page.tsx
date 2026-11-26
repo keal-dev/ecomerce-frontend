@@ -4,7 +4,7 @@ import { TbArrowLeft } from 'react-icons/tb';
 import { BillingSettingsForm } from './_components/BillingSettingsForm';
 
 export const metadata = {
-  title: 'Series de Facturación y Comprobantes | MercadoAdmin',
+  title: 'Series de Facturación y Comprobantes | Panel Admin',
   description: 'Configura las series de Boleta y Factura electrónica SUNAT.',
 };
 

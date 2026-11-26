@@ -30,6 +30,9 @@ export interface AddCartProductInput {
 
 interface CartState {
   items: CartItem[];
+  isDrawerOpen: boolean;
+  openDrawer: () => void;
+  closeDrawer: () => void;
   addItem: (product: AddCartProductInput, quantity?: number) => void;
   removeItem: (id: string) => void;
   updateQuantity: (id: string, quantity: number) => void;
@@ -42,6 +45,9 @@ export const useCartStore = create<CartState>()(
   persist(
     (set, get) => ({
       items: [],
+      isDrawerOpen: false,
+      openDrawer: () => set({ isDrawerOpen: true }),
+      closeDrawer: () => set({ isDrawerOpen: false }),
 
       addItem: (product: AddCartProductInput, quantity = 1) => {
         if (!product || !product.id || quantity <= 0) return;
@@ -119,6 +125,7 @@ export const useCartStore = create<CartState>()(
     }),
     {
       name: 'ecommerce_shopping_cart_storage',
+      partialize: (state) => ({ items: state.items }),
     },
   ),
 );

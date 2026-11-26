@@ -35,7 +35,7 @@ export function CashRegisterManager() {
   const [isOpenModalOpen, setIsOpenModalOpen] = useState(false);
   const [isCloseModalOpen, setIsCloseModalOpen] = useState(false);
 
-  const businessName = company?.name || 'MercadoAdmin';
+  const businessName = company?.name || 'Cooperativa Gourmet';
 
   const loadData = useCallback(() => {
     fetchCurrentSession();

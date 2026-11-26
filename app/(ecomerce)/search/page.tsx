@@ -38,7 +38,6 @@ function SearchContent() {
   const [sortBy, setSortBy] = useState<SearchSortOption>('relevance');
   const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
 
-  // Cargar catálogo inicial y buscar productos con el término de la query
   useEffect(() => {
     fetchProducts();
   }, [fetchProducts]);
@@ -75,7 +74,6 @@ function SearchContent() {
     };
   }, [query]);
 
-  // Lista de categorías con conteo dinámico basado en los resultados encontrados
   const categoryFacets = useMemo(() => {
     const map = new Map<string, { id: string; name: string; count: number }>();
 
@@ -97,7 +95,6 @@ function SearchContent() {
     return Array.from(map.values()).sort((a, b) => b.count - a.count);
   }, [products]);
 
-  // Manejador de filtros
   const handleFilterChange = (partial: Partial<SearchFilterState>) => {
     setFilters((prev) => ({ ...prev, ...partial }));
   };
@@ -128,26 +125,23 @@ function SearchContent() {
     return count;
   }, [filters]);
 
-  // Productos filtrados y ordenados
   const filteredProducts = useMemo(() => {
     let list = [...products];
 
-    // Filtro por categoría
     if (filters.categoryId) {
-      list = list.filter((p) => p.category?.id === filters.categoryId || p.categoryId === filters.categoryId);
+      list = list.filter(
+        (p) => p.category?.id === filters.categoryId || p.categoryId === filters.categoryId,
+      );
     }
 
-    // Filtro Envío Gratis
     if (filters.onlyFreeShipping) {
       list = list.filter((p) => p.freeShipping === true);
     }
 
-    // Filtro FULL
     if (filters.onlyFull) {
       list = list.filter((p) => p.full === true);
     }
 
-    // Filtro Solo Ofertas
     if (filters.onlyDeals) {
       list = list.filter(
         (p) =>
@@ -156,7 +150,6 @@ function SearchContent() {
       );
     }
 
-    // Filtro Precio Mínimo
     if (filters.minPrice.trim()) {
       const min = parseFloat(filters.minPrice);
       if (!isNaN(min)) {
@@ -164,7 +157,6 @@ function SearchContent() {
       }
     }
 
-    // Filtro Precio Máximo
     if (filters.maxPrice.trim()) {
       const max = parseFloat(filters.maxPrice);
       if (!isNaN(max)) {
@@ -172,7 +164,6 @@ function SearchContent() {
       }
     }
 
-    // Ordenamiento
     if (sortBy === 'price_asc') {
       list.sort((a, b) => Number(a.price) - Number(b.price));
     } else if (sortBy === 'price_desc') {
@@ -182,8 +173,16 @@ function SearchContent() {
     } else if (sortBy === 'relevance' && query) {
       const q = query.toLowerCase();
       list.sort((a, b) => {
-        const aTitle = a.title.toLowerCase().startsWith(q) ? 2 : a.title.toLowerCase().includes(q) ? 1 : 0;
-        const bTitle = b.title.toLowerCase().startsWith(q) ? 2 : b.title.toLowerCase().includes(q) ? 1 : 0;
+        const aTitle = a.title.toLowerCase().startsWith(q)
+          ? 2
+          : a.title.toLowerCase().includes(q)
+            ? 1
+            : 0;
+        const bTitle = b.title.toLowerCase().startsWith(q)
+          ? 2
+          : b.title.toLowerCase().includes(q)
+            ? 1
+            : 0;
         return bTitle - aTitle;
       });
     }
@@ -191,25 +190,24 @@ function SearchContent() {
     return list;
   }, [products, filters, sortBy, query]);
 
-  // Productos de respaldo / recomendados en caso de vacío
   const recommendedProducts = useMemo(() => {
     return storeProducts.filter((p) => p.isActive !== false).slice(0, 10);
   }, [storeProducts]);
 
   return (
-    <div className="min-h-screen pb-16">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-4">
+    <div className="min-h-screen bg-white pb-16">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-6">
         {/* Breadcrumb */}
-        <nav className="flex items-center gap-1.5 text-xs text-gray-500 mb-4 font-light">
-          <Link href="/" className="hover:text-[#3483fa] transition-colors">
+        <nav className="flex items-center gap-1.5 text-[11px] uppercase tracking-wider text-neutral-500 mb-4">
+          <Link href="/" className="hover:text-[#de2a2a] transition-colors">
             Inicio
           </Link>
-          <TbChevronRight size={13} className="text-gray-400" />
-          <span className="text-gray-500">Búsqueda</span>
+          <TbChevronRight size={13} className="text-neutral-400" />
+          <span className="text-neutral-500">Búsqueda</span>
           {query && (
             <>
-              <TbChevronRight size={13} className="text-gray-400" />
-              <span className="text-gray-800 font-medium truncate max-w-xs">{query}</span>
+              <TbChevronRight size={13} className="text-neutral-400" />
+              <span className="text-black font-bold truncate max-w-xs">{query}</span>
             </>
           )}
         </nav>
@@ -226,8 +224,10 @@ function SearchContent() {
 
         {isLoading ? (
           <div className="min-h-[50vh] flex flex-col items-center justify-center gap-3">
-            <TbLoader2 className="animate-spin text-[#3483fa]" size={36} />
-            <p className="text-xs text-gray-500">Buscando publicaciones para &quot;{query}&quot;...</p>
+            <TbLoader2 className="animate-spin text-[#de2a2a]" size={36} />
+            <p className="text-xs font-medium uppercase tracking-wider text-neutral-500">
+              Buscando productos para &quot;{query}&quot;...
+            </p>
           </div>
         ) : filteredProducts.length === 0 ? (
           <SearchEmptyState
@@ -239,7 +239,7 @@ function SearchContent() {
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 items-start">
             {/* Barra lateral de filtros (Escritorio) */}
-            <div className="hidden lg:block lg:col-span-1 sticky top-20">
+            <div className="hidden lg:block lg:col-span-1 sticky top-24">
               <SearchFilters
                 filters={filters}
                 categories={categoryFacets}
@@ -265,6 +265,7 @@ function SearchContent() {
                     full: p.full ?? false,
                     imageUrl: p.imageUrl || '/placeholder.png',
                     description: p.description,
+                    stock: p.stock,
                   };
 
                   return <ProductCard key={p.id} product={cardProduct} />;
@@ -277,20 +278,20 @@ function SearchContent() {
         {/* Drawer de filtros para móvil */}
         {isMobileFiltersOpen && (
           <div className="fixed inset-0 z-50 lg:hidden flex">
-            {/* Backdrop */}
             <div
-              className="fixed inset-0 bg-black/50 backdrop-blur-xs transition-opacity"
+              className="fixed inset-0 bg-black/60 backdrop-blur-xs transition-opacity"
               onClick={() => setIsMobileFiltersOpen(false)}
             />
 
-            {/* Panel lateral */}
-            <div className="relative ml-auto w-full max-w-xs bg-white h-full shadow-2xl flex flex-col z-10 animate-in slide-in-from-right duration-200">
-              <div className="flex items-center justify-between p-4 border-b border-gray-100">
-                <span className="text-sm font-bold text-gray-900">Filtrar resultados</span>
+            <div className="relative ml-auto w-full max-w-xs bg-white h-full shadow-2xl flex flex-col z-10 animate-in slide-in-from-right duration-200 rounded-none border-l border-[#d9d9d9]">
+              <div className="flex items-center justify-between p-4 bg-black text-white border-b border-[#262626]">
+                <span className="font-display text-sm font-extrabold uppercase tracking-wider">
+                  Filtrar resultados
+                </span>
                 <button
                   type="button"
                   onClick={() => setIsMobileFiltersOpen(false)}
-                  className="p-1 text-gray-500 hover:text-gray-900 rounded-lg"
+                  className="p-1 text-neutral-300 hover:text-white cursor-pointer"
                 >
                   <TbX size={20} />
                 </button>
@@ -307,13 +308,13 @@ function SearchContent() {
                 />
               </div>
 
-              <div className="p-4 border-t border-gray-100 bg-gray-50">
+              <div className="p-4 border-t border-[#d9d9d9] bg-[#f8f8f8]">
                 <button
                   type="button"
                   onClick={() => setIsMobileFiltersOpen(false)}
-                  className="w-full py-2.5 bg-[#3483fa] text-white text-xs font-semibold rounded-xl text-center shadow-xs cursor-pointer"
+                  className="w-full py-3 bg-[#de2a2a] hover:bg-red-700 text-white text-xs font-bold uppercase tracking-widest rounded-none text-center cursor-pointer transition-colors"
                 >
-                  Ver {filteredProducts.length} publicaciones
+                  Ver {filteredProducts.length} resultados
                 </button>
               </div>
             </div>
@@ -328,9 +329,11 @@ export default function SearchPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-[60vh] flex flex-col items-center justify-center gap-3">
-          <TbLoader2 className="animate-spin text-[#3483fa]" size={36} />
-          <p className="text-xs text-gray-500">Cargando búsqueda...</p>
+        <div className="min-h-[60vh] bg-white flex flex-col items-center justify-center gap-3">
+          <TbLoader2 className="animate-spin text-[#de2a2a]" size={36} />
+          <p className="text-xs font-medium uppercase tracking-wider text-neutral-500">
+            Cargando búsqueda...
+          </p>
         </div>
       }
     >

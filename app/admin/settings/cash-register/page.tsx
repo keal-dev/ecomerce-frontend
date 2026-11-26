@@ -2,7 +2,7 @@ import React from 'react';
 import { CashRegisterManager } from './_components/CashRegisterManager';
 
 export const metadata = {
-  title: 'Apertura y Cierre de Caja | MercadoAdmin',
+  title: 'Apertura y Cierre de Caja | Panel Admin',
   description: 'Control de fondo de caja, arqueos diarios y cierre de turnos.',
 };
 

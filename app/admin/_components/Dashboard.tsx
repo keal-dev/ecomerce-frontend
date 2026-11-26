@@ -279,7 +279,7 @@ export function Dashboard() {
           {isSuperAdmin ? (
             <Link
               href="/admin/products/new"
-              className="inline-flex items-center gap-1.5 bg-[#3483fa] hover:bg-blue-600 text-white text-xs sm:text-sm font-medium px-4 py-2 rounded-lg shadow-2xs transition-colors"
+              className="inline-flex items-center gap-1.5 bg-[#111111] hover:bg-[#de2a2a] text-white text-xs sm:text-sm font-medium px-4 py-2 rounded-lg shadow-2xs transition-colors"
             >
               <TbPlus size={16} />
               <span>Nuevo Producto</span>
@@ -287,7 +287,7 @@ export function Dashboard() {
           ) : (
             <Link
               href="/admin/orders"
-              className="inline-flex items-center gap-1.5 bg-[#3483fa] hover:bg-blue-600 text-white text-xs sm:text-sm font-medium px-4 py-2 rounded-lg shadow-2xs transition-colors"
+              className="inline-flex items-center gap-1.5 bg-[#111111] hover:bg-[#de2a2a] text-white text-xs sm:text-sm font-medium px-4 py-2 rounded-lg shadow-2xs transition-colors"
             >
               <TbShoppingCart size={16} />
               <span>Ver Pedidos</span>
@@ -427,7 +427,7 @@ export function Dashboard() {
             </div>
             <Link
               href="/admin/orders"
-              className="text-xs text-[#3483fa] hover:underline font-medium inline-flex items-center gap-1"
+              className="text-xs text-[#de2a2a] hover:underline font-medium inline-flex items-center gap-1"
             >
               Ver todos <TbArrowUpRight size={13} />
             </Link>
@@ -435,7 +435,7 @@ export function Dashboard() {
 
           {isLoading && recentOrders.length === 0 ? (
             <div className="p-12 text-center text-xs text-gray-500">
-              <div className="w-6 h-6 border-2 border-[#3483fa] border-t-transparent rounded-full animate-spin mx-auto mb-2" />
+              <div className="w-6 h-6 border-2 border-[#de2a2a] border-t-transparent rounded-full animate-spin mx-auto mb-2" />
               Cargando pedidos reales...
             </div>
           ) : recentOrders.length === 0 ? (
@@ -464,7 +464,7 @@ export function Dashboard() {
                     <tr key={order.id} className="hover:bg-gray-50/60 transition-colors">
                       <td className="py-3.5 px-4 whitespace-nowrap">
                         <div className="flex items-center gap-1.5">
-                          <span className="font-mono font-bold text-indigo-600">
+                          <span className="font-mono font-bold text-[#111111]">
                             {order.orderNumber.startsWith('#')
                               ? order.orderNumber
                               : `#${order.orderNumber}`}
@@ -529,7 +529,7 @@ export function Dashboard() {
                       <td className="py-3.5 px-4 text-right whitespace-nowrap">
                         <Link
                           href="/admin/orders"
-                          className="p-1.5 inline-flex text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
+                          className="p-1.5 inline-flex text-gray-400 hover:text-[#de2a2a] hover:bg-red-50 rounded-lg transition-colors"
                           title="Ir al módulo de pedidos"
                         >
                           <TbEye size={17} />
@@ -594,7 +594,7 @@ export function Dashboard() {
               {isSuperAdmin && (
                 <Link
                   href="/admin/categories"
-                  className="text-xs text-[#3483fa] hover:underline font-medium"
+                  className="text-xs text-[#de2a2a] hover:underline font-medium"
                 >
                   Gestionar
                 </Link>

@@ -43,9 +43,10 @@ const iconMap: Record<string, React.ElementType> = {
 
 interface CategoriesDropdownProps {
   categories?: Category[];
+  isActive?: boolean;
 }
 
-export const CategoriesDropdown = ({ categories: propCategories }: CategoriesDropdownProps) => {
+export const CategoriesDropdown = ({ categories: propCategories, isActive = false }: CategoriesDropdownProps) => {
   const { categories: storeCategories, isLoading, fetchCategories } = useCategoryStore();
   const [isOpen, setIsOpen] = useState(false);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -112,14 +113,14 @@ export const CategoriesDropdown = ({ categories: propCategories }: CategoriesDro
         onClick={handleToggleClick}
         aria-expanded={isOpen}
         aria-haspopup="true"
-        className={`flex items-center gap-1 cursor-pointer transition-colors text-[13px] font-normal outline-none ${
-          isOpen ? 'text-[#3483fa] font-medium' : 'text-[#333] hover:text-[#3483fa]'
+        className={`flex items-center gap-1.5 cursor-pointer transition-colors text-[11px] font-bold uppercase tracking-wider outline-none ${
+          isOpen || isActive ? 'text-[#de2a2a]' : 'text-white hover:text-[#de2a2a]'
         }`}
       >
-        <span>Categorías</span>
+        <span>CATEGORÍAS</span>
         <TbChevronDown 
           size={14} 
-          className={`transition-transform duration-200 ${isOpen ? 'rotate-180 text-[#3483fa]' : ''}`} 
+          className={`transition-transform duration-200 ${isOpen ? 'rotate-180 text-[#de2a2a]' : isActive ? 'text-[#de2a2a]' : ''}`} 
         />
       </button>
 
@@ -129,24 +130,21 @@ export const CategoriesDropdown = ({ categories: propCategories }: CategoriesDro
           className="absolute left-0 top-full pt-2 z-50 animate-in fade-in slide-in-from-top-1 duration-150"
           style={{ width: '280px' }}
         >
-          {/* Flecha superior indicadora */}
-          <div className="absolute top-[3px] left-6 w-0 h-0 border-x-[6px] border-x-transparent border-b-[6px] border-b-[#333333]" />
-
-          {/* Tarjeta flotante oscura */}
-          <div className="bg-[#333333] text-white rounded-md shadow-2xl overflow-hidden border border-neutral-700/60 py-2">
+          {/* Tarjeta flotante negra editorial */}
+          <div className="bg-black text-white rounded-none shadow-2xl overflow-hidden border border-[#262626] py-2">
             
             {/* Estado de carga */}
             {isLoading && categories.length === 0 ? (
-              <div className="py-6 px-4 flex flex-col items-center justify-center space-y-2 text-xs text-gray-400">
-                <div className="w-5 h-5 border-2 border-[#3483fa] border-t-transparent rounded-full animate-spin" />
+              <div className="py-6 px-4 flex flex-col items-center justify-center space-y-2 text-xs text-neutral-400">
+                <div className="w-5 h-5 border-2 border-[#de2a2a] border-t-transparent rounded-full animate-spin" />
                 <span>Cargando categorías...</span>
               </div>
             ) : categories.length === 0 ? (
-              <div className="py-6 px-4 text-center text-xs text-gray-400">
+              <div className="py-6 px-4 text-center text-xs text-neutral-400">
                 No hay categorías disponibles
               </div>
             ) : (
-              <ul className="flex flex-col max-h-[460px] overflow-y-auto divide-y divide-neutral-800/60">
+              <ul className="flex flex-col max-h-[460px] overflow-y-auto divide-y divide-[#1f1f1f]">
                 {categories.map((cat) => {
                   const IconComponent = (cat.icon && iconMap[cat.icon]) ? iconMap[cat.icon] : TbCategory;
 
@@ -155,7 +153,7 @@ export const CategoriesDropdown = ({ categories: propCategories }: CategoriesDro
                       <Link
                         href={cat.href || `/category/${cat.id}`}
                         onClick={() => setIsOpen(false)}
-                        className="px-4 py-2.5 flex items-center justify-between text-[13px] text-gray-200 hover:bg-[#3483fa] hover:text-white transition-colors cursor-pointer group"
+                        className="px-4 py-2.5 flex items-center justify-between text-xs text-neutral-200 hover:bg-[#de2a2a] hover:text-white transition-colors cursor-pointer group"
                       >
                         <div className="flex items-center gap-3 truncate">
                           {cat.icon && (cat.icon.startsWith('http') || cat.icon.startsWith('data:')) ? (
@@ -167,21 +165,21 @@ export const CategoriesDropdown = ({ categories: propCategories }: CategoriesDro
                           ) : (
                             <IconComponent 
                               size={18} 
-                              className="text-gray-400 group-hover:text-white transition-colors shrink-0" 
+                              className="text-neutral-400 group-hover:text-white transition-colors shrink-0" 
                             />
                           )}
-                          <span className="truncate group-hover:font-medium">{cat.name}</span>
+                          <span className="truncate font-semibold uppercase tracking-wide">{cat.name}</span>
                         </div>
 
                         <div className="flex items-center gap-1.5 shrink-0 ml-2">
                           {cat.badge && (
-                            <span className="bg-[#00a650] text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full uppercase tracking-wider">
+                            <span className="bg-[#f3ff34] text-black text-[9px] font-extrabold px-1.5 py-0.5 uppercase tracking-wider">
                               {cat.badge}
                             </span>
                           )}
                           <TbChevronRight 
                             size={14} 
-                            className="text-gray-500 group-hover:text-white transition-transform group-hover:translate-x-0.5" 
+                            className="text-neutral-500 group-hover:text-white transition-transform group-hover:translate-x-0.5" 
                           />
                         </div>
                       </Link>
@@ -192,11 +190,11 @@ export const CategoriesDropdown = ({ categories: propCategories }: CategoriesDro
             )}
 
             {/* Pie del menú */}
-            <div className="px-4 pt-2.5 pb-1 border-t border-neutral-700/60 mt-1">
+            <div className="px-4 pt-2.5 pb-1 border-t border-[#262626] mt-1">
               <Link
                 href="/categories"
                 onClick={() => setIsOpen(false)}
-                className="text-xs text-[#3483fa] hover:text-blue-400 hover:underline block text-center font-medium py-1"
+                className="text-[11px] font-bold uppercase tracking-wider text-white hover:text-[#de2a2a] block text-center py-1 transition-colors"
               >
                 Ver todas las categorías →
               </Link>

@@ -91,7 +91,7 @@ export function Header() {
     pendingWebOrders.length + lowStockProducts.length + unbilledOrders.length;
 
   return (
-    <header className="h-[52px] bg-brand border-b border-black/10 px-4 sm:px-6 flex items-center justify-between sticky top-0 z-30">
+    <header className="h-[52px] bg-black border-b border-[#262626] px-4 sm:px-6 flex items-center justify-between sticky top-0 z-30 text-white">
       {/* Lado Izquierdo: Botón Menú Móvil + Logo de la empresa + Indicador de Empresa */}
       <div className="flex items-center gap-2 sm:gap-3">
         {/* Botón de Menú Móvil (solo en móviles y tablets: lg:hidden) */}
@@ -99,7 +99,7 @@ export function Header() {
           type="button"
           onClick={toggleMobileSidebar}
           aria-label="Abrir menú de navegación"
-          className="lg:hidden p-1.5 -ml-1 text-gray-900 hover:text-black hover:bg-black/10 rounded-lg transition-colors cursor-pointer"
+          className="lg:hidden p-1.5 -ml-1 text-white hover:bg-white/10 rounded-lg transition-colors cursor-pointer"
         >
           <TbMenu2 size={20} />
         </button>
@@ -107,24 +107,24 @@ export function Header() {
         {/* Logo de la empresa (solo visible en móviles y tablets: lg:hidden) */}
         <Link 
           href="/admin" 
-          className="lg:hidden w-7 h-7 rounded-lg bg-white/80 text-gray-900 font-black text-sm flex items-center justify-center border border-black/10 shadow-2xs hover:bg-white transition-opacity shrink-0"
+          className="lg:hidden w-7 h-7 rounded-lg bg-[#de2a2a] text-white font-black text-sm flex items-center justify-center shadow-2xs hover:bg-red-700 transition-colors shrink-0"
           title="Ir al Dashboard"
           aria-label="Inicio del Dashboard"
         >
-          {company?.name ? company.name.charAt(0).toUpperCase() : 'M'}
+          {company?.name ? company.name.charAt(0).toUpperCase() : 'C'}
         </Link>
 
         {/* Divisor vertical fino (solo en móviles y tablets) */}
-        <div className="lg:hidden h-4.5 w-px bg-black/15 shrink-0" />
+        <div className="lg:hidden h-4.5 w-px bg-white/15 shrink-0" />
 
         {/* Identificador de Empresa */}
         <div 
-          className="flex items-center gap-2 px-2.5 py-1.5 rounded-lg border border-black/10 bg-black/5 text-xs font-semibold text-gray-900 select-none"
+          className="flex items-center gap-2 px-2.5 py-1.5 rounded-lg border border-[#262626] bg-white/5 text-xs font-semibold text-white select-none"
           title={company?.legalName || company?.name || 'Empresa'}
         >
-          <TbBuilding size={15} className="text-gray-800 shrink-0" />
-          <span className="truncate max-w-[160px] sm:max-w-[240px] font-bold text-gray-900">
-            {company?.name || 'MercadoAdmin'}
+          <TbBuilding size={15} className="text-[#de2a2a] shrink-0" />
+          <span className="truncate max-w-[160px] sm:max-w-[240px] font-bold text-white">
+            {company?.name || 'Cooperativa Gourmet'}
           </span>
         </div>
       </div>
@@ -136,9 +136,9 @@ export function Header() {
           href="/"
           title="Ver tienda"
           aria-label="Ver tienda"
-          className="flex items-center gap-1.5 text-xs font-semibold text-gray-900 hover:text-black border border-black/10 p-2 lg:px-3 lg:py-1.5 rounded-lg bg-black/5 hover:bg-black/10 transition-colors cursor-pointer"
+          className="flex items-center gap-1.5 text-xs font-semibold text-white border border-white/20 p-2 lg:px-3 lg:py-1.5 rounded-lg bg-white/5 hover:bg-[#de2a2a] hover:border-[#de2a2a] transition-colors cursor-pointer"
         >
-          <TbBuildingStore size={16} className="text-gray-800 shrink-0" />
+          <TbBuildingStore size={16} className="shrink-0" />
           <span className="hidden lg:inline">Ver tienda</span>
         </Link>
 
@@ -152,27 +152,27 @@ export function Header() {
               if (nextState) loadAlerts();
             }}
             aria-label="Notificaciones"
-            className="relative p-2 text-gray-900 hover:text-black hover:bg-black/10 rounded-lg transition-colors cursor-pointer"
+            className="relative p-2 text-white hover:bg-white/10 rounded-lg transition-colors cursor-pointer"
           >
             <TbBell size={20} />
             {totalAlerts > 0 ? (
-              <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 bg-rose-600 text-white text-[10px] font-black rounded-full flex items-center justify-center border-2 border-brand">
+              <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 bg-[#de2a2a] text-white text-[10px] font-black rounded-full flex items-center justify-center border-2 border-black">
                 {totalAlerts > 99 ? '99+' : totalAlerts}
               </span>
             ) : (
-              <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-emerald-600 rounded-full border border-brand" />
+              <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-[#2e9e7b] rounded-full border border-black" />
             )}
           </button>
 
           {notifOpen && (
-            <div className="absolute right-0 mt-2 w-80 sm:w-96 bg-white rounded-2xl shadow-xl border border-gray-200 overflow-hidden z-50 animate-in fade-in zoom-in-95 duration-150">
+            <div className="absolute right-0 mt-2 w-80 sm:w-96 bg-white text-[#242424] rounded-2xl shadow-xl border border-gray-200 overflow-hidden z-50 animate-in fade-in zoom-in-95 duration-150">
               {/* Header del panel de notificaciones */}
-              <div className="px-4 py-3 bg-gray-50/80 border-b border-gray-100 flex items-center justify-between">
+              <div className="px-4 py-3 bg-black text-white border-b border-[#262626] flex items-center justify-between">
                 <div>
-                  <h3 className="text-xs font-bold text-gray-900 uppercase tracking-wide">
+                  <h3 className="text-xs font-bold text-white uppercase tracking-wide">
                     Centro de Alertas
                   </h3>
-                  <p className="text-[11px] text-gray-500">
+                  <p className="text-[11px] text-neutral-300">
                     {totalAlerts > 0
                       ? `${totalAlerts} alerta(s) requieren atención`
                       : 'Todo tu negocio está al día'}
@@ -182,7 +182,7 @@ export function Header() {
                   type="button"
                   onClick={loadAlerts}
                   disabled={loadingAlerts}
-                  className="p-1.5 text-gray-500 hover:text-gray-900 hover:bg-gray-200/60 rounded-lg transition-colors cursor-pointer"
+                  className="p-1.5 text-neutral-300 hover:text-white hover:bg-white/10 rounded-lg transition-colors cursor-pointer"
                   title="Actualizar alertas"
                 >
                   <TbRefresh size={15} className={loadingAlerts ? 'animate-spin' : ''} />
@@ -296,7 +296,7 @@ export function Header() {
         </div>
 
         {/* Clerk User Button */}
-        <div className="flex items-center pl-2 border-l border-black/15">
+        <div className="flex items-center pl-2 border-l border-white/15">
           <Show when="signed-in">
             <UserButton 
               appearance={{

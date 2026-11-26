@@ -11,7 +11,7 @@ export default function AdminLayout({
 }) {
   return (
     <AdminGuard>
-      <div className="admin-fluent min-h-screen bg-[#ebebeb] text-[#242424] font-sans">
+      <div className="admin-fluent min-h-screen bg-[#ebebeb] text-[#242424] font-store">
         <Sidebar />
         <div className="flex flex-col min-w-0 lg:pl-56">
           <Header />

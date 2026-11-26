@@ -4,7 +4,7 @@ import { TbArrowLeft } from 'react-icons/tb';
 import { UsersManager } from '../_components/UsersManager';
 
 export const metadata = {
-  title: 'Usuarios y Roles | MercadoAdmin',
+  title: 'Usuarios y Roles | Panel Admin',
   description: 'Gestiona los niveles de acceso del personal y roles del sistema.',
 };
 

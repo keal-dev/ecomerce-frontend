@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import {
   TbBrandWhatsapp,
   TbMail,
-  TbPhone,
   TbMapPin,
   TbClock,
   TbSend,
@@ -36,7 +35,6 @@ export const HelpContactChannels = ({ company }: HelpContactChannelsProps) => {
     e.preventDefault();
     setIsSending(true);
 
-    // Simular envío de consulta con feedback inmediato
     setTimeout(() => {
       setIsSending(false);
       setSubmitted(true);
@@ -51,13 +49,13 @@ export const HelpContactChannels = ({ company }: HelpContactChannelsProps) => {
   };
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-200/90 shadow-xs p-6 sm:p-8">
-      <div className="mb-6">
-        <h2 className="text-lg sm:text-xl font-bold text-gray-900 tracking-tight">
+    <div className="bg-white rounded-none border border-[#d9d9d9] p-6 sm:p-8">
+      <div className="mb-6 pb-4 border-b border-[#d9d9d9]">
+        <h2 className="font-display text-lg sm:text-xl font-extrabold uppercase tracking-tight text-black">
           ¿Aún necesitas ayuda? Contáctanos
         </h2>
-        <p className="text-xs sm:text-sm text-gray-500 mt-1 font-light">
-          Nuestro equipo de atención al cliente está listo para resolver tus dudas de inmediato
+        <p className="text-xs sm:text-sm text-neutral-600 mt-1">
+          Nuestro equipo de atención al cliente está listo para resolver tus dudas de inmediato.
         </p>
       </div>
 
@@ -69,18 +67,18 @@ export const HelpContactChannels = ({ company }: HelpContactChannelsProps) => {
             href={`https://wa.me/${cleanPhone}?text=Hola,%20necesito%20ayuda%20con%20mi%20compra`}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-4 p-4 rounded-xl border border-emerald-100 bg-emerald-50/50 hover:bg-emerald-50 transition-all group"
+            className="flex items-center gap-4 p-4 rounded-none border border-[#2e9e7b]/40 bg-[#2e9e7b]/5 hover:border-[#2e9e7b] transition-all group"
           >
-            <div className="w-12 h-12 rounded-xl bg-emerald-500 text-white flex items-center justify-center shrink-0 shadow-xs group-hover:scale-105 transition-transform">
+            <div className="w-12 h-12 rounded-none bg-[#2e9e7b] text-white flex items-center justify-center shrink-0">
               <TbBrandWhatsapp size={26} />
             </div>
             <div>
-              <span className="text-xs font-bold text-emerald-800">
+              <span className="text-[11px] font-bold uppercase tracking-wider text-[#2e9e7b]">
                 Atención vía WhatsApp
               </span>
-              <p className="text-sm font-semibold text-gray-900">{phone}</p>
-              <span className="text-[11px] text-emerald-600 font-medium">
-                Respuesta casi inmediata →
+              <p className="text-sm font-extrabold text-black">{phone}</p>
+              <span className="text-[11px] text-neutral-600 font-medium">
+                Respuesta inmediata →
               </span>
             </div>
           </a>
@@ -88,68 +86,72 @@ export const HelpContactChannels = ({ company }: HelpContactChannelsProps) => {
           {/* Email */}
           <a
             href={`mailto:${email}?subject=Consulta%20desde%20Centro%20de%20Ayuda`}
-            className="flex items-center gap-4 p-4 rounded-xl border border-blue-100 bg-blue-50/50 hover:bg-blue-50 transition-all group"
+            className="flex items-center gap-4 p-4 rounded-none border border-[#d9d9d9] bg-[#f8f8f8] hover:border-black transition-all group"
           >
-            <div className="w-12 h-12 rounded-xl bg-[#3483fa] text-white flex items-center justify-center shrink-0 shadow-xs group-hover:scale-105 transition-transform">
+            <div className="w-12 h-12 rounded-none bg-black text-white flex items-center justify-center shrink-0 group-hover:bg-[#de2a2a] transition-colors">
               <TbMail size={24} />
             </div>
             <div>
-              <span className="text-xs font-bold text-blue-800">
+              <span className="text-[11px] font-bold uppercase tracking-wider text-neutral-500">
                 Correo Electrónico
               </span>
-              <p className="text-sm font-semibold text-gray-900">{email}</p>
-              <span className="text-[11px] text-blue-600 font-medium">
+              <p className="text-sm font-extrabold text-black">{email}</p>
+              <span className="text-[11px] text-[#de2a2a] font-bold">
                 Escríbenos en cualquier momento →
               </span>
             </div>
           </a>
 
           {/* Horario y Ubicación */}
-          <div className="p-4 rounded-xl border border-gray-100 bg-gray-50/80 space-y-3">
+          <div className="p-4 rounded-none border border-[#d9d9d9] bg-[#f8f8f8] space-y-3">
             <div className="flex items-start gap-3">
-              <TbClock size={18} className="text-gray-500 shrink-0 mt-0.5" />
+              <TbClock size={18} className="text-[#de2a2a] shrink-0 mt-0.5" />
               <div>
-                <p className="text-xs font-bold text-gray-800">Horario de atención</p>
-                <p className="text-[11px] text-gray-500">
+                <p className="text-xs font-bold uppercase tracking-wider text-black">
+                  Horario de atención
+                </p>
+                <p className="text-[11px] text-neutral-600 mt-0.5">
                   Lunes a Sábado: 8:30 AM – 7:30 PM (Domingos hasta las 2:00 PM)
                 </p>
               </div>
             </div>
 
-            <div className="flex items-start gap-3 pt-2 border-t border-gray-200/60">
-              <TbMapPin size={18} className="text-gray-500 shrink-0 mt-0.5" />
+            <div className="flex items-start gap-3 pt-2 border-t border-[#d9d9d9]">
+              <TbMapPin size={18} className="text-[#de2a2a] shrink-0 mt-0.5" />
               <div>
-                <p className="text-xs font-bold text-gray-800">Oficina Principal</p>
-                <p className="text-[11px] text-gray-500">{address}</p>
+                <p className="text-xs font-bold uppercase tracking-wider text-black">
+                  Oficina Principal
+                </p>
+                <p className="text-[11px] text-neutral-600 mt-0.5">{address}</p>
               </div>
             </div>
           </div>
         </div>
 
         {/* Formulario de consulta rápida */}
-        <div className="lg:col-span-7 bg-gray-50/60 rounded-xl p-5 sm:p-6 border border-gray-100">
-          <h3 className="text-sm font-bold text-gray-900 mb-1">
+        <div className="lg:col-span-7 bg-[#f8f8f8] rounded-none p-5 sm:p-6 border border-[#d9d9d9]">
+          <h3 className="font-display text-sm font-extrabold uppercase tracking-tight text-black mb-1">
             Envíanos un mensaje directo
           </h3>
-          <p className="text-xs text-gray-500 font-light mb-4">
+          <p className="text-xs text-neutral-600 mb-4">
             Te responderemos al correo o teléfono indicado a la brevedad.
           </p>
 
           {submitted ? (
-            <div className="p-6 bg-emerald-50 rounded-xl border border-emerald-200 text-center animate-in fade-in duration-200">
-              <div className="w-12 h-12 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto mb-2.5">
+            <div className="p-6 bg-[#2e9e7b]/10 rounded-none border border-[#2e9e7b] text-center animate-in fade-in duration-200">
+              <div className="w-12 h-12 rounded-none bg-[#2e9e7b] text-white flex items-center justify-center mx-auto mb-2.5">
                 <TbCircleCheck size={28} />
               </div>
-              <h4 className="text-sm font-bold text-emerald-900">
+              <h4 className="font-display text-sm font-extrabold uppercase text-black">
                 ¡Mensaje recibido con éxito!
               </h4>
-              <p className="text-xs text-emerald-700 mt-1 max-w-xs mx-auto">
+              <p className="text-xs text-neutral-700 mt-1 max-w-xs mx-auto">
                 Hemos asignado tu consulta a un asesor. Te contactaremos pronto.
               </p>
               <button
                 type="button"
                 onClick={() => setSubmitted(false)}
-                className="mt-4 text-xs font-semibold text-emerald-800 underline cursor-pointer"
+                className="mt-4 text-xs font-bold uppercase tracking-wider text-[#de2a2a] underline cursor-pointer"
               >
                 Enviar otra consulta
               </button>
@@ -158,7 +160,7 @@ export const HelpContactChannels = ({ company }: HelpContactChannelsProps) => {
             <form onSubmit={handleSubmit} className="space-y-3">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-[11px] font-medium text-gray-700 mb-1">
+                  <label className="block text-[11px] font-bold uppercase tracking-wider text-neutral-700 mb-1">
                     Tu nombre completo *
                   </label>
                   <input
@@ -167,12 +169,12 @@ export const HelpContactChannels = ({ company }: HelpContactChannelsProps) => {
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     placeholder="Ej. Juan Pérez"
-                    className="w-full px-3 py-2 text-xs bg-white border border-gray-200 rounded-lg outline-none focus:border-[#3483fa]"
+                    className="w-full px-3 py-2 text-xs bg-white border border-[#d9d9d9] rounded-none outline-none focus:border-black"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-medium text-gray-700 mb-1">
+                  <label className="block text-[11px] font-bold uppercase tracking-wider text-neutral-700 mb-1">
                     Correo electrónico *
                   </label>
                   <input
@@ -181,20 +183,20 @@ export const HelpContactChannels = ({ company }: HelpContactChannelsProps) => {
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     placeholder="ejemplo@correo.com"
-                    className="w-full px-3 py-2 text-xs bg-white border border-gray-200 rounded-lg outline-none focus:border-[#3483fa]"
+                    className="w-full px-3 py-2 text-xs bg-white border border-[#d9d9d9] rounded-none outline-none focus:border-black"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-[11px] font-medium text-gray-700 mb-1">
+                  <label className="block text-[11px] font-bold uppercase tracking-wider text-neutral-700 mb-1">
                     Motivo de contacto
                   </label>
                   <select
                     value={formData.subject}
                     onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-                    className="w-full px-3 py-2 text-xs bg-white border border-gray-200 rounded-lg outline-none focus:border-[#3483fa]"
+                    className="w-full px-3 py-2 text-xs bg-white border border-[#d9d9d9] rounded-none outline-none focus:border-black"
                   >
                     <option value="general">Consulta general</option>
                     <option value="shipping">Estado o rastreo de envío</option>
@@ -205,21 +207,21 @@ export const HelpContactChannels = ({ company }: HelpContactChannelsProps) => {
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-medium text-gray-700 mb-1">
+                  <label className="block text-[11px] font-bold uppercase tracking-wider text-neutral-700 mb-1">
                     N° de Pedido (opcional)
                   </label>
                   <input
                     type="text"
                     value={formData.orderNumber}
                     onChange={(e) => setFormData({ ...formData, orderNumber: e.target.value })}
-                    placeholder="Ej. #PED-4821"
-                    className="w-full px-3 py-2 text-xs bg-white border border-gray-200 rounded-lg outline-none focus:border-[#3483fa]"
+                    placeholder="Ej. ORD-2026-4821"
+                    className="w-full px-3 py-2 text-xs bg-white border border-[#d9d9d9] rounded-none outline-none focus:border-black"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-[11px] font-medium text-gray-700 mb-1">
+                <label className="block text-[11px] font-bold uppercase tracking-wider text-neutral-700 mb-1">
                   ¿Cómo podemos ayudarte? *
                 </label>
                 <textarea
@@ -228,14 +230,14 @@ export const HelpContactChannels = ({ company }: HelpContactChannelsProps) => {
                   value={formData.message}
                   onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                   placeholder="Detalla tu consulta aquí..."
-                  className="w-full px-3 py-2 text-xs bg-white border border-gray-200 rounded-lg outline-none focus:border-[#3483fa] resize-none"
+                  className="w-full px-3 py-2 text-xs bg-white border border-[#d9d9d9] rounded-none outline-none focus:border-black resize-none"
                 />
               </div>
 
               <button
                 type="submit"
                 disabled={isSending}
-                className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-[#3483fa] hover:bg-[#2968c8] text-white text-xs font-semibold rounded-lg shadow-xs transition-colors cursor-pointer disabled:opacity-50"
+                className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 bg-[#de2a2a] hover:bg-red-700 text-white text-xs font-bold uppercase tracking-widest rounded-none transition-colors cursor-pointer disabled:opacity-50"
               >
                 <TbSend size={15} />
                 <span>{isSending ? 'Enviando consulta...' : 'Enviar mensaje'}</span>

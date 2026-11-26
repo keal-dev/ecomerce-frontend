@@ -48,7 +48,7 @@ export const MainCarousel = () => {
 
   return (
     <div
-      className="relative w-full h-[360px] sm:h-[430px] md:h-[500px] lg:h-[530px] group overflow-hidden bg-brand/30"
+      className="relative w-full h-[260px] sm:h-[330px] md:h-[390px] lg:h-[420px] group overflow-hidden bg-black"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -87,61 +87,66 @@ export const MainCarousel = () => {
             </div>
           ))
         ) : (
-          /* Slide de respaldo por defecto cuando aún no se suben banners */
-          <div className="min-w-full h-full flex-shrink-0 bg-brand flex items-center justify-center">
-            <div className="max-w-4xl mx-auto px-6 text-center text-[#333]">
-              <span className="inline-block px-3 py-1 bg-white/80 rounded-full text-xs font-bold mb-3 uppercase tracking-wider text-gray-800">
-                Bienvenido a nuestra tienda
+          /* Slide de respaldo editorial cooperativa gourmet */
+          <div className="min-w-full h-full flex-shrink-0 bg-gradient-to-br from-black via-[#121212] to-[#230909] flex items-center justify-center relative">
+            <div className="max-w-4xl mx-auto px-6 text-center text-white">
+              <span className="inline-block px-3 py-1 bg-[#de2a2a] text-white text-[11px] font-bold mb-4 uppercase tracking-[0.2em]">
+                PRODUCTOS DE ORIGEN • DELIVERY EN LIMA Y PERÚ
               </span>
-              <h1 className="text-3xl md:text-5xl font-black mb-3 tracking-tight">
-                Las mejores ofertas y promociones
+              <h1 className="font-display text-3xl sm:text-5xl lg:text-6xl font-extrabold mb-4 tracking-tight uppercase leading-none">
+                VINOS, CHOCOLATES, CACAO Y CAFÉ DE ORIGEN
               </h1>
-              <p className="text-sm md:text-lg mb-6 font-medium text-gray-700">
-                Envíos a todo el país y compras seguras en cuotas.
+              <p className="text-sm md:text-base mb-8 font-normal text-neutral-300 max-w-xl mx-auto">
+                Vinos seleccionados, chocolates finos, derivados del cacao y café de especialidad elaborados por nuestra cooperativa con entrega rápida y comprobante electrónico.
               </p>
-              <Link
-                href="/categories"
-                className="inline-block bg-[#3483fa] hover:bg-blue-600 text-white font-bold py-2.5 px-6 rounded-lg shadow-sm transition-all"
-              >
-                Explorar Catálogo
-              </Link>
+              <div className="flex flex-wrap items-center justify-center gap-3">
+                <Link
+                  href="/categories"
+                  className="inline-block bg-[#de2a2a] hover:bg-red-700 text-white font-bold text-xs uppercase tracking-widest py-3.5 px-8 rounded-none transition-colors"
+                >
+                  EXPLORAR CATÁLOGO
+                </Link>
+                <Link
+                  href="/ofertas"
+                  className="inline-block bg-white hover:bg-neutral-200 text-black font-bold text-xs uppercase tracking-widest py-3.5 px-8 rounded-none transition-colors"
+                >
+                  VER OFERTAS
+                </Link>
+              </div>
             </div>
           </div>
         )}
       </div>
 
-      {/* Degradado inferior para fundir con el fondo de la página */}
-      <div className="absolute bottom-0 left-0 w-full h-16 md:h-24 bg-gradient-to-t from-[#f3f4f6] to-transparent pointer-events-none z-10" />
-
-      {/* Flechas de navegación (solo si hay más de 1 slide) */}
+      {/* Flechas de navegación editoriales cuadradas */}
       {totalSlides > 1 && (
         <>
           <button
             onClick={prevSlide}
-            className="absolute left-3 md:left-4 top-1/2 -translate-y-1/2 z-20 bg-white/90 hover:bg-white text-gray-800 p-2 md:p-3 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300 transform -translate-x-3 group-hover:translate-x-0 cursor-pointer"
+            className="absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-white text-black hover:bg-[#de2a2a] hover:text-white border border-black/15 w-11 h-11 flex items-center justify-center rounded-none shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-200 cursor-pointer"
             aria-label="Anterior slide"
           >
-            <TbChevronLeft className="w-5 h-5 md:w-7 md:h-7" />
+            <TbChevronLeft className="w-5 h-5" />
           </button>
 
           <button
             onClick={nextSlide}
-            className="absolute right-3 md:right-4 top-1/2 -translate-y-1/2 z-20 bg-white/90 hover:bg-white text-gray-800 p-2 md:p-3 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-3 group-hover:translate-x-0 cursor-pointer"
+            className="absolute right-4 top-1/2 -translate-y-1/2 z-20 bg-white text-black hover:bg-[#de2a2a] hover:text-white border border-black/15 w-11 h-11 flex items-center justify-center rounded-none shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-200 cursor-pointer"
             aria-label="Siguiente slide"
           >
-            <TbChevronRight className="w-5 h-5 md:w-7 md:h-7" />
+            <TbChevronRight className="w-5 h-5" />
           </button>
 
-          {/* Indicadores de Puntos */}
-          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex gap-2">
+          {/* Barras indicadoras inferiores */}
+          <div className="absolute bottom-5 left-1/2 -translate-x-1/2 z-20 flex gap-2">
             {Array.from({ length: totalSlides }).map((_, index) => (
               <button
                 key={index}
                 onClick={() => setCurrentSlide(index)}
-                className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
+                className={`h-1 rounded-none transition-all duration-300 cursor-pointer ${
                   currentSlide === index
-                    ? 'bg-[#3483fa] w-6'
-                    : 'bg-white/70 hover:bg-white w-2 shadow-xs'
+                    ? 'bg-[#de2a2a] w-8'
+                    : 'bg-white/60 hover:bg-white w-5'
                 }`}
                 aria-label={`Ir al slide ${index + 1}`}
               />

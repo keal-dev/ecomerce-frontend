@@ -53,11 +53,11 @@ const FULL_MONTH_LABELS = [
 ];
 
 const FLUENT_PALETTE = [
-  '#0f6cbd',
-  '#107c10',
-  '#8764b8',
+  '#de2a2a',
+  '#111111',
+  '#2e9e7b',
   '#ca5010',
-  '#d13438',
+  '#6f719b',
 ];
 
 interface MonthStat {
@@ -369,11 +369,11 @@ export function SalesAnalyticsSection({
 
     const total = yearOrdersAll.length;
     const defs = [
-      { key: 'delivered', label: 'Entregados', color: '#107c10' },
-      { key: 'pending', label: 'Confirmados', color: '#0f6cbd' },
+      { key: 'delivered', label: 'Entregados', color: '#2e9e7b' },
+      { key: 'pending', label: 'Confirmados', color: '#111111' },
       { key: 'preparing', label: 'En Preparación', color: '#ca5010' },
-      { key: 'shipping', label: 'En Camino', color: '#8764b8' },
-      { key: 'cancelled', label: 'Cancelados', color: '#d13438' },
+      { key: 'shipping', label: 'En Camino', color: '#6f719b' },
+      { key: 'cancelled', label: 'Cancelados', color: '#de2a2a' },
     ];
 
     return defs
@@ -446,7 +446,7 @@ export function SalesAnalyticsSection({
         {/* Header & Controls */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-4 border-b border-gray-100">
           <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-lg bg-[#0f6cbd]/10 text-[#0f6cbd] flex items-center justify-center shrink-0">
+            <div className="w-9 h-9 rounded-lg bg-[#de2a2a]/10 text-[#de2a2a] flex items-center justify-center shrink-0">
               <TbChartBar size={20} />
             </div>
             <div>
@@ -475,7 +475,7 @@ export function SalesAnalyticsSection({
                   onClick={() => setMetric(item.key)}
                   className={`px-2.5 py-1 rounded font-semibold transition-colors cursor-pointer ${
                     metric === item.key
-                      ? 'bg-white text-[#0f6cbd] shadow-2xs'
+                      ? 'bg-white text-[#de2a2a] shadow-2xs'
                       : 'text-[#5c5c5c] hover:text-[#242424]'
                   }`}
                 >
@@ -492,7 +492,7 @@ export function SalesAnalyticsSection({
                 title="Gráfico de barras"
                 className={`p-1.5 rounded transition-colors cursor-pointer ${
                   chartType === 'bar'
-                    ? 'bg-white text-[#0f6cbd] shadow-2xs'
+                    ? 'bg-white text-[#de2a2a] shadow-2xs'
                     : 'text-[#5c5c5c] hover:text-[#242424]'
                 }`}
               >
@@ -504,7 +504,7 @@ export function SalesAnalyticsSection({
                 title="Gráfico de área"
                 className={`p-1.5 rounded transition-colors cursor-pointer ${
                   chartType === 'area'
-                    ? 'bg-white text-[#0f6cbd] shadow-2xs'
+                    ? 'bg-white text-[#de2a2a] shadow-2xs'
                     : 'text-[#5c5c5c] hover:text-[#242424]'
                 }`}
               >
@@ -558,7 +558,7 @@ export function SalesAnalyticsSection({
 
           <div className="p-3 rounded-lg bg-[#fafafa] border border-[#ebebeb]">
             <span className="text-[11px] font-medium text-[#5c5c5c] flex items-center gap-1">
-              <TbAward size={13} className="text-[#0f6cbd]" />
+              <TbAward size={13} className="text-[#de2a2a]" />
               <span>Mejor Mes</span>
             </span>
             <span className="text-sm font-bold text-[#242424] mt-0.5 block truncate">
@@ -618,8 +618,8 @@ export function SalesAnalyticsSection({
               >
                 <defs>
                   <linearGradient id="fluentBarGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#0f6cbd" />
-                    <stop offset="100%" stopColor="#2886de" stopOpacity="0.85" />
+                    <stop offset="0%" stopColor="#18181b" />
+                    <stop offset="100%" stopColor="#3f3f46" stopOpacity="0.9" />
                   </linearGradient>
                   <linearGradient
                     id="fluentBarHoverGrad"
@@ -628,12 +628,12 @@ export function SalesAnalyticsSection({
                     x2="0"
                     y2="1"
                   >
-                    <stop offset="0%" stopColor="#0f548c" />
-                    <stop offset="100%" stopColor="#0f6cbd" />
+                    <stop offset="0%" stopColor="#b91c1c" />
+                    <stop offset="100%" stopColor="#de2a2a" />
                   </linearGradient>
                   <linearGradient id="fluentAreaGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#0f6cbd" stopOpacity="0.28" />
-                    <stop offset="100%" stopColor="#0f6cbd" stopOpacity="0.02" />
+                    <stop offset="0%" stopColor="#de2a2a" stopOpacity="0.28" />
+                    <stop offset="100%" stopColor="#de2a2a" stopOpacity="0.02" />
                   </linearGradient>
                 </defs>
 
@@ -729,7 +729,7 @@ export function SalesAnalyticsSection({
                               width={colW - 4}
                               height={plotH}
                               rx={6}
-                              fill="#0f6cbd"
+                              fill="#de2a2a"
                               fillOpacity={0.05}
                             />
                           )}
@@ -753,7 +753,7 @@ export function SalesAnalyticsSection({
                               textAnchor="middle"
                               fontSize="10"
                               fontWeight="700"
-                              fill={isHovered ? '#0f548c' : '#242424'}
+                              fill={isHovered ? '#b91c1c' : '#242424'}
                             >
                               {formatCompactAxis(
                                 pt.val,
@@ -767,7 +767,7 @@ export function SalesAnalyticsSection({
                               cx={pt.x}
                               cy={plotBottom + 24}
                               r={2.5}
-                              fill="#0f6cbd"
+                              fill="#de2a2a"
                             />
                           )}
                         </g>
@@ -782,7 +782,7 @@ export function SalesAnalyticsSection({
                         <path
                           d={linePath}
                           fill="none"
-                          stroke="#0f6cbd"
+                          stroke="#de2a2a"
                           strokeWidth={2.5}
                           strokeLinecap="round"
                         />
@@ -800,7 +800,7 @@ export function SalesAnalyticsSection({
                               x2={pt.x}
                               y1={padT}
                               y2={plotBottom}
-                              stroke="#0f6cbd"
+                              stroke="#de2a2a"
                               strokeWidth={1}
                               strokeDasharray="3 3"
                               strokeOpacity={0.5}
@@ -811,8 +811,8 @@ export function SalesAnalyticsSection({
                               cx={pt.x}
                               cy={pt.y}
                               r={isHovered ? 5.5 : 3.5}
-                              fill={isHovered ? '#0f6cbd' : '#ffffff'}
-                              stroke="#0f6cbd"
+                              fill={isHovered ? '#de2a2a' : '#ffffff'}
+                              stroke="#de2a2a"
                               strokeWidth={2}
                             />
                           )}
@@ -821,7 +821,7 @@ export function SalesAnalyticsSection({
                               cx={pt.x}
                               cy={plotBottom + 24}
                               r={2.5}
-                              fill="#0f6cbd"
+                              fill="#de2a2a"
                             />
                           )}
                         </g>
@@ -844,7 +844,7 @@ export function SalesAnalyticsSection({
                         fontSize="11"
                         fontWeight={isHovered || isCurrent ? '700' : '500'}
                         fill={
-                          isHovered || isCurrent ? '#0f6cbd' : '#5c5c5c'
+                          isHovered || isCurrent ? '#de2a2a' : '#5c5c5c'
                         }
                       >
                         {pt.stat.label}
@@ -937,7 +937,7 @@ export function SalesAnalyticsSection({
         <div>
           <div className="flex items-center justify-between gap-2 pb-3 border-b border-gray-100">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-[#0f6cbd]/10 text-[#0f6cbd] flex items-center justify-center shrink-0">
+              <div className="w-8 h-8 rounded-lg bg-[#de2a2a]/10 text-[#de2a2a] flex items-center justify-center shrink-0">
                 <TbChartPie size={18} />
               </div>
               <div>
@@ -969,7 +969,7 @@ export function SalesAnalyticsSection({
                 }}
                 className={`py-1.5 rounded font-semibold transition-colors cursor-pointer ${
                   rightTab === t.key
-                    ? 'bg-white text-[#0f6cbd] shadow-2xs'
+                    ? 'bg-white text-[#de2a2a] shadow-2xs'
                     : 'text-[#5c5c5c] hover:text-[#242424]'
                 }`}
               >
@@ -998,13 +998,13 @@ export function SalesAnalyticsSection({
                         <span className="font-semibold text-[#242424] truncate">
                           {idx + 1}. {prod.title}
                         </span>
-                        <span className="font-bold text-[#0f6cbd] shrink-0">
+                        <span className="font-bold text-[#de2a2a] shrink-0">
                           {currencySymbol} {prod.revenue.toFixed(2)}
                         </span>
                       </div>
                       <div className="w-full h-2 rounded-full bg-[#f0f0f0] overflow-hidden">
                         <div
-                          className="h-full rounded-full bg-[#0f6cbd] transition-all duration-300"
+                          className="h-full rounded-full bg-[#de2a2a] transition-all duration-300"
                           style={{ width: `${pct}%` }}
                         />
                       </div>
@@ -1076,7 +1076,7 @@ export function SalesAnalyticsSection({
                         <span className="text-base font-black text-[#242424] mt-0.5">
                           {activeSlice.pct.toFixed(0)}%
                         </span>
-                        <span className="text-[10px] font-bold text-[#0f6cbd]">
+                        <span className="text-[10px] font-bold text-[#de2a2a]">
                           {rightTab === 'channels'
                             ? formatCompactAxis(
                                 activeSlice.value,

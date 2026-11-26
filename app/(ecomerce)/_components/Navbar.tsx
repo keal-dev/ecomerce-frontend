@@ -14,6 +14,7 @@ import {
   TbChevronRight,
 } from 'react-icons/tb';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import {
   SignInButton,
   SignUpButton,
@@ -31,6 +32,7 @@ import { getMyOrders } from '@/services/order.service';
 import { Order } from '@/types/order.types';
 
 export const Navbar = () => {
+  const pathname = usePathname();
   const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [notifOpen, setNotifOpen] = useState(false);
@@ -41,6 +43,7 @@ export const Navbar = () => {
   const { currentUser } = useAuthStore();
   const { company, fetchCompany } = useCompanyStore();
   const totalCartItems = useCartStore((state) => state.getTotalItems());
+  const openDrawer = useCartStore((state) => state.openDrawer);
   const totalFavorites = useFavoritesStore((state) => state.favoriteIds.length);
 
   const loadCustomerOrders = useCallback(async () => {
@@ -82,35 +85,14 @@ export const Navbar = () => {
   );
 
   return (
-    <header className="w-full relative z-50">
-      {/* Sección fina encima del header */}
-      <div className="bg-slate-950 text-slate-200 text-[11px] py-1.5 px-4 border-b border-slate-800">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shrink-0" />
-            <span className="font-medium text-slate-200">
-              Envíos garantizados a todo el país • Garantía Oficial • Comprobantes SUNAT
-            </span>
-          </div>
-
-          <div className="hidden sm:flex items-center gap-4 text-slate-400 text-[11px]">
-            <Link href="/ayuda" className="hover:text-white transition-colors">
-              Centro de Ayuda
-            </Link>
-            <span>•</span>
-            <Link href="/rastreo" className="hover:text-white transition-colors">
-              Rastrea tu pedido
-            </Link>
-          </div>
-        </div>
-      </div>
-
-      <div className="w-full py-2 shadow-sm bg-brand transition-colors duration-300">
+    <header className="w-full sticky top-0 z-40 bg-black text-white border-b border-[#262626]">
+      {/* Fila principal */}
+      <div className="w-full py-5 sm:py-6 bg-black">
         <div className="max-w-7xl mx-auto px-4 md:px-7 relative">
 
-        {/* 1. Mobile Search Overlay (se despliega a pantalla completa al tocar la lupa) */}
+        {/* Mobile Search Overlay */}
         {isMobileSearchOpen && (
-          <div className="md:hidden fixed inset-0 z-50 bg-white flex flex-col animate-in fade-in duration-150">
+          <div className="md:hidden fixed inset-0 z-50 bg-white text-[#020202] flex flex-col animate-in fade-in duration-150">
             <PredictiveSearchBar
               isMobileModal={true}
               onCloseMobile={() => setIsMobileSearchOpen(false)}
@@ -118,156 +100,110 @@ export const Navbar = () => {
           </div>
         )}
 
-        {/* 2. Layout Grid: 2 filas x 3 columnas (Col 1: Auto, Col 2: 1fr alineado a la izquierda, Col 3: Auto derecha) */}
-        <div className="grid grid-cols-[auto_1fr_auto] grid-rows-[auto_auto] items-center gap-x-3 md:gap-x-6 lg:gap-x-8 gap-y-1.5">
-
-          {/* FILA 1, COLUMNA 1: Logo & Botón Menú Móvil */}
-          <div className="col-start-1 row-start-1 flex items-center gap-1 sm:gap-2 h-9">
+        <div className="flex items-center justify-between gap-4 md:gap-6">
+          {/* Izquierda: Menú móvil + Logo */}
+          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
             <button
               type="button"
               onClick={() => setIsMobileMenuOpen(true)}
               aria-label="Abrir menú"
-              className="lg:hidden p-1.5 -ml-1 text-gray-800 hover:bg-black/5 rounded-md cursor-pointer transition-colors"
+              className="lg:hidden p-1.5 -ml-1 text-white hover:bg-white/10 cursor-pointer transition-colors"
             >
               <TbMenu2 size={24} />
             </button>
 
-            <Link href="/" className="flex items-center gap-2 min-w-0">
+            <Link href="/" className="flex items-center gap-2.5 min-w-0">
               {company?.logoUrl && (
-                <div className="h-7.5 sm:h-7.7 md:h-7.5 flex items-center justify-center overflow-hidden shrink-0">
+                <div className="h-8 sm:h-9 flex items-center justify-center overflow-hidden shrink-0">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img 
-                    src={company.logoUrl} 
-                    alt={company.name || 'Logo'} 
-                    className="h-full w-auto object-contain" 
+                  <img
+                    src={company.logoUrl}
+                    alt={company.name || 'Logo'}
+                    className="h-full w-auto object-contain"
                   />
                 </div>
               )}
-              <span className="text-[#333] font-bold text-lg md:text-2xl tracking-tighter truncate max-w-[150px] sm:max-w-[190px] md:max-w-[240px]">
-                {company?.name || 'Tienda Online'}
+              <span className="font-display text-white font-bold uppercase text-lg md:text-2xl tracking-[0.08em] truncate max-w-[180px] sm:max-w-[260px]">
+                {company?.name || 'Cooperativa Gourmet'}
               </span>
             </Link>
           </div>
 
-          {/* FILA 1, COLUMNA 2: Buscador de escritorio predictivo */}
-          <div className="col-start-2 row-start-1 hidden md:flex items-center w-full max-w-xl lg:max-w-2xl justify-self-start h-9">
+          {/* Centro: Buscador predictivo escritorio */}
+          <div className="hidden md:flex flex-1 justify-center max-w-lg lg:max-w-xl px-4">
             <PredictiveSearchBar />
           </div>
 
-          {/* FILA 1, COLUMNA 3: Acciones superiores (Lupa móvil, Carrito móvil, Autenticación / Perfil) */}
-          <div className="col-start-3 row-start-1 flex items-center gap-2 md:gap-4 text-[13px] text-[#333] h-9 justify-self-end">
-            {/* Botón Lupa en Móvil */}
+          {/* Derecha: Acciones */}
+          <div className="flex items-center gap-2 sm:gap-3.5 text-xs text-white shrink-0">
+            {/* Lupa móvil */}
             <button
               type="button"
               onClick={() => setIsMobileSearchOpen(true)}
               aria-label="Buscar"
-              className="md:hidden p-1.5 rounded-full hover:bg-black/5 text-[#333] cursor-pointer transition-colors relative group"
+              className="md:hidden p-2 hover:bg-white/10 text-white cursor-pointer transition-colors"
             >
-              <TbSearch size={21} className="transition-transform group-hover:scale-110" />
-              <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[11px] font-medium py-1 px-2.5 rounded shadow-lg pointer-events-none opacity-0 group-hover:opacity-100 transition-all duration-200 whitespace-nowrap z-50">
-                Buscar
-                <span className="absolute -top-1 left-1/2 -translate-x-1/2 border-x-4 border-x-transparent border-b-4 border-b-slate-900"></span>
-              </span>
+              <TbSearch size={20} />
             </button>
 
-            {/* Carrito en Móvil */}
-            <Link
-              href="/cart"
-              className="md:hidden p-1.5 rounded-full hover:bg-black/5 text-[#333] relative transition-colors inline-flex items-center justify-center cursor-pointer"
-              aria-label="Carrito de compras"
-            >
-              <TbShoppingCart size={21} />
-              {mounted && totalCartItems > 0 && (
-                <span className="absolute -top-0.5 -right-0.5 bg-[#3483fa] text-white text-[10px] font-bold h-3.5 min-w-[14px] px-0.5 flex items-center justify-center rounded-full leading-none animate-in zoom-in-50 duration-150">
-                  {totalCartItems > 99 ? '99+' : totalCartItems}
-                </span>
-              )}
-            </Link>
-
             <Show when="signed-out">
-              <SignUpButton mode="modal">
-                <button type="button" className="hover:text-black font-normal text-xs md:text-[13px] cursor-pointer">
-                  Crea tu cuenta
-                </button>
-              </SignUpButton>
+              <div className="hidden sm:flex items-center gap-3">
+                <SignUpButton mode="modal">
+                  <button
+                    type="button"
+                    className="hover:text-[#de2a2a] font-semibold uppercase tracking-wider text-[11px] cursor-pointer transition-colors"
+                  >
+                    Regístrate
+                  </button>
+                </SignUpButton>
 
-              <SignInButton mode="modal">
-                <button type="button" className="hover:text-black font-normal text-xs md:text-[13px] cursor-pointer">
-                  Ingresa
-                </button>
-              </SignInButton>
+                <SignInButton mode="modal">
+                  <button
+                    type="button"
+                    className="px-3 py-1.5 bg-white text-black hover:bg-[#de2a2a] hover:text-white font-bold uppercase tracking-wider text-[11px] cursor-pointer transition-colors"
+                  >
+                    Ingresa
+                  </button>
+                </SignInButton>
+              </div>
             </Show>
 
             <Show when="signed-in">
               {canAccessSalesPanel && (
                 <Link
                   href="/admin"
-                  className="flex items-center gap-1.5 text-xs font-medium text-[#333] bg-white/70 hover:bg-white border border-black/10 p-2 lg:px-3 lg:py-1.5 rounded-full shadow-2xs hover:shadow-xs transition-all duration-200 relative group cursor-pointer"
+                  className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-white bg-white/10 hover:bg-[#de2a2a] border border-white/20 hover:border-[#de2a2a] p-2 lg:px-3 lg:py-1.5 transition-colors cursor-pointer"
                   aria-label="Panel de ventas"
                 >
-                  <TbBuildingStore size={17} className="text-gray-700 transition-transform group-hover:scale-110" />
-                  <span className="hidden lg:inline">Panel de ventas</span>
-                  <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[11px] font-medium py-1 px-2.5 rounded shadow-lg pointer-events-none opacity-0 group-hover:opacity-100 transition-all duration-200 whitespace-nowrap z-50">
-                    Panel de ventas
-                    <span className="absolute -top-1 left-1/2 -translate-x-1/2 border-x-4 border-x-transparent border-b-4 border-b-slate-900"></span>
-                  </span>
+                  <TbBuildingStore size={16} />
+                  <span className="hidden lg:inline">Panel</span>
                 </Link>
               )}
 
               <Link
                 href="/favoritos"
-                className="p-2 rounded-full hover:bg-black/5 text-[#333] hover:text-rose-600 relative transition-all duration-200 group flex items-center justify-center cursor-pointer"
+                className="p-2 hover:text-[#de2a2a] relative transition-colors flex items-center justify-center cursor-pointer"
                 aria-label="Favoritos"
               >
-                <TbHeart size={21} className="transition-transform group-hover:scale-110" />
+                <TbHeart size={20} />
                 {mounted && totalFavorites > 0 && (
-                  <span className="absolute -top-0.5 -right-0.5 bg-rose-500 text-white text-[10px] font-bold h-3.5 min-w-[14px] px-0.5 flex items-center justify-center rounded-full leading-none animate-in zoom-in-50 duration-150">
+                  <span className="absolute -top-0.5 -right-0.5 bg-[#de2a2a] text-white text-[10px] font-bold h-4 min-w-[16px] px-1 flex items-center justify-center rounded-full leading-none">
                     {totalFavorites > 99 ? '99+' : totalFavorites}
                   </span>
                 )}
-                <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[11px] font-medium py-1 px-2.5 rounded shadow-lg pointer-events-none opacity-0 group-hover:opacity-100 transition-all duration-200 whitespace-nowrap z-50">
-                  Favoritos
-                  <span className="absolute -top-1 left-1/2 -translate-x-1/2 border-x-4 border-x-transparent border-b-4 border-b-slate-900"></span>
-                </span>
               </Link>
 
               <UserButton
                 appearance={{
                   elements: {
-                    userButtonAvatarBox: "w-8 h-8"
-                  }
+                    userButtonAvatarBox: 'w-8 h-8 ring-1 ring-white/30',
+                  },
                 }}
               />
             </Show>
-          </div>
 
-          {/* FILA 2, COLUMNA 1: Rastreo de compra (Ancho automático) */}
-          <div className="col-start-1 row-start-2 hidden lg:flex items-center">
-            <Link href="/rastreo" className="inline-flex items-center gap-1.5 cursor-pointer hover:border-black/20 border border-transparent px-1.5 py-0.5 rounded transition-colors" title="Rastrea tu pedido en tiempo real">
-              <TbTruckDelivery size={18} className="text-gray-600 shrink-0" />
-              <div className="flex flex-col leading-tight">
-                <span className="text-gray-600 text-[11px] truncate">¿Dónde está tu compra?</span>
-                <span className="font-medium text-[#333] text-[12px] truncate">Rastrea tu pedido</span>
-              </div>
-            </Link>
-          </div>
-
-          {/* FILA 2, COLUMNA 2: Menú de categorías y enlaces (Alineados en la misma vertical exacta que el buscador) */}
-          <nav className="col-start-2 row-start-2 hidden lg:flex items-center gap-4 text-[13px] text-[#333] font-light justify-self-start py-0.5">
-            <CategoriesDropdown />
-            <Link href="/ofertas" className="hover:text-[#3483fa] transition-colors">Ofertas</Link>
-            <Link href="/brands" className="hover:text-[#3483fa] transition-colors">Marcas</Link>
-            <Link href="/historial" className="hover:text-[#3483fa] transition-colors">Historial</Link>
-            <Link href="/ayuda" className="hover:text-[#3483fa] transition-colors">Ayuda</Link>
-          </nav>
-
-          {/* FILA 2, COLUMNA 3: Acciones inferiores (Mis compras, Notificaciones, Carrito en escritorio) */}
-          <div className="col-start-3 row-start-2 hidden md:flex items-center gap-4 text-[13px] text-[#333] font-light justify-self-end py-0.5">
-            <Link href="/mis-compras" className="hover:text-[#3483fa] font-normal transition-colors">
-              Mis compras
-            </Link>
-
-            <div className="relative" ref={notifRef}>
+            {/* Notificaciones */}
+            <div className="relative hidden md:block" ref={notifRef}>
               <button
                 type="button"
                 onClick={() => {
@@ -276,49 +212,45 @@ export const Navbar = () => {
                   if (next) loadCustomerOrders();
                 }}
                 aria-label="Notificaciones"
-                className="p-1.5 rounded-full hover:bg-black/5 text-[#333] relative transition-colors cursor-pointer group"
+                className="p-2 hover:text-[#de2a2a] text-white relative transition-colors cursor-pointer"
               >
-                <TbBell size={19} className="transition-transform group-hover:scale-110" />
-                <span className="absolute top-1 right-1 w-1.5 h-1.5 bg-[#00a650] rounded-full"></span>
-                {!notifOpen && (
-                  <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[11px] font-medium py-1 px-2.5 rounded shadow-lg pointer-events-none opacity-0 group-hover:opacity-100 transition-all duration-200 whitespace-nowrap z-50">
-                    Notificaciones
-                    <span className="absolute -top-1 left-1/2 -translate-x-1/2 border-x-4 border-x-transparent border-b-4 border-b-slate-900"></span>
-                  </span>
-                )}
+                <TbBell size={20} />
+                <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-[#de2a2a] rounded-full" />
               </button>
 
               {notifOpen && (
-                <div className="absolute right-0 mt-2 w-80 bg-white rounded-2xl shadow-xl border border-gray-200 overflow-hidden z-50 text-left font-normal animate-in fade-in zoom-in-95 duration-150">
-                  <div className="px-4 py-3 bg-gray-50 border-b border-gray-100 flex items-center justify-between">
-                    <span className="text-xs font-bold text-gray-900">Notificaciones</span>
+                <div className="absolute right-0 mt-2 w-80 bg-white text-[#020202] shadow-2xl border border-[#d9d9d9] overflow-hidden z-50 text-left font-normal animate-in fade-in duration-150">
+                  <div className="px-4 py-3 bg-black text-white flex items-center justify-between">
+                    <span className="text-xs font-display font-bold uppercase tracking-wider">
+                      Notificaciones
+                    </span>
                     <Link
                       href="/mis-compras"
                       onClick={() => setNotifOpen(false)}
-                      className="text-[11px] font-semibold text-[#3483fa] hover:underline"
+                      className="text-[11px] font-semibold text-[#de2a2a] hover:underline"
                     >
                       Ver mis compras
                     </Link>
                   </div>
 
-                  <div className="divide-y divide-gray-100 max-h-80 overflow-y-auto">
+                  <div className="divide-y divide-[#e5e5e5] max-h-80 overflow-y-auto">
                     {myOrders.map((ord) => (
                       <Link
                         key={ord.id}
                         href={`/rastreo?order=${encodeURIComponent(ord.orderNumber)}`}
                         onClick={() => setNotifOpen(false)}
-                        className="p-3.5 hover:bg-gray-50 flex items-start gap-3 transition-colors"
+                        className="p-3.5 hover:bg-neutral-50 flex items-start gap-3 transition-colors"
                       >
-                        <div className="p-2 rounded-xl bg-blue-50 text-[#3483fa] shrink-0 mt-0.5">
+                        <div className="p-2 bg-neutral-100 text-black shrink-0 mt-0.5">
                           <TbPackage size={17} />
                         </div>
                         <div className="min-w-0 flex-1">
-                          <p className="text-xs font-bold text-gray-900 truncate">
+                          <p className="text-xs font-bold text-black truncate">
                             Pedido #{ord.orderNumber}
                           </p>
-                          <p className="text-[11px] text-gray-500 mt-0.5">
+                          <p className="text-[11px] text-neutral-500 mt-0.5">
                             Estado:{' '}
-                            <strong className="text-gray-800">
+                            <strong className="text-black">
                               {ord.orderStatus === 'delivered'
                                 ? 'Entregado'
                                 : ord.orderStatus === 'shipping'
@@ -329,78 +261,148 @@ export const Navbar = () => {
                             </strong>
                           </p>
                         </div>
-                        <TbChevronRight size={15} className="text-gray-400 self-center shrink-0" />
+                        <TbChevronRight size={15} className="text-neutral-400 self-center shrink-0" />
                       </Link>
                     ))}
 
                     <Link
                       href="/ofertas"
                       onClick={() => setNotifOpen(false)}
-                      className="p-3.5 hover:bg-gray-50 flex items-start gap-3 transition-colors"
+                      className="p-3.5 hover:bg-neutral-50 flex items-start gap-3 transition-colors"
                     >
-                      <div className="p-2 rounded-xl bg-emerald-50 text-[#00a650] shrink-0 mt-0.5">
+                      <div className="p-2 bg-[#fff5f5] text-[#de2a2a] shrink-0 mt-0.5">
                         <TbTag size={17} />
                       </div>
                       <div className="min-w-0 flex-1">
-                        <p className="text-xs font-bold text-gray-900">
-                          Ofertas y Descuentos Activos
+                        <p className="text-xs font-bold text-black">
+                          Ofertas de Nuestra Cooperativa
                         </p>
-                        <p className="text-[11px] text-gray-500 mt-0.5">
-                          Explora los productos en promoción con envío a todo el Perú.
+                        <p className="text-[11px] text-neutral-500 mt-0.5">
+                          Descubre promociones activas con envío a todo el Perú.
                         </p>
                       </div>
-                      <TbChevronRight size={15} className="text-gray-400 self-center shrink-0" />
+                      <TbChevronRight size={15} className="text-neutral-400 self-center shrink-0" />
                     </Link>
 
                     <Link
                       href="/rastreo"
                       onClick={() => setNotifOpen(false)}
-                      className="p-3.5 hover:bg-gray-50 flex items-start gap-3 transition-colors"
+                      className="p-3.5 hover:bg-neutral-50 flex items-start gap-3 transition-colors"
                     >
-                      <div className="p-2 rounded-xl bg-gray-100 text-gray-700 shrink-0 mt-0.5">
+                      <div className="p-2 bg-neutral-100 text-black shrink-0 mt-0.5">
                         <TbTruckDelivery size={17} />
                       </div>
                       <div className="min-w-0 flex-1">
-                        <p className="text-xs font-bold text-gray-900">
+                        <p className="text-xs font-bold text-black">
                           Rastrea tu Pedido en Línea
                         </p>
-                        <p className="text-[11px] text-gray-500 mt-0.5">
-                          Consulta el estado de tu envío y descarga tu Boleta o Factura SUNAT.
+                        <p className="text-[11px] text-neutral-500 mt-0.5">
+                          Consulta el estado de tu delivery y descarga tu comprobante SUNAT.
                         </p>
                       </div>
-                      <TbChevronRight size={15} className="text-gray-400 self-center shrink-0" />
+                      <TbChevronRight size={15} className="text-neutral-400 self-center shrink-0" />
                     </Link>
                   </div>
                 </div>
               )}
             </div>
 
-            {/* Carrito */}
-            <Link
-              href="/cart"
-              className="p-1.5 rounded-full hover:bg-black/5 text-[#333] relative transition-colors inline-flex items-center justify-center cursor-pointer group"
-              aria-label="Carrito de compras"
+            {/* Botón Carrito (abre Mini-Carrito lateral) */}
+            <button
+              type="button"
+              onClick={openDrawer}
+              className="flex items-center gap-2 px-2.5 py-2 hover:bg-white/10 text-white relative transition-colors cursor-pointer"
+              aria-label="Abrir carrito de compras"
             >
-              <TbShoppingCart size={20} className="transition-transform group-hover:scale-110" />
+              <TbShoppingCart size={21} />
+              <span className="hidden lg:inline text-[11px] font-bold uppercase tracking-wider">
+                Carrito
+              </span>
               {mounted && totalCartItems > 0 && (
-                <span className="absolute -top-0.5 -right-0.5 bg-[#3483fa] text-white text-[10px] font-bold h-3.5 min-w-[14px] px-0.5 flex items-center justify-center rounded-full leading-none animate-in zoom-in-50 duration-150">
+                <span className="bg-[#de2a2a] text-white text-[10px] font-bold h-4 min-w-[16px] px-1 flex items-center justify-center rounded-full leading-none">
                   {totalCartItems > 99 ? '99+' : totalCartItems}
                 </span>
               )}
-              <span className="absolute -bottom-8 right-0 bg-slate-900 text-white text-[11px] font-medium py-1 px-2.5 rounded shadow-lg pointer-events-none opacity-0 group-hover:opacity-100 transition-all duration-200 whitespace-nowrap z-50">
-                Carrito
-                <span className="absolute -top-1 right-3 border-x-4 border-x-transparent border-b-4 border-b-slate-900"></span>
-              </span>
-            </Link>
+            </button>
           </div>
         </div>
         </div>
       </div>
 
-      {/* 4. Mobile & Tablet Drawer Menu */}
-      <MobileMenuDrawer 
-        isOpen={isMobileMenuOpen} 
-        onClose={() => setIsMobileMenuOpen(false)} 
+      {/* Barra inferior de categorías (Desktop) */}
+      <div className="hidden lg:block bg-black border-t border-[#262626]">
+        <div className="max-w-7xl mx-auto px-4 md:px-7">
+          <nav className="flex items-center justify-between h-12 gap-4">
+            <div className="flex items-center gap-6">
+              <Link
+                href="/"
+                className={`text-[11px] font-bold uppercase tracking-wider transition-colors whitespace-nowrap ${
+                  pathname === '/'
+                    ? 'text-[#de2a2a]'
+                    : 'text-white hover:text-[#de2a2a]'
+                }`}
+              >
+                INICIO
+              </Link>
+
+              <CategoriesDropdown
+                isActive={
+                  pathname === '/categories' || pathname.startsWith('/category/')
+                }
+              />
+
+              <Link
+                href="/ofertas"
+                className={`text-[11px] font-bold uppercase tracking-wider transition-colors whitespace-nowrap ${
+                  pathname.startsWith('/ofertas')
+                    ? 'text-[#de2a2a]'
+                    : 'text-white hover:text-[#de2a2a]'
+                }`}
+              >
+                OFERTAS
+              </Link>
+              <Link
+                href="/brands"
+                className={`text-[11px] font-bold uppercase tracking-wider transition-colors whitespace-nowrap ${
+                  pathname === '/brands' || pathname.startsWith('/brand/')
+                    ? 'text-[#de2a2a]'
+                    : 'text-white hover:text-[#de2a2a]'
+                }`}
+              >
+                MARCAS
+              </Link>
+            </div>
+
+            <div className="flex items-center gap-5 shrink-0">
+              <Link
+                href="/historial"
+                className={`text-[11px] font-semibold uppercase tracking-wider transition-colors whitespace-nowrap ${
+                  pathname.startsWith('/historial')
+                    ? 'text-[#de2a2a]'
+                    : 'text-neutral-300 hover:text-white'
+                }`}
+              >
+                Historial
+              </Link>
+              <Link
+                href="/mis-compras"
+                className={`text-[11px] font-semibold uppercase tracking-wider transition-colors whitespace-nowrap ${
+                  pathname.startsWith('/mis-compras')
+                    ? 'text-[#de2a2a]'
+                    : 'text-neutral-300 hover:text-white'
+                }`}
+              >
+                Mis compras
+              </Link>
+            </div>
+          </nav>
+        </div>
+      </div>
+
+      {/* Mobile & Tablet Drawer Menu */}
+      <MobileMenuDrawer
+        isOpen={isMobileMenuOpen}
+        onClose={() => setIsMobileMenuOpen(false)}
       />
     </header>
   );

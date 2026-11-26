@@ -1,6 +1,7 @@
 import React from 'react';
 import { Navbar } from './_components/Navbar';
 import { Footer } from './_components/Footer';
+import { MiniCartDrawer } from './_components/MiniCartDrawer';
 
 export default function EcomerceLayout({
   children,
@@ -8,12 +9,13 @@ export default function EcomerceLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen bg-[#f3f4f6] flex flex-col justify-between">
+    <div className="min-h-screen bg-white text-[#020202] font-store flex flex-col justify-between">
       <Navbar />
-      <div className="flex-1">
+      <main className="flex-1">
         {children}
-      </div>
+      </main>
       <Footer />
+      <MiniCartDrawer />
     </div>
   );
 }

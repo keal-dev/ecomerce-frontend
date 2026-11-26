@@ -12,47 +12,47 @@ interface HistoryEmptyStateProps {
 
 export const HistoryEmptyState = ({ recommendedProducts }: HistoryEmptyStateProps) => {
   return (
-    <div className="space-y-8">
+    <div className="space-y-10">
       {/* Caja de estado vacío */}
-      <div className="bg-white rounded-2xl border border-gray-200/80 shadow-xs p-8 sm:p-12 text-center max-w-2xl mx-auto">
-        <div className="w-16 h-16 sm:w-20 sm:h-20 bg-blue-50 text-[#3483fa] rounded-full flex items-center justify-center mx-auto mb-4 border border-blue-100 shadow-2xs">
-          <TbHistoryOff size={36} className="text-[#3483fa]" />
+      <div className="bg-[#f8f8f8] rounded-none border border-[#d9d9d9] p-8 sm:p-12 text-center max-w-2xl mx-auto">
+        <div className="w-16 h-16 bg-black text-white rounded-none flex items-center justify-center mx-auto mb-5">
+          <TbHistoryOff size={32} />
         </div>
 
-        <h2 className="text-lg sm:text-xl font-bold text-gray-900 tracking-tight">
+        <h2 className="font-display text-lg sm:text-xl font-extrabold uppercase tracking-tight text-black">
           Tu historial de navegación está vacío
         </h2>
 
-        <p className="text-xs sm:text-sm text-gray-500 mt-2 max-w-md mx-auto leading-relaxed font-light">
-          A medida que explores publicaciones y detalles de productos, los guardaremos aquí automáticamente para que los encuentres con rapidez.
+        <p className="text-xs sm:text-sm text-neutral-600 mt-2 max-w-md mx-auto leading-relaxed">
+          A medida que explores vinos, chocolates, cacao y café en nuestro catálogo, los guardaremos aquí automáticamente.
         </p>
 
         <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3">
           <Link
             href="/ofertas"
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-[#3483fa] hover:bg-[#2968c8] text-white text-xs sm:text-sm font-semibold rounded-xl shadow-xs transition-colors"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#de2a2a] hover:bg-red-700 text-white text-xs font-bold uppercase tracking-widest rounded-none transition-colors"
           >
-            <TbFlame size={18} />
+            <TbFlame size={16} />
             <span>Descubrir ofertas</span>
           </Link>
 
           <Link
             href="/"
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-800 text-xs sm:text-sm font-medium rounded-xl transition-colors"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 border border-black bg-white hover:bg-black hover:text-white text-black text-xs font-bold uppercase tracking-widest rounded-none transition-colors"
           >
-            <TbShoppingBag size={18} />
+            <TbShoppingBag size={16} />
             <span>Ir a la tienda</span>
           </Link>
         </div>
       </div>
 
-      {/* Sección de productos recomendados para que la página sea atractiva */}
+      {/* Sección de productos recomendados */}
       {recommendedProducts.length > 0 && (
-        <div className="bg-white rounded-2xl border border-gray-200/80 p-5 sm:p-6 shadow-xs">
-          <div className="flex items-center gap-2 mb-4">
-            <TbFlame className="text-[#00a650]" size={22} />
-            <h3 className="text-base sm:text-lg font-bold text-gray-900">
-              Productos recomendados para ti
+        <div className="bg-white rounded-none border border-[#d9d9d9] p-5 sm:p-6">
+          <div className="flex items-center gap-2 mb-5 pb-3 border-b border-[#d9d9d9]">
+            <TbFlame className="text-[#de2a2a]" size={20} />
+            <h3 className="font-display text-sm sm:text-base font-extrabold uppercase tracking-tight text-black">
+              Recomendados de nuestra cooperativa
             </h3>
           </div>
 
@@ -69,6 +69,7 @@ export const HistoryEmptyState = ({ recommendedProducts }: HistoryEmptyStateProp
                 full: p.full ?? false,
                 imageUrl: p.imageUrl || '/placeholder.png',
                 description: p.description,
+                stock: p.stock,
               };
 
               return <ProductCard key={p.id} product={cardProduct} />;

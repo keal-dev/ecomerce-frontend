@@ -17,7 +17,6 @@ export default function FavoritesPage() {
     fetchProducts();
   }, [fetchProducts]);
 
-  // Obtener los productos favoritos respetando el orden en que se agregaron
   const favoriteProducts = useMemo(() => {
     if (!mounted || favoriteIds.length === 0 || products.length === 0) return [];
 
@@ -35,45 +34,46 @@ export default function FavoritesPage() {
     return list;
   }, [mounted, favoriteIds, products]);
 
-  // Recomendados para cuando está vacío
   const recommendedProducts = useMemo(() => {
     return products.filter((p) => p.isActive !== false).slice(0, 10);
   }, [products]);
 
   if (!mounted || (isLoading && products.length === 0)) {
     return (
-      <div className="min-h-[60vh] flex flex-col items-center justify-center gap-3">
-        <TbLoader2 className="animate-spin text-[#3483fa]" size={36} />
-        <p className="text-xs text-gray-500">Cargando tus favoritos...</p>
+      <div className="min-h-[60vh] bg-white flex flex-col items-center justify-center gap-3">
+        <TbLoader2 className="animate-spin text-[#de2a2a]" size={36} />
+        <p className="text-xs font-bold uppercase tracking-wider text-neutral-500">
+          Cargando tus favoritos...
+        </p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen pb-16">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-4">
+    <div className="min-h-screen bg-white pb-16">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-6">
         {/* Breadcrumb */}
-        <nav className="flex items-center gap-1.5 text-xs text-gray-500 mb-4 font-light">
-          <Link href="/" className="hover:text-[#3483fa] transition-colors">
+        <nav className="flex items-center gap-1.5 text-[11px] uppercase tracking-wider text-neutral-500 mb-5">
+          <Link href="/" className="hover:text-[#de2a2a] transition-colors">
             Inicio
           </Link>
-          <TbChevronRight size={13} className="text-gray-400" />
-          <span className="text-gray-800 font-medium">Mis Favoritos</span>
+          <TbChevronRight size={13} className="text-neutral-400" />
+          <span className="text-black font-bold">Mis Favoritos</span>
         </nav>
 
         {/* Encabezado */}
-        <div className="bg-white rounded-xl border border-gray-200/90 shadow-2xs p-4 sm:p-5 mb-5 flex items-center justify-between">
+        <div className="bg-black text-white rounded-none border-b-4 border-[#de2a2a] p-5 sm:p-7 mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <div className="flex items-center gap-2.5">
-              <h1 className="text-lg sm:text-2xl font-bold text-gray-900 tracking-tight">
+            <div className="flex items-center gap-3 flex-wrap">
+              <h1 className="font-display text-xl sm:text-3xl font-extrabold uppercase tracking-tight text-white">
                 Mis Favoritos
               </h1>
-              <span className="bg-rose-50 text-rose-600 border border-rose-100 text-xs font-semibold px-2.5 py-0.5 rounded-full">
+              <span className="bg-[#de2a2a] text-white text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-none">
                 {favoriteProducts.length} {favoriteProducts.length === 1 ? 'producto' : 'productos'}
               </span>
             </div>
-            <p className="text-xs sm:text-sm text-gray-500 mt-0.5 font-light">
-              Tus publicaciones y artículos guardados para ver o comprar después
+            <p className="text-xs sm:text-sm text-neutral-300 mt-1">
+              Tus productos favoritos guardados para ver o comprar después.
             </p>
           </div>
 
@@ -81,7 +81,7 @@ export default function FavoritesPage() {
             <button
               type="button"
               onClick={clearFavorites}
-              className="text-xs text-rose-600 hover:text-rose-700 font-medium flex items-center gap-1 px-3 py-1.5 rounded-lg hover:bg-rose-50 transition-colors cursor-pointer"
+              className="text-xs text-white hover:text-[#de2a2a] font-bold uppercase tracking-wider flex items-center gap-1.5 px-3.5 py-2 border border-[#262626] hover:border-[#de2a2a] rounded-none transition-colors cursor-pointer self-start sm:self-auto"
             >
               <TbTrash size={15} />
               <span>Vaciar lista</span>
@@ -91,24 +91,24 @@ export default function FavoritesPage() {
 
         {/* Contenido */}
         {favoriteProducts.length === 0 ? (
-          <div className="space-y-8">
-            <div className="bg-white rounded-2xl border border-gray-200/90 shadow-2xs p-8 sm:p-12 text-center max-w-xl mx-auto">
-              <div className="w-16 h-16 bg-rose-50 text-rose-500 rounded-full flex items-center justify-center mx-auto mb-4 border border-rose-100">
+          <div className="space-y-10">
+            <div className="bg-[#f8f8f8] rounded-none border border-[#d9d9d9] p-8 sm:p-12 text-center max-w-xl mx-auto">
+              <div className="w-16 h-16 bg-black text-white rounded-none flex items-center justify-center mx-auto mb-5">
                 <TbHeartOff size={32} />
               </div>
 
-              <h2 className="text-lg sm:text-xl font-bold text-gray-900 tracking-tight">
+              <h2 className="font-display text-lg sm:text-xl font-extrabold uppercase tracking-tight text-black">
                 No tienes productos en favoritos
               </h2>
 
-              <p className="text-xs sm:text-sm text-gray-500 mt-2 max-w-sm mx-auto leading-relaxed font-light">
-                Haz clic en el corazón de cualquier publicación para guardarla aquí y no perderla de vista.
+              <p className="text-xs sm:text-sm text-neutral-600 mt-2 max-w-sm mx-auto leading-relaxed">
+                Haz clic en el corazón de cualquier producto o pack para guardarlo aquí y no perderlo de vista.
               </p>
 
               <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
                 <Link
                   href="/ofertas"
-                  className="px-5 py-2.5 bg-[#3483fa] hover:bg-[#2968c8] text-white text-xs sm:text-sm font-semibold rounded-xl shadow-xs transition-colors flex items-center gap-2"
+                  className="px-5 py-2.5 bg-[#de2a2a] hover:bg-red-700 text-white text-xs font-bold uppercase tracking-widest rounded-none transition-colors flex items-center gap-2"
                 >
                   <TbFlame size={16} />
                   <span>Descubrir ofertas</span>
@@ -116,7 +116,7 @@ export default function FavoritesPage() {
 
                 <Link
                   href="/"
-                  className="px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-800 text-xs sm:text-sm font-medium rounded-xl transition-colors flex items-center gap-2"
+                  className="px-5 py-2.5 border border-black bg-white hover:bg-black hover:text-white text-black text-xs font-bold uppercase tracking-widest rounded-none transition-colors flex items-center gap-2"
                 >
                   <TbHome size={16} />
                   <span>Ir a la tienda</span>
@@ -126,11 +126,11 @@ export default function FavoritesPage() {
 
             {/* Recomendados */}
             {recommendedProducts.length > 0 && (
-              <div className="bg-white rounded-2xl border border-gray-200/90 p-5 sm:p-6 shadow-2xs">
-                <div className="flex items-center gap-2 mb-4">
-                  <TbFlame className="text-[#00a650]" size={20} />
-                  <h3 className="text-sm sm:text-base font-bold text-gray-900">
-                    Productos que podrían interesarte
+              <div className="bg-white rounded-none border border-[#d9d9d9] p-5 sm:p-6">
+                <div className="flex items-center gap-2 mb-5 pb-3 border-b border-[#d9d9d9]">
+                  <TbFlame className="text-[#de2a2a]" size={20} />
+                  <h3 className="font-display text-sm sm:text-base font-extrabold uppercase tracking-tight text-black">
+                    Recomendados de nuestra cooperativa
                   </h3>
                 </div>
 
@@ -147,6 +147,7 @@ export default function FavoritesPage() {
                       full: p.full ?? false,
                       imageUrl: p.imageUrl || '/placeholder.png',
                       description: p.description,
+                      stock: p.stock,
                     };
 
                     return <ProductCard key={p.id} product={cardProduct} />;
@@ -169,6 +170,7 @@ export default function FavoritesPage() {
                 full: p.full ?? false,
                 imageUrl: p.imageUrl || '/placeholder.png',
                 description: p.description,
+                stock: p.stock,
               };
 
               return <ProductCard key={p.id} product={cardProduct} />;

@@ -37,7 +37,7 @@ export function CompanyManager() {
   const { company, isLoading, isSaving, error, fetchCompany, updateCompanyData, uploadLogo } = useCompanyStore();
 
   const [formData, setFormData] = useState<UpdateCompanyDto>({
-    name: 'MercadoAdmin',
+    name: 'Cooperativa Gourmet',
     legalName: '',
     taxId: '',
     logoUrl: '',
@@ -67,7 +67,7 @@ export function CompanyManager() {
   useEffect(() => {
     if (company) {
       setFormData({
-        name: company.name || 'MercadoAdmin',
+        name: company.name || 'Cooperativa Gourmet',
         legalName: company.legalName || '',
         taxId: company.taxId || '',
         logoUrl: company.logoUrl || '',

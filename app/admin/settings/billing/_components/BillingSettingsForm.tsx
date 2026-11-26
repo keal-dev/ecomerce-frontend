@@ -294,7 +294,7 @@ export function BillingSettingsForm() {
           <div className="text-xs text-gray-500">
             Emisor fiscal configurado:{' '}
             <strong className="text-gray-800">
-              {company?.legalName || company?.name || 'MercadoAdmin'}
+              {company?.legalName || company?.name || 'Cooperativa Gourmet'}
             </strong>{' '}
             {company?.taxId ? `(RUC: ${company.taxId})` : ''}
           </div>

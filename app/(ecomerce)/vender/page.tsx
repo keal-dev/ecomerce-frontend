@@ -15,85 +15,86 @@ import {
 
 export default function VenderPage() {
   return (
-    <div className="min-h-screen pb-16">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-4">
+    <div className="min-h-screen bg-white pb-16">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-6">
         {/* Breadcrumb */}
-        <nav className="flex items-center gap-1.5 text-xs text-gray-500 mb-6 font-light">
-          <Link href="/" className="hover:text-[#3483fa] transition-colors">
+        <nav className="flex items-center gap-1.5 text-[11px] uppercase tracking-wider text-neutral-500 mb-6">
+          <Link href="/" className="hover:text-[#de2a2a] transition-colors">
             Inicio
           </Link>
-          <TbChevronRight size={13} className="text-gray-400" />
-          <span className="text-gray-800 font-medium">Vender</span>
+          <TbChevronRight size={13} className="text-neutral-400" />
+          <span className="text-black font-bold">Aliados</span>
         </nav>
 
         {/* Tarjeta Principal de Próximamente */}
-        <div className="bg-white rounded-2xl border border-gray-200/90 shadow-sm p-8 sm:p-14 text-center overflow-hidden relative">
-          {/* Fondo sutil decorativo */}
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-32 bg-gradient-to-b from-[#fff059]/20 to-transparent blur-2xl pointer-events-none" />
-
+        <div className="bg-[#f8f8f8] rounded-none border border-[#d9d9d9] p-8 sm:p-14 text-center">
           {/* Insignia superior */}
-          <div className="inline-flex items-center gap-2 px-3 py-1 bg-amber-50 border border-amber-200 text-amber-800 rounded-full text-xs font-semibold mb-6">
-            <TbTools size={15} className="text-amber-600 animate-pulse" />
-            <span>En desarrollo</span>
+          <div className="inline-flex items-center gap-2 px-3 py-1 bg-black text-white rounded-none text-[11px] font-bold uppercase tracking-widest mb-6">
+            <TbTools size={14} className="text-[#de2a2a]" />
+            <span>Próximamente</span>
           </div>
 
           {/* Icono central */}
-          <div className="w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-br from-yellow-100 to-amber-50 text-amber-600 rounded-2xl flex items-center justify-center mx-auto mb-5 shadow-inner border border-amber-200/60">
-            <TbBuildingStore size={48} className="text-gray-800" />
+          <div className="w-20 h-20 bg-black text-white rounded-none flex items-center justify-center mx-auto mb-5 border-b-4 border-[#de2a2a]">
+            <TbBuildingStore size={42} />
           </div>
 
           {/* Título principal */}
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900 tracking-tight">
+          <h1 className="font-display text-2xl sm:text-3xl font-extrabold uppercase tracking-tight text-black">
             Estamos trabajando en esto
           </h1>
 
-          {/* Subtítulo solicitado explícitamente */}
-          <p className="text-base sm:text-lg font-medium text-[#3483fa] mt-2">
-            Esta página aún no está disponible
+          <p className="text-sm sm:text-base font-bold uppercase tracking-wider text-[#de2a2a] mt-2">
+            Esta sección aún no está disponible
           </p>
 
-          <p className="text-xs sm:text-sm text-gray-500 mt-2.5 max-w-lg mx-auto leading-relaxed font-light">
-            Estamos preparando la mejor experiencia para que puedas publicar tus artículos, gestionar tus ventas y alcanzar a miles de compradores en todo el país.
+          <p className="text-xs sm:text-sm text-neutral-600 mt-2.5 max-w-lg mx-auto leading-relaxed">
+            Nuestro portal de venta directa está enfocado actualmente en ofrecerte nuestros vinos, chocolates, derivados del cacao y café de origen con delivery rápido.
           </p>
 
-          {/* Teaser de características que vendrán */}
-          <div className="mt-8 pt-8 border-t border-gray-100 grid grid-cols-1 sm:grid-cols-3 gap-4 text-left">
-            <div className="p-3.5 rounded-xl bg-gray-50/80 border border-gray-100">
-              <div className="w-8 h-8 rounded-lg bg-blue-50 text-[#3483fa] flex items-center justify-center mb-2.5">
+          {/* Teaser */}
+          <div className="mt-8 pt-8 border-t border-[#d9d9d9] grid grid-cols-1 sm:grid-cols-3 gap-4 text-left">
+            <div className="p-4 rounded-none bg-white border border-[#d9d9d9]">
+              <div className="w-8 h-8 rounded-none bg-black text-white flex items-center justify-center mb-2.5">
                 <TbBolt size={18} />
               </div>
-              <h3 className="text-xs font-bold text-gray-800">Publica en segundos</h3>
-              <p className="text-[11px] text-gray-500 mt-1 leading-snug">
-                Herramientas intuitivas para subir y catalogar tu inventario al instante.
+              <h3 className="font-display text-xs font-extrabold uppercase text-black">
+                Catálogo curado
+              </h3>
+              <p className="text-[11px] text-neutral-600 mt-1 leading-snug">
+                Selección directa de productores asociados de nuestra cooperativa.
               </p>
             </div>
 
-            <div className="p-3.5 rounded-xl bg-gray-50/80 border border-gray-100">
-              <div className="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center mb-2.5">
+            <div className="p-4 rounded-none bg-white border border-[#d9d9d9]">
+              <div className="w-8 h-8 rounded-none bg-[#2e9e7b] text-white flex items-center justify-center mb-2.5">
                 <TbShieldCheck size={18} />
               </div>
-              <h3 className="text-xs font-bold text-gray-800">Cobros protegidos</h3>
-              <p className="text-[11px] text-gray-500 mt-1 leading-snug">
-                Seguridad garantizada para recibir tus ganancias puntualmente.
+              <h3 className="font-display text-xs font-extrabold uppercase text-black">
+                Pagos protegidos
+              </h3>
+              <p className="text-[11px] text-neutral-600 mt-1 leading-snug">
+                Transacciones seguras con tarjetas, Yape y Plin.
               </p>
             </div>
 
-            <div className="p-3.5 rounded-xl bg-gray-50/80 border border-gray-100">
-              <div className="w-8 h-8 rounded-lg bg-purple-50 text-purple-600 flex items-center justify-center mb-2.5">
+            <div className="p-4 rounded-none bg-white border border-[#d9d9d9]">
+              <div className="w-8 h-8 rounded-none bg-[#de2a2a] text-white flex items-center justify-center mb-2.5">
                 <TbTruckDelivery size={18} />
               </div>
-              <h3 className="text-xs font-bold text-gray-800">Envíos organizados</h3>
-              <p className="text-[11px] text-gray-500 mt-1 leading-snug">
-                Logística fácil y trazabilidad en tiempo real para tus clientes.
+              <h3 className="font-display text-xs font-extrabold uppercase text-black">
+                Delivery express
+              </h3>
+              <p className="text-[11px] text-neutral-600 mt-1 leading-snug">
+                Seguimiento en tiempo real para todos tus pedidos.
               </p>
             </div>
           </div>
 
-          {/* Botones de acción para no dejar al usuario en un callejón sin salida */}
           <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
             <Link
               href="/"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-2.5 bg-[#3483fa] hover:bg-[#2968c8] text-white text-xs sm:text-sm font-semibold rounded-xl shadow-xs transition-colors"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#de2a2a] hover:bg-red-700 text-white text-xs font-bold uppercase tracking-widest rounded-none transition-colors"
             >
               <TbArrowLeft size={16} />
               <span>Volver al inicio</span>
@@ -101,9 +102,9 @@ export default function VenderPage() {
 
             <Link
               href="/ofertas"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-800 text-xs sm:text-sm font-medium rounded-xl transition-colors"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 border border-black bg-white hover:bg-black hover:text-white text-black text-xs font-bold uppercase tracking-widest rounded-none transition-colors"
             >
-              <TbFlame size={16} className="text-[#00a650]" />
+              <TbFlame size={16} className="text-[#de2a2a]" />
               <span>Explorar ofertas</span>
             </Link>
           </div>

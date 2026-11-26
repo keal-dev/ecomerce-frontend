@@ -7,7 +7,6 @@ import {
   TbTruckDelivery,
   TbPackage,
   TbCheck,
-  TbClock,
   TbSearch,
   TbAlertCircle,
   TbMapPin,
@@ -80,7 +79,6 @@ function TrackingContent() {
     fetchTracking(orderQuery);
   };
 
-  // Determinar paso activo en la línea de tiempo (1 a 4)
   const getStepProgress = (status: OrderStatus) => {
     switch (status) {
       case 'preparing':
@@ -101,46 +99,49 @@ function TrackingContent() {
   const isCancelled = order?.orderStatus === 'cancelled';
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] pb-20 pt-6">
+    <div className="min-h-screen bg-white pb-20 pt-6">
       <div className="max-w-4xl mx-auto px-4 sm:px-6">
         {/* Breadcrumb */}
-        <nav className="flex items-center gap-1.5 text-xs text-slate-500 mb-6">
-          <Link href="/" className="hover:text-[#3483fa] transition-colors flex items-center gap-1">
+        <nav className="flex items-center gap-1.5 text-[11px] uppercase tracking-wider text-neutral-500 mb-6">
+          <Link href="/" className="hover:text-[#de2a2a] transition-colors flex items-center gap-1">
             <TbArrowLeft size={13} />
             Inicio
           </Link>
-          <TbChevronRight size={13} className="text-slate-400" />
-          <span className="text-slate-800 font-medium">Rastreo de Pedidos</span>
+          <TbChevronRight size={13} className="text-neutral-400" />
+          <span className="text-black font-bold">Rastreo de Pedidos</span>
         </nav>
 
         {/* Hero Card */}
-        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8 mb-8 text-center relative overflow-hidden">
-          <div className="inline-flex p-3 bg-blue-50 text-[#3483fa] rounded-2xl mb-4">
-            <TbTruckDelivery size={36} />
+        <div className="bg-black text-white rounded-none border-b-4 border-[#de2a2a] p-6 sm:p-10 mb-8 text-center">
+          <div className="inline-flex p-3 bg-[#de2a2a] text-white rounded-none mb-4">
+            <TbTruckDelivery size={32} />
           </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-            ¿Dónde está tu compra?
+          <span className="block text-[11px] font-bold uppercase tracking-[0.2em] text-[#de2a2a] mb-1">
+            Seguimiento en vivo
+          </span>
+          <h1 className="font-display text-2xl sm:text-4xl font-extrabold uppercase tracking-tight text-white">
+            ¿Dónde está tu pedido?
           </h1>
-          <p className="text-xs sm:text-sm text-slate-600 max-w-lg mx-auto mt-2 leading-relaxed">
-            Rastrea el estado en tiempo real de tu pedido realizado en la tienda online.
+          <p className="text-xs sm:text-sm text-neutral-300 max-w-lg mx-auto mt-2 leading-relaxed">
+            Rastrea el estado en tiempo real de tu delivery realizado en nuestra tienda online.
           </p>
 
           {/* Formulario de búsqueda */}
           <form onSubmit={handleSubmit} className="mt-6 max-w-md mx-auto flex gap-2">
             <div className="relative flex-1">
-              <TbSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+              <TbSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-400" size={18} />
               <input
                 type="text"
                 value={orderQuery}
                 onChange={(e) => setOrderQuery(e.target.value)}
-                placeholder="Ingresa tu número (ej: ORD-2026-48912)"
-                className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm font-medium focus:ring-2 focus:ring-[#3483fa]/20 focus:border-[#3483fa] focus:bg-white outline-hidden transition-all"
+                placeholder="Ej: ORD-2026-48912"
+                className="w-full pl-10 pr-4 py-3 bg-white border border-[#262626] rounded-none text-xs sm:text-sm font-bold text-black outline-none placeholder:text-neutral-400"
               />
             </div>
             <button
               type="submit"
               disabled={loading}
-              className="px-5 py-3 bg-[#3483fa] hover:bg-blue-600 disabled:bg-slate-300 text-white text-xs sm:text-sm font-bold rounded-xl shadow-xs transition-colors flex items-center gap-1.5 cursor-pointer shrink-0"
+              className="px-5 py-3 bg-[#de2a2a] hover:bg-red-700 disabled:bg-neutral-600 text-white text-xs font-bold uppercase tracking-widest rounded-none transition-colors flex items-center gap-1.5 cursor-pointer shrink-0"
             >
               {loading ? (
                 <TbRefresh className="animate-spin" size={18} />
@@ -156,7 +157,7 @@ function TrackingContent() {
           {/* Compras recientes en este dispositivo */}
           {recentOrders.length > 0 && (
             <div className="mt-4 flex flex-wrap items-center justify-center gap-1.5 text-xs">
-              <span className="text-slate-500 font-medium">Compras en este equipo:</span>
+              <span className="text-neutral-400 font-medium">Compras recientes:</span>
               {recentOrders.map((ro) => (
                 <button
                   key={ro.orderNumber}
@@ -165,7 +166,7 @@ function TrackingContent() {
                     setOrderQuery(ro.orderNumber);
                     fetchTracking(ro.orderNumber);
                   }}
-                  className="px-2.5 py-1 bg-slate-100 hover:bg-blue-50 hover:text-[#3483fa] border border-slate-200 rounded-lg font-mono text-[11px] font-bold transition-colors cursor-pointer"
+                  className="px-2.5 py-1 bg-neutral-900 hover:bg-[#de2a2a] border border-[#262626] hover:border-[#de2a2a] text-white rounded-none font-mono text-[11px] font-bold transition-colors cursor-pointer"
                 >
                   {ro.orderNumber}
                 </button>
@@ -173,17 +174,17 @@ function TrackingContent() {
             </div>
           )}
 
-          <div className="mt-3 text-[12px] text-slate-500">
+          <div className="mt-4 text-xs text-neutral-400">
             ¿No tienes a la mano tu número de pedido?{' '}
-            <Link href="/mis-compras" className="text-[#3483fa] font-bold hover:underline">
+            <Link href="/mis-compras" className="text-[#de2a2a] font-bold hover:underline">
               Búscalo en Mis Compras
             </Link>
-            {' '}con tu correo electrónico o DNI/RUC.
+            {' '}con tu cuenta o correo.
           </div>
 
           {error && (
-            <div className="mt-4 max-w-md mx-auto p-3.5 bg-rose-50 border border-rose-200 rounded-xl text-rose-800 text-xs font-medium flex items-center gap-2 text-left">
-              <TbAlertCircle size={18} className="text-rose-600 shrink-0" />
+            <div className="mt-4 max-w-md mx-auto p-3.5 bg-red-950/80 border border-[#de2a2a] rounded-none text-white text-xs font-medium flex items-center gap-2 text-left">
+              <TbAlertCircle size={18} className="text-[#de2a2a] shrink-0" />
               <span>{error}</span>
             </div>
           )}
@@ -193,27 +194,27 @@ function TrackingContent() {
         {order && (
           <div className="space-y-6 animate-in fade-in duration-200">
             {/* Header del pedido */}
-            <div className="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm">
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-slate-100 pb-4">
+            <div className="bg-white rounded-none border border-[#d9d9d9] p-5 sm:p-6">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-[#d9d9d9] pb-4">
                 <div>
-                  <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider block">
+                  <span className="text-[11px] font-bold text-neutral-500 uppercase tracking-wider block">
                     Número de Seguimiento
                   </span>
                   <div className="flex items-center gap-2 mt-0.5">
-                    <span className="font-mono text-xl font-bold text-slate-900">
+                    <span className="font-mono text-xl font-extrabold text-black">
                       #{order.orderNumber}
                     </span>
                     {order.environment === 'test' && (
-                      <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-100 text-amber-800 border border-amber-200">
+                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-none bg-[#f3ff34] text-black border border-black uppercase">
                         TEST
                       </span>
                     )}
                   </div>
                 </div>
 
-                <div className="text-xs sm:text-right text-slate-500">
+                <div className="text-xs sm:text-right text-neutral-500">
                   <span className="block">Fecha de Compra:</span>
-                  <strong className="text-slate-800 font-semibold">
+                  <strong className="text-black font-bold">
                     {new Date(order.createdAt).toLocaleDateString('es-PE', {
                       day: '2-digit',
                       month: 'long',
@@ -227,11 +228,11 @@ function TrackingContent() {
 
               {/* TIMELINE / LÍNEA DE TIEMPO DE ESTADOS */}
               {isCancelled ? (
-                <div className="mt-6 p-4 bg-rose-50 rounded-xl border border-rose-200 text-rose-800 text-xs flex items-center gap-3">
-                  <TbAlertCircle size={22} className="text-rose-600 shrink-0" />
+                <div className="mt-6 p-4 bg-red-50 rounded-none border border-[#de2a2a] text-[#de2a2a] text-xs flex items-center gap-3">
+                  <TbAlertCircle size={22} className="shrink-0" />
                   <div>
-                    <strong className="font-bold block text-sm">Pedido Cancelado</strong>
-                    <p className="mt-0.5 text-rose-700">
+                    <strong className="font-bold uppercase block text-sm">Pedido Cancelado</strong>
+                    <p className="mt-0.5 text-neutral-700">
                       Este pedido fue cancelado. Si tienes consultas sobre reembolsos, contáctate con nuestro canal de atención.
                     </p>
                   </div>
@@ -249,13 +250,13 @@ function TrackingContent() {
                       {
                         step: 2,
                         label: 'En Preparación',
-                        desc: 'Empacando en almacén',
+                        desc: 'Empacando tu pedido',
                         icon: TbPackage,
                       },
                       {
                         step: 3,
                         label: 'En Camino',
-                        desc: 'Con courier / motorizado',
+                        desc: 'Con motorizado asignado',
                         icon: TbTruckDelivery,
                       },
                       {
@@ -272,37 +273,29 @@ function TrackingContent() {
                       return (
                         <div
                           key={st.step}
-                          className={`p-4 rounded-xl border transition-all ${
+                          className={`p-4 rounded-none border transition-all ${
                             isCurrent
-                              ? 'bg-blue-50/70 border-blue-300 ring-2 ring-blue-500/10'
+                              ? 'bg-red-50/50 border-[#de2a2a]'
                               : isCompleted
-                              ? 'bg-emerald-50/50 border-emerald-200'
-                              : 'bg-slate-50/60 border-slate-200 opacity-60'
+                                ? 'bg-[#2e9e7b]/5 border-[#2e9e7b]'
+                                : 'bg-[#f8f8f8] border-[#d9d9d9] opacity-60'
                           }`}
                         >
                           <div
-                            className={`w-9 h-9 rounded-lg flex items-center justify-center mb-2.5 ${
+                            className={`w-9 h-9 rounded-none flex items-center justify-center mb-2.5 ${
                               isCurrent
-                                ? 'bg-[#3483fa] text-white shadow-xs'
+                                ? 'bg-[#de2a2a] text-white'
                                 : isCompleted
-                                ? 'bg-emerald-600 text-white'
-                                : 'bg-slate-200 text-slate-500'
+                                  ? 'bg-[#2e9e7b] text-white'
+                                  : 'bg-neutral-200 text-neutral-500'
                             }`}
                           >
                             <IconComponent size={18} />
                           </div>
-                          <h4
-                            className={`text-xs font-bold ${
-                              isCurrent
-                                ? 'text-blue-900'
-                                : isCompleted
-                                ? 'text-emerald-900'
-                                : 'text-slate-600'
-                            }`}
-                          >
+                          <h4 className="font-display text-xs font-extrabold uppercase text-black">
                             {st.label}
                           </h4>
-                          <p className="text-[11px] text-slate-500 mt-0.5 leading-snug">
+                          <p className="text-[11px] text-neutral-600 mt-0.5 leading-snug">
                             {st.desc}
                           </p>
                         </div>
@@ -316,44 +309,45 @@ function TrackingContent() {
             {/* DETALLES DE ENTREGA Y PRODUCTOS */}
             <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
               {/* Productos comprados */}
-              <div className="md:col-span-7 bg-white rounded-2xl border border-slate-200 p-5 shadow-sm space-y-3">
-                <h3 className="text-xs font-bold uppercase tracking-wider text-slate-700 flex items-center gap-1.5 border-b border-slate-100 pb-2.5">
-                  <TbPackage className="text-[#3483fa]" size={16} />
+              <div className="md:col-span-7 bg-white rounded-none border border-[#d9d9d9] p-5 space-y-3">
+                <h3 className="font-display text-xs font-extrabold uppercase tracking-wider text-black flex items-center gap-1.5 border-b border-[#d9d9d9] pb-2.5">
+                  <TbPackage className="text-[#de2a2a]" size={16} />
                   <span>Artículos en tu compra ({order.items?.length || 0})</span>
                 </h3>
 
-                <div className="divide-y divide-slate-100">
+                <div className="divide-y divide-[#d9d9d9]">
                   {order.items?.map((item) => (
                     <div key={item.id} className="py-3 flex items-center justify-between gap-3 text-xs">
                       <div className="flex items-center gap-3">
                         {item.productImageUrl ? (
+                          // eslint-disable-next-line @next/next/no-img-element
                           <img
                             src={item.productImageUrl}
                             alt={item.productTitle}
-                            className="w-12 h-12 object-contain rounded-lg border border-slate-100 p-1"
+                            className="w-12 h-12 object-contain rounded-none border border-[#d9d9d9] bg-[#f8f8f8] p-1"
                           />
                         ) : (
-                          <div className="w-12 h-12 bg-slate-100 rounded-lg flex items-center justify-center text-slate-400">
+                          <div className="w-12 h-12 bg-[#f8f8f8] border border-[#d9d9d9] rounded-none flex items-center justify-center text-neutral-400">
                             <TbPackage size={20} />
                           </div>
                         )}
                         <div>
-                          <p className="font-semibold text-slate-900">{item.productTitle}</p>
-                          <p className="text-slate-500 text-[11px]">
+                          <p className="font-bold text-black">{item.productTitle}</p>
+                          <p className="text-neutral-500 text-[11px]">
                             {item.quantity} x S/ {Number(item.unitPrice).toFixed(2)}
                           </p>
                         </div>
                       </div>
-                      <span className="font-bold text-slate-900">
+                      <span className="font-extrabold text-black">
                         S/ {Number(item.subtotal).toFixed(2)}
                       </span>
                     </div>
                   ))}
                 </div>
 
-                <div className="pt-3 border-t border-slate-100 flex justify-between items-center text-xs">
-                  <span className="text-slate-500">Total de la orden:</span>
-                  <span className="text-base font-extrabold text-slate-900">
+                <div className="pt-3 border-t border-[#d9d9d9] flex justify-between items-center text-xs">
+                  <span className="text-neutral-500 font-bold uppercase">Total de la orden:</span>
+                  <span className="font-display text-lg font-extrabold text-black">
                     S/ {Number(order.total).toFixed(2)}
                   </span>
                 </div>
@@ -361,52 +355,52 @@ function TrackingContent() {
 
               {/* Información de envío y contacto */}
               <div className="md:col-span-5 space-y-4">
-                <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm space-y-3 text-xs">
-                  <h3 className="font-bold uppercase tracking-wider text-slate-700 flex items-center gap-1.5 border-b border-slate-100 pb-2.5">
-                    <TbMapPin className="text-[#3483fa]" size={16} />
+                <div className="bg-white rounded-none border border-[#d9d9d9] p-5 space-y-3 text-xs">
+                  <h3 className="font-display font-extrabold uppercase tracking-wider text-black flex items-center gap-1.5 border-b border-[#d9d9d9] pb-2.5">
+                    <TbMapPin className="text-[#de2a2a]" size={16} />
                     <span>Lugar de Entrega</span>
                   </h3>
                   <div>
-                    <span className="text-slate-400 block text-[11px]">Destino:</span>
-                    <strong className="text-slate-900 block font-semibold mt-0.5">
+                    <span className="text-neutral-500 block text-[11px]">Destino:</span>
+                    <strong className="text-black block font-bold mt-0.5">
                       {order.district}, {order.province}, {order.department}
                     </strong>
                   </div>
                   <div>
-                    <span className="text-slate-400 block text-[11px]">Dirección:</span>
-                    <p className="text-slate-700 mt-0.5 bg-slate-50 p-2 rounded-lg border border-slate-200/60 font-medium">
+                    <span className="text-neutral-500 block text-[11px]">Dirección:</span>
+                    <p className="text-black mt-0.5 bg-[#f8f8f8] p-2.5 rounded-none border border-[#d9d9d9] font-medium">
                       {order.address}
                     </p>
                   </div>
                   {order.reference && (
                     <div>
-                      <span className="text-slate-400 block text-[11px]">Referencia:</span>
-                      <p className="text-slate-600 italic mt-0.5">{order.reference}</p>
+                      <span className="text-neutral-500 block text-[11px]">Referencia:</span>
+                      <p className="text-neutral-600 italic mt-0.5">{order.reference}</p>
                     </div>
                   )}
                 </div>
 
                 {/* Comprobante Electrónico SUNAT si fue emitido */}
                 {order.invoicePdfUrl && (
-                  <div className="bg-emerald-50/80 rounded-2xl border border-emerald-200/90 p-4 text-xs text-emerald-950 space-y-2.5">
+                  <div className="bg-[#2e9e7b]/10 rounded-none border border-[#2e9e7b] p-4 text-xs text-black space-y-2.5">
                     <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-1.5 font-bold text-emerald-900">
-                        <TbFileInvoice size={18} className="text-emerald-600" />
+                      <div className="flex items-center gap-1.5 font-bold uppercase">
+                        <TbFileInvoice size={18} className="text-[#2e9e7b]" />
                         <span>Comprobante Electrónico</span>
                       </div>
-                      <span className="text-[10px] bg-emerald-200/80 text-emerald-900 px-2 py-0.5 rounded-full font-bold">
+                      <span className="text-[10px] bg-[#2e9e7b] text-white px-2 py-0.5 rounded-none font-bold uppercase">
                         SUNAT {order.invoiceSunatStatus || 'ACEPTADA'}
                       </span>
                     </div>
-                    <p className="text-[11px] text-emerald-800">
+                    <p className="text-[11px] text-neutral-700">
                       {order.invoiceType === 'factura' ? 'Factura Electrónica' : 'Boleta Electrónica'}:{' '}
-                      <strong className="font-mono text-emerald-950">{order.invoiceSeries}-{order.invoiceNumber}</strong>
+                      <strong className="font-mono text-black">{order.invoiceSeries}-{order.invoiceNumber}</strong>
                     </p>
                     <a
                       href={order.invoicePdfUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center justify-center gap-1.5 w-full py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl transition-colors shadow-2xs"
+                      className="inline-flex items-center justify-center gap-1.5 w-full py-2.5 bg-black hover:bg-[#2e9e7b] text-white font-bold uppercase tracking-wider rounded-none transition-colors"
                     >
                       <TbFileInvoice size={15} />
                       <span>Descargar Comprobante PDF</span>
@@ -415,14 +409,14 @@ function TrackingContent() {
                 )}
 
                 {/* Ayuda y Soporte */}
-                <div className="bg-blue-50/60 rounded-2xl border border-blue-100 p-4 text-xs text-blue-900 space-y-2">
-                  <div className="flex items-center gap-1.5 font-bold text-blue-900">
-                    <TbHelpCircle size={16} className="text-[#3483fa]" />
+                <div className="bg-[#f8f8f8] rounded-none border border-[#d9d9d9] p-4 text-xs text-black space-y-2">
+                  <div className="flex items-center gap-1.5 font-bold uppercase">
+                    <TbHelpCircle size={16} className="text-[#de2a2a]" />
                     <span>¿Necesitas ayuda con tu entrega?</span>
                   </div>
-                  <p className="text-[11px] text-blue-800 leading-relaxed">
+                  <p className="text-[11px] text-neutral-600 leading-relaxed">
                     Si tienes dudas sobre el despacho, contáctanos a nuestro WhatsApp o correo oficial{' '}
-                    <strong>{company?.email || 'soporte@tienda.com'}</strong> indicando tu número de pedido.
+                    <strong className="text-black">{company?.email || 'soporte@tienda.com'}</strong> indicando tu número de pedido.
                   </p>
                 </div>
               </div>
@@ -432,34 +426,40 @@ function TrackingContent() {
 
         {/* Guía informativa si aún no hay búsqueda */}
         {!order && !loading && (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs text-slate-600">
-            <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-2xs space-y-2">
-              <div className="w-8 h-8 rounded-lg bg-blue-50 text-[#3483fa] flex items-center justify-center font-bold">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs text-neutral-600">
+            <div className="bg-[#f8f8f8] p-5 rounded-none border border-[#d9d9d9] space-y-2">
+              <div className="w-8 h-8 rounded-none bg-black text-white flex items-center justify-center font-bold">
                 1
               </div>
-              <h4 className="font-bold text-slate-900 text-sm">¿Dónde está mi número de pedido?</h4>
-              <p className="text-[11px] text-slate-500 leading-relaxed">
+              <h4 className="font-display font-extrabold uppercase text-black text-sm">
+                ¿Dónde está mi número de pedido?
+              </h4>
+              <p className="text-[11px] text-neutral-600 leading-relaxed">
                 Lo encuentras en el correo electrónico de confirmación que te enviamos al momento de comprar (formato ORD-2026-XXXXX).
               </p>
             </div>
 
-            <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-2xs space-y-2">
-              <div className="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold">
+            <div className="bg-[#f8f8f8] p-5 rounded-none border border-[#d9d9d9] space-y-2">
+              <div className="w-8 h-8 rounded-none bg-[#de2a2a] text-white flex items-center justify-center font-bold">
                 2
               </div>
-              <h4 className="font-bold text-slate-900 text-sm">Tiempos de entrega</h4>
-              <p className="text-[11px] text-slate-500 leading-relaxed">
-                Los envíos en Lima Metropolitana toman entre 24 y 48 horas hábiles. Envíos a provincias se despachan en 48 a 72 horas con agencias autorizadas.
+              <h4 className="font-display font-extrabold uppercase text-black text-sm">
+                Delivery rápido y seguro
+              </h4>
+              <p className="text-[11px] text-neutral-600 leading-relaxed">
+                Despachamos en Lima Metropolitana en el menor tiempo posible con embalaje protegido para vinos, chocolates y café. Envíos a provincias con agencias autorizadas.
               </p>
             </div>
 
-            <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-2xs space-y-2">
-              <div className="w-8 h-8 rounded-lg bg-purple-50 text-purple-600 flex items-center justify-center font-bold">
+            <div className="bg-[#f8f8f8] p-5 rounded-none border border-[#d9d9d9] space-y-2">
+              <div className="w-8 h-8 rounded-none bg-[#2e9e7b] text-white flex items-center justify-center font-bold">
                 3
               </div>
-              <h4 className="font-bold text-slate-900 text-sm">Seguridad y Garantía</h4>
-              <p className="text-[11px] text-slate-500 leading-relaxed">
-                Todos nuestros paquetes se entregan sellados, con su comprobante electrónico y número de seguimiento para tu tranquilidad.
+              <h4 className="font-display font-extrabold uppercase text-black text-sm">
+                Autenticidad Garantizada
+              </h4>
+              <p className="text-[11px] text-neutral-600 leading-relaxed">
+                Todos nuestros pedidos se entregan con empaque sellado e intacto, comprobante electrónico SUNAT y seguimiento en línea.
               </p>
             </div>
           </div>
@@ -473,9 +473,9 @@ export default function TrackingPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen py-20 text-center text-slate-500">
-          <TbRefresh className="w-8 h-8 mx-auto animate-spin text-[#3483fa] mb-2" />
-          <p className="text-sm font-medium">Cargando módulo de rastreo...</p>
+        <div className="min-h-screen bg-white py-20 text-center text-neutral-500">
+          <TbRefresh className="w-8 h-8 mx-auto animate-spin text-[#de2a2a] mb-2" />
+          <p className="text-xs font-bold uppercase tracking-wider">Cargando módulo de rastreo...</p>
         </div>
       }
     >
@@ -483,4 +483,3 @@ export default function TrackingPage() {
     </Suspense>
   );
 }
-

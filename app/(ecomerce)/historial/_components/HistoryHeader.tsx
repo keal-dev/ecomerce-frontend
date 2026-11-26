@@ -15,7 +15,6 @@ interface HistoryHeaderProps {
 
 export const HistoryHeader = ({
   totalCount,
-  filteredCount,
   searchQuery,
   onSearchChange,
   activeFilter,
@@ -31,19 +30,19 @@ export const HistoryHeader = ({
 
   return (
     <>
-      <div className="bg-white rounded-xl shadow-xs border border-gray-200/80 p-4 sm:p-5 mb-5">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-gray-100 pb-4">
+      <div className="bg-white rounded-none border border-[#d9d9d9] p-5 sm:p-6 mb-6">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[#d9d9d9] pb-4">
           <div>
-            <div className="flex items-center gap-2.5">
-              <h1 className="text-xl sm:text-2xl font-bold text-gray-900 tracking-tight">
+            <div className="flex items-center gap-3 flex-wrap">
+              <h1 className="font-display text-xl sm:text-2xl font-extrabold uppercase tracking-tight text-black">
                 Historial de navegación
               </h1>
-              <span className="bg-blue-50 text-[#3483fa] text-xs font-semibold px-2.5 py-0.5 rounded-full border border-blue-100">
+              <span className="bg-black text-white text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-none">
                 {totalCount} {totalCount === 1 ? 'producto' : 'productos'}
               </span>
             </div>
-            <p className="text-xs sm:text-sm text-gray-500 mt-1 font-light">
-              Publicaciones y productos que visitaste recientemente en nuestra tienda
+            <p className="text-xs sm:text-sm text-neutral-500 mt-1">
+              Productos que visitaste recientemente en nuestra tienda.
             </p>
           </div>
 
@@ -52,9 +51,9 @@ export const HistoryHeader = ({
               <button
                 type="button"
                 onClick={() => setShowConfirmModal(true)}
-                className="flex items-center gap-1.5 px-3 py-2 text-xs font-medium text-rose-600 hover:text-rose-700 hover:bg-rose-50 rounded-lg transition-colors border border-transparent hover:border-rose-200 cursor-pointer"
+                className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold uppercase tracking-wider text-[#de2a2a] border border-[#d9d9d9] hover:border-[#de2a2a] hover:bg-red-50 rounded-none transition-colors cursor-pointer"
               >
-                <TbTrash size={16} />
+                <TbTrash size={15} />
                 <span>Borrar historial</span>
               </button>
             </div>
@@ -67,21 +66,21 @@ export const HistoryHeader = ({
             <div className="relative flex-1 max-w-md">
               <TbSearch
                 size={17}
-                className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"
+                className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400 pointer-events-none"
               />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => onSearchChange(e.target.value)}
                 placeholder="Buscar en tu historial..."
-                className="w-full pl-9 pr-8 py-2 text-xs sm:text-sm bg-gray-50 hover:bg-white focus:bg-white border border-gray-200 focus:border-[#3483fa] rounded-lg outline-none transition-all"
+                className="w-full pl-9 pr-8 py-2 text-xs sm:text-sm bg-[#f8f8f8] focus:bg-white border border-[#d9d9d9] focus:border-black rounded-none outline-none transition-colors"
               />
               {searchQuery && (
                 <button
                   type="button"
                   onClick={() => onSearchChange('')}
                   aria-label="Limpiar búsqueda"
-                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 p-0.5"
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-black p-0.5 cursor-pointer"
                 >
                   <TbX size={15} />
                 </button>
@@ -89,14 +88,14 @@ export const HistoryHeader = ({
             </div>
 
             {/* Píldoras de filtro rápido */}
-            <div className="flex items-center gap-2 overflow-x-auto pb-1 sm:pb-0 text-xs font-medium">
+            <div className="flex items-center gap-2 overflow-x-auto pb-1 sm:pb-0 text-xs font-bold uppercase tracking-wider">
               <button
                 type="button"
                 onClick={() => onFilterChange('all')}
-                className={`px-3 py-1.5 rounded-full transition-all whitespace-nowrap cursor-pointer ${
+                className={`px-3.5 py-2 rounded-none transition-colors whitespace-nowrap cursor-pointer border ${
                   activeFilter === 'all'
-                    ? 'bg-[#3483fa] text-white shadow-xs'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    ? 'bg-black text-white border-black'
+                    : 'bg-[#f8f8f8] text-neutral-700 border-[#d9d9d9] hover:border-black'
                 }`}
               >
                 Todos ({totalCount})
@@ -105,10 +104,10 @@ export const HistoryHeader = ({
               <button
                 type="button"
                 onClick={() => onFilterChange('discount')}
-                className={`px-3 py-1.5 rounded-full transition-all whitespace-nowrap cursor-pointer ${
+                className={`px-3.5 py-2 rounded-none transition-colors whitespace-nowrap cursor-pointer border ${
                   activeFilter === 'discount'
-                    ? 'bg-[#00a650] text-white shadow-xs'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    ? 'bg-[#de2a2a] text-white border-[#de2a2a]'
+                    : 'bg-[#f8f8f8] text-neutral-700 border-[#d9d9d9] hover:border-black'
                 }`}
               >
                 Con descuento
@@ -117,10 +116,10 @@ export const HistoryHeader = ({
               <button
                 type="button"
                 onClick={() => onFilterChange('shipping')}
-                className={`px-3 py-1.5 rounded-full transition-all whitespace-nowrap cursor-pointer ${
+                className={`px-3.5 py-2 rounded-none transition-colors whitespace-nowrap cursor-pointer border ${
                   activeFilter === 'shipping'
-                    ? 'bg-[#3483fa] text-white shadow-xs'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    ? 'bg-black text-white border-black'
+                    : 'bg-[#f8f8f8] text-neutral-700 border-[#d9d9d9] hover:border-black'
                 }`}
               >
                 Envío gratis
@@ -132,15 +131,15 @@ export const HistoryHeader = ({
 
       {/* Modal de confirmación para borrar historial */}
       {showConfirmModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-xs p-4 animate-in fade-in duration-150">
-          <div className="bg-white rounded-2xl max-w-sm w-full p-5 shadow-2xl border border-gray-100">
-            <div className="w-11 h-11 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center mb-3">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4 animate-in fade-in duration-150">
+          <div className="bg-white rounded-none max-w-sm w-full p-6 shadow-2xl border border-black">
+            <div className="w-11 h-11 rounded-none bg-[#de2a2a] text-white flex items-center justify-center mb-4">
               <TbAlertCircle size={24} />
             </div>
-            <h3 className="text-base font-bold text-gray-900">
+            <h3 className="font-display text-base font-extrabold uppercase text-black">
               ¿Borrar todo el historial?
             </h3>
-            <p className="text-xs text-gray-600 mt-1.5 leading-relaxed font-light">
+            <p className="text-xs text-neutral-600 mt-1.5 leading-relaxed">
               Se eliminarán las {totalCount} publicaciones que visitaste de este dispositivo. Esta acción no se puede deshacer.
             </p>
 
@@ -148,14 +147,14 @@ export const HistoryHeader = ({
               <button
                 type="button"
                 onClick={() => setShowConfirmModal(false)}
-                className="px-3.5 py-2 text-xs font-medium text-gray-700 hover:bg-gray-100 rounded-lg transition-colors cursor-pointer"
+                className="px-4 py-2 text-xs font-bold uppercase tracking-wider text-black border border-[#d9d9d9] hover:border-black rounded-none transition-colors cursor-pointer"
               >
                 Cancelar
               </button>
               <button
                 type="button"
                 onClick={handleConfirmClear}
-                className="px-4 py-2 text-xs font-semibold text-white bg-rose-600 hover:bg-rose-700 rounded-lg shadow-xs transition-colors cursor-pointer"
+                className="px-4 py-2 text-xs font-bold uppercase tracking-wider text-white bg-[#de2a2a] hover:bg-red-700 rounded-none transition-colors cursor-pointer"
               >
                 Sí, borrar todo
               </button>

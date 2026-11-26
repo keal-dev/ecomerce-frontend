@@ -77,10 +77,10 @@ function SidebarInner({ onClose }: { onClose?: () => void }) {
 
   return (
     <div 
-      className="flex flex-col h-full bg-[#0f172a] transition-colors duration-300"
+      className="flex flex-col h-full bg-black transition-colors duration-300"
     >
-      {/* Logo Header: Oscuro matching el cuerpo del sidebar */}
-      <div className="h-[52px] bg-[#0f172a] border-b border-slate-800 flex items-center justify-between px-3 shrink-0">
+      {/* Logo Header: Negro puro matching el cuerpo del sidebar */}
+      <div className="h-[52px] bg-black border-b border-[#262626] flex items-center justify-between px-3 shrink-0">
         <Link 
           href="/admin" 
           onClick={onClose}
@@ -95,11 +95,11 @@ function SidebarInner({ onClose }: { onClose?: () => void }) {
                 className="w-full h-full object-contain p-1" 
               />
             ) : (
-              <TbBuildingStore size={19} className="text-slate-300" />
+              <TbBuildingStore size={19} className="text-neutral-300" />
             )}
           </div>
-          <span className="font-bold text-sm text-white tracking-tight truncate max-w-[150px]">
-            {company?.name || 'MercadoAdmin'}
+          <span className="font-display font-bold uppercase text-sm text-white tracking-[0.06em] truncate max-w-[150px]">
+            {company?.name || 'Cooperativa Gourmet'}
           </span>
         </Link>
 
@@ -108,7 +108,7 @@ function SidebarInner({ onClose }: { onClose?: () => void }) {
             type="button"
             onClick={onClose}
             aria-label="Cerrar menú"
-            className="p-1.5 text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition-colors cursor-pointer lg:hidden"
+            className="p-1.5 text-neutral-400 hover:text-white hover:bg-white/10 rounded-lg transition-colors cursor-pointer lg:hidden"
           >
             <TbX size={20} />
           </button>
@@ -116,7 +116,7 @@ function SidebarInner({ onClose }: { onClose?: () => void }) {
       </div>
 
       {/* Navigation Sections */}
-      <nav className="flex-1 px-2.5 py-2.5 space-y-2.5 overflow-y-auto bg-[#0f172a]">
+      <nav className="flex-1 px-2.5 py-2.5 space-y-2.5 overflow-y-auto bg-black">
         {/* Dashboard Principal */}
         <div>
           <Link
@@ -124,14 +124,14 @@ function SidebarInner({ onClose }: { onClose?: () => void }) {
             onClick={onClose}
             className={`flex items-center justify-between px-2.5 py-1.5 rounded-lg text-[13px] transition-all duration-150 ${
               isDashboardActive
-                ? 'bg-brand text-gray-900 font-semibold shadow-xs'
-                : 'text-slate-400 hover:bg-[#1e293b]/60 hover:text-slate-100 font-medium'
+                ? 'bg-[#de2a2a] text-white font-semibold shadow-xs'
+                : 'text-neutral-400 hover:bg-white/10 hover:text-white font-medium'
             }`}
           >
             <div className="flex items-center gap-2">
               <TbLayoutDashboard 
                 size={17} 
-                className={isDashboardActive ? 'text-gray-900' : 'text-slate-400'} 
+                className={isDashboardActive ? 'text-white' : 'text-neutral-400'} 
               />
               <span>Dashboard</span>
             </div>
@@ -152,22 +152,22 @@ function SidebarInner({ onClose }: { onClose?: () => void }) {
                   onClick={onClose}
                   className={`flex items-center justify-between px-2.5 py-1.5 rounded-lg text-[13px] transition-all duration-150 ${
                     isActive
-                      ? 'bg-brand text-gray-900 font-semibold shadow-xs'
-                      : 'text-slate-400 hover:bg-[#1e293b]/60 hover:text-slate-100 font-medium'
+                      ? 'bg-[#de2a2a] text-white font-semibold shadow-xs'
+                      : 'text-neutral-400 hover:bg-white/10 hover:text-white font-medium'
                   }`}
                 >
                   <div className="flex items-center gap-2">
                     <Icon 
                       size={16.5} 
-                      className={isActive ? 'text-gray-900' : 'text-slate-400'} 
+                      className={isActive ? 'text-white' : 'text-neutral-400'} 
                     />
                     <span>{item.name}</span>
                   </div>
                   {item.badge && (
                     <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${
                       isActive 
-                        ? 'bg-black/15 text-gray-900' 
-                        : 'bg-slate-800 text-slate-300 border border-slate-700'
+                        ? 'bg-black/25 text-white' 
+                        : 'bg-neutral-900 text-neutral-300 border border-[#262626]'
                     }`}>
                       {item.badge}
                     </span>
@@ -181,9 +181,9 @@ function SidebarInner({ onClose }: { onClose?: () => void }) {
         {/* Bloque: Mantenimiento / Catálogo (Exclusivo SUPER_ADMIN) */}
         {isSuperAdmin && (
           <>
-            <div className="border-t border-slate-800 py-0.5" />
+            <div className="border-t border-[#262626] py-0.5" />
             <div>
-              <div className="px-2 mb-1 text-[0.6rem] font-bold text-slate-400 uppercase tracking-wider">
+              <div className="px-2 mb-1 text-[0.6rem] font-bold text-neutral-500 uppercase tracking-wider">
                 Catálogo Central
               </div>
               <div className="space-y-0.5">
@@ -198,22 +198,22 @@ function SidebarInner({ onClose }: { onClose?: () => void }) {
                       onClick={onClose}
                       className={`flex items-center justify-between px-2.5 py-1.5 rounded-lg text-[13px] transition-all duration-150 ${
                         isActive
-                          ? 'bg-brand text-gray-900 font-semibold shadow-xs'
-                          : 'text-slate-400 hover:bg-[#1e293b]/60 hover:text-slate-100 font-medium'
+                          ? 'bg-[#de2a2a] text-white font-semibold shadow-xs'
+                          : 'text-neutral-400 hover:bg-white/10 hover:text-white font-medium'
                       }`}
                     >
                       <div className="flex items-center gap-2">
                         <Icon 
                           size={16.5} 
-                          className={isActive ? 'text-gray-900' : 'text-slate-400'} 
+                          className={isActive ? 'text-white' : 'text-neutral-400'} 
                         />
                         <span>{item.name}</span>
                       </div>
                       {item.badge && (
                         <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${
                           isActive 
-                            ? 'bg-black/15 text-gray-900' 
-                            : 'bg-slate-800 text-slate-300 border border-slate-700'
+                            ? 'bg-black/25 text-white' 
+                            : 'bg-neutral-900 text-neutral-300 border border-[#262626]'
                         }`}>
                           {item.badge}
                         </span>
@@ -229,9 +229,9 @@ function SidebarInner({ onClose }: { onClose?: () => void }) {
         {/* Bloque: Otros / Configuración (Super Admin y Admin) */}
         {!isSeller && (
           <>
-            <div className="border-t border-slate-800 py-0.5" />
+            <div className="border-t border-[#262626] py-0.5" />
             <div>
-              <div className="px-2 mb-1 text-[0.6rem] font-bold text-slate-400 uppercase tracking-wider">
+              <div className="px-2 mb-1 text-[0.6rem] font-bold text-neutral-500 uppercase tracking-wider">
                 Configuración
               </div>
               <div className="space-y-0.5">
@@ -246,14 +246,14 @@ function SidebarInner({ onClose }: { onClose?: () => void }) {
                       onClick={onClose}
                       className={`flex items-center justify-between px-2.5 py-1.5 rounded-lg text-[13px] transition-all duration-150 ${
                         isActive
-                          ? 'bg-brand text-gray-900 font-semibold shadow-xs'
-                          : 'text-slate-400 hover:bg-[#1e293b]/60 hover:text-slate-100 font-medium'
+                          ? 'bg-[#de2a2a] text-white font-semibold shadow-xs'
+                          : 'text-neutral-400 hover:bg-white/10 hover:text-white font-medium'
                       }`}
                     >
                       <div className="flex items-center gap-2">
                         <Icon 
                           size={16.5} 
-                          className={isActive ? 'text-gray-900' : 'text-slate-400'} 
+                          className={isActive ? 'text-white' : 'text-neutral-400'} 
                         />
                         <span>{item.name}</span>
                       </div>
@@ -275,7 +275,7 @@ export function Sidebar() {
   return (
     <>
       {/* 1. Sidebar Fijo para Escritorio (>= lg) */}
-      <aside className="hidden lg:flex w-56 shrink-0 flex-col bg-[#0f172a] border-r border-slate-800 fixed inset-y-0 left-0 z-30 h-screen">
+      <aside className="hidden lg:flex w-56 shrink-0 flex-col bg-black border-r border-[#262626] fixed inset-y-0 left-0 z-30 h-screen">
         <SidebarInner />
       </aside>
 
@@ -284,13 +284,13 @@ export function Sidebar() {
         <div className="fixed inset-0 z-50 lg:hidden">
           {/* Backdrop con desenfoque suave */}
           <div 
-            className="fixed inset-0 bg-black/50 backdrop-blur-xs transition-opacity animate-in fade-in duration-200"
+            className="fixed inset-0 bg-black/60 backdrop-blur-xs transition-opacity animate-in fade-in duration-200"
             onClick={closeMobileSidebar}
             aria-hidden="true"
           />
 
           {/* Drawer contenedor que se desliza desde la izquierda */}
-          <aside className="fixed inset-y-0 left-0 z-50 w-64 bg-[#0f172a] border-r border-slate-800 shadow-2xl animate-in slide-in-from-left duration-200 h-screen">
+          <aside className="fixed inset-y-0 left-0 z-50 w-64 bg-black border-r border-[#262626] shadow-2xl animate-in slide-in-from-left duration-200 h-screen">
             <SidebarInner onClose={closeMobileSidebar} />
           </aside>
         </div>

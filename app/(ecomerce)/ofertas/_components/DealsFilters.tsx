@@ -4,7 +4,7 @@ import React from 'react';
 import { TbFilter, TbX, TbTruckDelivery, TbBolt, TbPercentage } from 'react-icons/tb';
 
 export interface DealsFilterState {
-  minDiscount: number; // 0, 10, 20, 30, 40
+  minDiscount: number;
   categoryId: string | null;
   onlyFreeShipping: boolean;
   onlyFull: boolean;
@@ -42,18 +42,20 @@ export function DealsFilters({
   ];
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-4 sm:p-5 shadow-xs space-y-6">
+    <div className="bg-white rounded-none border border-[#d9d9d9] p-4 sm:p-5 space-y-6">
       {/* Cabecera de Filtros */}
-      <div className="flex items-center justify-between pb-3 border-b border-gray-100">
+      <div className="flex items-center justify-between pb-3 border-b border-[#d9d9d9]">
         <div className="flex items-center gap-2">
-          <TbFilter size={18} className="text-[#3483fa]" />
-          <h2 className="text-xs sm:text-sm font-bold text-gray-900">Filtrar Ofertas</h2>
+          <TbFilter size={17} className="text-[#de2a2a]" />
+          <h2 className="font-display text-sm font-extrabold uppercase tracking-tight text-black">
+            Filtrar Promos
+          </h2>
         </div>
         {hasActiveFilters && (
           <button
             type="button"
             onClick={onResetFilters}
-            className="text-[11px] font-bold text-[#3483fa] hover:text-blue-800 hover:underline flex items-center gap-1 cursor-pointer"
+            className="text-[11px] font-bold uppercase tracking-wider text-[#de2a2a] hover:underline flex items-center gap-1 cursor-pointer"
           >
             <TbX size={13} />
             <span>Limpiar</span>
@@ -63,106 +65,116 @@ export function DealsFilters({
 
       {/* 1. Porcentaje de Descuento */}
       <div>
-        <h3 className="text-xs font-bold text-gray-800 mb-2.5 flex items-center gap-1.5">
-          <TbPercentage size={15} className="text-emerald-600" />
+        <h3 className="text-[11px] font-bold uppercase tracking-widest text-black mb-2.5 flex items-center gap-1.5">
+          <TbPercentage size={14} className="text-[#de2a2a]" />
           <span>Porcentaje de Descuento</span>
         </h3>
-        <div className="space-y-1.5">
-          {discountTiers.map((tier) => (
-            <label
-              key={tier.value}
-              className={`flex items-center justify-between p-2 rounded-lg text-xs font-medium cursor-pointer transition-colors ${
-                filters.minDiscount === tier.value
-                  ? 'bg-blue-50 text-[#3483fa] font-bold'
-                  : 'hover:bg-gray-50 text-gray-700'
-              }`}
-            >
-              <div className="flex items-center gap-2">
-                <input
-                  type="radio"
-                  name="minDiscount"
-                  checked={filters.minDiscount === tier.value}
-                  onChange={() => onFilterChange({ minDiscount: tier.value })}
-                  className="text-[#3483fa] focus:ring-blue-200"
-                />
-                <span>{tier.label}</span>
-              </div>
-            </label>
-          ))}
+        <div className="space-y-1">
+          {discountTiers.map((tier) => {
+            const active = filters.minDiscount === tier.value;
+            return (
+              <label
+                key={tier.value}
+                className={`flex items-center justify-between px-2.5 py-2 rounded-none text-xs cursor-pointer transition-colors ${
+                  active
+                    ? 'bg-black text-white font-bold'
+                    : 'hover:bg-[#f8f8f8] text-neutral-700 font-medium'
+                }`}
+              >
+                <div className="flex items-center gap-2">
+                  <input
+                    type="radio"
+                    name="minDiscount"
+                    checked={active}
+                    onChange={() => onFilterChange({ minDiscount: tier.value })}
+                    className="accent-[#de2a2a] cursor-pointer"
+                  />
+                  <span>{tier.label}</span>
+                </div>
+              </label>
+            );
+          })}
         </div>
       </div>
 
       {/* 2. Categorías con ofertas */}
       {categories.length > 0 && (
-        <div className="pt-2 border-t border-gray-100">
-          <h3 className="text-xs font-bold text-gray-800 mb-2.5">
+        <div className="pt-4 border-t border-[#d9d9d9]">
+          <h3 className="text-[11px] font-bold uppercase tracking-widest text-black mb-2.5">
             Categorías
           </h3>
           <div className="space-y-1 max-h-52 overflow-y-auto pr-1">
             <button
               type="button"
               onClick={() => onFilterChange({ categoryId: null })}
-              className={`w-full text-left px-2 py-1.5 rounded-lg text-xs flex items-center justify-between transition-colors cursor-pointer ${
+              className={`w-full text-left px-2.5 py-1.5 rounded-none text-xs flex items-center justify-between transition-colors cursor-pointer ${
                 filters.categoryId === null
-                  ? 'bg-blue-50 text-[#3483fa] font-bold'
-                  : 'hover:bg-gray-50 text-gray-700'
+                  ? 'bg-black text-white font-bold'
+                  : 'hover:bg-[#f8f8f8] text-neutral-700'
               }`}
             >
               <span>Todas las categorías</span>
             </button>
-            {categories.map((cat) => (
-              <button
-                key={cat.id}
-                type="button"
-                onClick={() => onFilterChange({ categoryId: cat.id })}
-                className={`w-full text-left px-2 py-1.5 rounded-lg text-xs flex items-center justify-between transition-colors cursor-pointer ${
-                  filters.categoryId === cat.id
-                    ? 'bg-blue-50 text-[#3483fa] font-bold'
-                    : 'hover:bg-gray-50 text-gray-700'
-                }`}
-              >
-                <span className="truncate">{cat.name}</span>
-                <span className="text-[10px] text-gray-400 bg-gray-100 px-1.5 py-0.2 rounded-full font-semibold shrink-0 ml-1">
-                  {cat.count}
-                </span>
-              </button>
-            ))}
+            {categories.map((cat) => {
+              const active = filters.categoryId === cat.id;
+              return (
+                <button
+                  key={cat.id}
+                  type="button"
+                  onClick={() => onFilterChange({ categoryId: cat.id })}
+                  className={`w-full text-left px-2.5 py-1.5 rounded-none text-xs flex items-center justify-between transition-colors cursor-pointer ${
+                    active
+                      ? 'bg-black text-white font-bold'
+                      : 'hover:bg-[#f8f8f8] text-neutral-700'
+                  }`}
+                >
+                  <span className="truncate">{cat.name}</span>
+                  <span
+                    className={`text-[10px] px-1.5 py-0.2 rounded-none font-bold shrink-0 ml-1 ${
+                      active ? 'bg-[#de2a2a] text-white' : 'bg-[#f8f8f8] text-neutral-500 border border-[#d9d9d9]'
+                    }`}
+                  >
+                    {cat.count}
+                  </span>
+                </button>
+              );
+            })}
           </div>
         </div>
       )}
 
       {/* 3. Beneficios de Envío */}
-      <div className="pt-2 border-t border-gray-100 space-y-2.5">
-        <h3 className="text-xs font-bold text-gray-800 mb-1">
+      <div className="pt-4 border-t border-[#d9d9d9] space-y-2.5">
+        <h3 className="text-[11px] font-bold uppercase tracking-widest text-black mb-1">
           Opciones de Envío
         </h3>
 
-        <label className="flex items-center gap-2 text-xs font-medium text-gray-700 cursor-pointer hover:text-gray-900 select-none">
+        <label className="flex items-center gap-2 text-xs font-medium text-neutral-700 cursor-pointer hover:text-black select-none">
           <input
             type="checkbox"
             checked={filters.onlyFreeShipping}
             onChange={(e) => onFilterChange({ onlyFreeShipping: e.target.checked })}
-            className="rounded border-gray-300 text-[#00a650] focus:ring-emerald-200"
+            className="w-4 h-4 rounded-none accent-[#de2a2a] cursor-pointer"
           />
-          <TbTruckDelivery size={16} className="text-[#00a650]" />
+          <TbTruckDelivery size={16} className="text-[#2e9e7b]" />
           <span>Envío gratis</span>
         </label>
 
-        <label className="flex items-center gap-2 text-xs font-medium text-gray-700 cursor-pointer hover:text-gray-900 select-none">
+        <label className="flex items-center gap-2 text-xs font-medium text-neutral-700 cursor-pointer hover:text-black select-none">
           <input
             type="checkbox"
             checked={filters.onlyFull}
             onChange={(e) => onFilterChange({ onlyFull: e.target.checked })}
-            className="rounded border-gray-300 text-[#00a650] focus:ring-emerald-200"
+            className="w-4 h-4 rounded-none accent-[#de2a2a] cursor-pointer"
           />
-          <TbBolt size={16} className="text-[#00a650]" />
-          <span>Envío FULL inmediato</span>
+          <TbBolt size={16} className="text-[#2e9e7b]" />
+          <span>Envío EXPRESS inmediato</span>
         </label>
       </div>
 
       {/* 4. Rango de Precio */}
-      <div className="pt-2 border-t border-gray-100">
-        <h3 className="text-xs font-bold text-gray-800 mb-2">
+      <div className="pt-4 border-t border-[#d9d9d9]">
+        <h3 className="text-[11px] font-bold uppercase tracking-widest text-black mb-2">
           Precio (S/)
         </h3>
         <div className="flex items-center gap-2">
@@ -172,16 +184,16 @@ export function DealsFilters({
             placeholder="Mínimo"
             value={filters.minPrice}
             onChange={(e) => onFilterChange({ minPrice: e.target.value })}
-            className="w-full px-2.5 py-1.5 bg-white border border-gray-300 rounded-lg text-xs text-gray-900 focus:outline-none focus:border-[#3483fa]"
+            className="w-full px-2.5 py-2 bg-white border border-[#d9d9d9] rounded-none text-xs text-black focus:outline-none focus:border-black"
           />
-          <span className="text-gray-400 text-xs">-</span>
+          <span className="text-neutral-400 text-xs">-</span>
           <input
             type="number"
             min="0"
             placeholder="Máximo"
             value={filters.maxPrice}
             onChange={(e) => onFilterChange({ maxPrice: e.target.value })}
-            className="w-full px-2.5 py-1.5 bg-white border border-gray-300 rounded-lg text-xs text-gray-900 focus:outline-none focus:border-[#3483fa]"
+            className="w-full px-2.5 py-2 bg-white border border-[#d9d9d9] rounded-none text-xs text-black focus:outline-none focus:border-black"
           />
         </div>
       </div>

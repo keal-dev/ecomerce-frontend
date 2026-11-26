@@ -2,18 +2,12 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { 
-  TbChevronRight, 
-  TbBook, 
-  TbFileCheck, 
-  TbPrinter, 
-  TbBuildingStore, 
-  TbUser, 
-  TbShoppingBag, 
-  TbAlertCircle, 
-  TbCheck, 
+import {
+  TbChevronRight,
+  TbBook,
+  TbPrinter,
+  TbAlertCircle,
   TbArrowLeft,
-  TbHelpCircle
 } from 'react-icons/tb';
 import { useCompanyStore } from '@/stores/company.store';
 import { getDepartments, getProvinces, getDistricts } from '@/services/ubigeo.service';
@@ -26,7 +20,7 @@ interface ClaimFormData {
   tutorDocType: string;
   tutorDocNumber: string;
   tutorPhone: string;
-  
+
   docType: string;
   docNumber: string;
   fullName: string;
@@ -36,12 +30,12 @@ interface ClaimFormData {
   province: string;
   district: string;
   address: string;
-  
+
   contractType: 'producto' | 'servicio';
   claimedAmount: string;
   orderNumber: string;
   contractDescription: string;
-  
+
   claimType: 'reclamo' | 'queja';
   claimDetail: string;
   claimRequest: string;
@@ -64,7 +58,7 @@ export default function LibroDeReclamacionesPage() {
     tutorDocType: 'DNI',
     tutorDocNumber: '',
     tutorPhone: '',
-    
+
     docType: 'DNI',
     docNumber: '',
     fullName: '',
@@ -74,12 +68,12 @@ export default function LibroDeReclamacionesPage() {
     province: '',
     district: '',
     address: '',
-    
+
     contractType: 'producto',
     claimedAmount: '',
     orderNumber: '',
     contractDescription: '',
-    
+
     claimType: 'reclamo',
     claimDetail: '',
     claimRequest: '',
@@ -88,7 +82,6 @@ export default function LibroDeReclamacionesPage() {
 
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
-  // Estados para Ubigeo Dinámico
   const [departments, setDepartments] = useState<DepartmentItem[]>([]);
   const [provinces, setProvinces] = useState<ProvinceItem[]>([]);
   const [districts, setDistricts] = useState<DistrictItem[]>([]);
@@ -112,7 +105,7 @@ export default function LibroDeReclamacionesPage() {
     loadDepts();
   }, [fetchCompany]);
 
-  const companyName = company?.name || 'MercadoAdmin';
+  const companyName = company?.name || 'Cooperativa Gourmet';
   const legalName = company?.legalName || 'Empresa Principal S.A.C.';
   const taxId = company?.taxId || 'RUC registrado';
   const fiscalAddress = company?.address || 'Lima, Perú';
@@ -183,7 +176,7 @@ export default function LibroDeReclamacionesPage() {
   };
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>,
   ) => {
     const { name, value, type } = e.target;
     if (type === 'checkbox') {
@@ -198,7 +191,6 @@ export default function LibroDeReclamacionesPage() {
     e.preventDefault();
     setErrorMsg(null);
 
-    // Validaciones indispensables de INDECOPI
     if (formData.isMinor && (!formData.tutorName.trim() || !formData.tutorDocNumber.trim())) {
       setErrorMsg('Para menores de edad, debes completar los datos del padre, madre o tutor.');
       return;
@@ -292,19 +284,21 @@ export default function LibroDeReclamacionesPage() {
   // VISTA DE CONSTANCIA FORMAL / HOJA DE RECLAMACIÓN GENERADA
   if (submittedClaim) {
     return (
-      <div className="min-h-screen pb-16 pt-5">
+      <div className="min-h-screen bg-white pb-16 pt-6">
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
           <div className="flex items-center justify-between gap-4 mb-4 print:hidden">
             <button
+              type="button"
               onClick={() => setSubmittedClaim(null)}
-              className="inline-flex items-center gap-1.5 text-xs text-gray-600 hover:text-gray-900 font-medium"
+              className="inline-flex items-center gap-1.5 text-xs text-neutral-600 hover:text-black font-bold uppercase tracking-wider cursor-pointer"
             >
               <TbArrowLeft size={16} />
               Volver al formulario
             </button>
             <button
+              type="button"
               onClick={() => window.print()}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-[#3483fa] hover:bg-blue-600 text-white rounded-lg text-xs font-semibold shadow-xs transition-colors"
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#de2a2a] hover:bg-red-700 text-white rounded-none text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer"
             >
               <TbPrinter size={16} />
               Imprimir / Guardar Constancia en PDF
@@ -312,24 +306,22 @@ export default function LibroDeReclamacionesPage() {
           </div>
 
           {/* Formato Oficial Hoja de Reclamación INDECOPI */}
-          <div className="bg-white rounded-2xl border border-gray-300 p-6 sm:p-10 shadow-sm text-gray-800 space-y-6 print:shadow-none print:border-none print:p-0">
-            {/* Cabecera Oficial */}
-            <div className="border-b-2 border-gray-900 pb-5 text-center">
-              <span className="inline-block px-3 py-1 bg-emerald-100 text-emerald-800 rounded-full text-[11px] font-bold uppercase tracking-wider mb-2 print:hidden">
+          <div className="bg-white rounded-none border-2 border-black p-6 sm:p-10 text-[#020202] space-y-6 print:border-none print:p-0">
+            <div className="border-b-2 border-black pb-5 text-center">
+              <span className="inline-block px-3 py-1 bg-[#2e9e7b] text-white rounded-none text-[11px] font-bold uppercase tracking-wider mb-2 print:hidden">
                 Registro Exitoso conforme a INDECOPI
               </span>
-              <h1 className="text-xl sm:text-2xl font-black text-gray-900 tracking-tight uppercase">
+              <h1 className="font-display text-xl sm:text-2xl font-black text-black tracking-tight uppercase">
                 Libro de Reclamaciones Virtual
               </h1>
-              <p className="text-sm font-bold text-gray-700 mt-1">
+              <p className="text-sm font-bold text-black mt-1 font-mono">
                 Hoja de Reclamación N° {submittedClaim.code}
               </p>
-              <p className="text-xs text-gray-500 mt-0.5">Fecha y hora de registro: {submittedClaim.date}</p>
+              <p className="text-xs text-neutral-500 mt-0.5">Fecha y hora de registro: {submittedClaim.date}</p>
             </div>
 
-            {/* Datos del Proveedor */}
-            <div className="bg-gray-50/80 p-4 rounded-xl border border-gray-200 text-xs space-y-1">
-              <p className="font-bold text-gray-900 uppercase text-[11px] tracking-wider">
+            <div className="bg-[#f8f8f8] p-4 rounded-none border border-[#d9d9d9] text-xs space-y-1">
+              <p className="font-bold text-black uppercase text-[11px] tracking-wider">
                 Datos del Proveedor (Comercio):
               </p>
               <p><strong>Razón Social:</strong> {legalName}</p>
@@ -337,12 +329,11 @@ export default function LibroDeReclamacionesPage() {
               <p><strong>Domicilio Fiscal:</strong> {fiscalAddress}</p>
             </div>
 
-            {/* Bloque 1: Consumidor */}
             <div className="space-y-2 text-xs">
-              <h2 className="font-bold text-gray-900 uppercase text-xs border-b pb-1">
+              <h2 className="font-display font-bold text-black uppercase text-xs border-b border-black pb-1">
                 1. Identificación del Consumidor Reclamante
               </h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-gray-700">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-neutral-800">
                 <p><strong>Nombre / Razón Social:</strong> {submittedClaim.data.fullName}</p>
                 <p><strong>Documento:</strong> {submittedClaim.data.docType} {submittedClaim.data.docNumber}</p>
                 <p><strong>Teléfono / Celular:</strong> {submittedClaim.data.phone || 'No especificado'}</p>
@@ -351,19 +342,18 @@ export default function LibroDeReclamacionesPage() {
                   <strong>Domicilio:</strong> {submittedClaim.data.address}, {submittedClaim.data.district}, {submittedClaim.data.province}, {submittedClaim.data.department}
                 </p>
                 {submittedClaim.data.isMinor && (
-                  <p className="sm:col-span-2 text-amber-800 bg-amber-50 p-2 rounded">
+                  <p className="sm:col-span-2 text-black bg-[#f3ff34]/40 border border-black p-2">
                     <strong>Padre/Madre/Tutor:</strong> {submittedClaim.data.tutorName} ({submittedClaim.data.tutorDocType} {submittedClaim.data.tutorDocNumber}) - Tel: {submittedClaim.data.tutorPhone}
                   </p>
                 )}
               </div>
             </div>
 
-            {/* Bloque 2: Bien Contratado */}
             <div className="space-y-2 text-xs">
-              <h2 className="font-bold text-gray-900 uppercase text-xs border-b pb-1">
+              <h2 className="font-display font-bold text-black uppercase text-xs border-b border-black pb-1">
                 2. Identificación del Bien Contratado
               </h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-gray-700">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-neutral-800">
                 <p><strong>Tipo de Bien:</strong> {submittedClaim.data.contractType === 'producto' ? 'Producto' : 'Servicio'}</p>
                 <p><strong>Monto Reclamado:</strong> {submittedClaim.data.claimedAmount ? `S/ ${submittedClaim.data.claimedAmount}` : 'No consignado'}</p>
                 {submittedClaim.data.orderNumber && (
@@ -375,39 +365,37 @@ export default function LibroDeReclamacionesPage() {
               </div>
             </div>
 
-            {/* Bloque 3: Detalle de la Reclamación */}
             <div className="space-y-3 text-xs">
-              <h2 className="font-bold text-gray-900 uppercase text-xs border-b pb-1">
+              <h2 className="font-display font-bold text-black uppercase text-xs border-b border-black pb-1">
                 3. Detalle de la Reclamación y Pedido del Consumidor
               </h2>
-              <div className="p-3 bg-gray-50 rounded-lg border border-gray-200">
-                <p className="font-bold text-gray-900 uppercase text-[11px]">
-                  Tipo de Reclamación: <span className="text-[#3483fa]">{submittedClaim.data.claimType.toUpperCase()}</span>
+              <div className="p-3 bg-[#f8f8f8] rounded-none border border-[#d9d9d9]">
+                <p className="font-bold text-black uppercase text-[11px]">
+                  Tipo de Reclamación: <span className="text-[#de2a2a]">{submittedClaim.data.claimType.toUpperCase()}</span>
                 </p>
-                <p className="text-[11px] text-gray-500 mt-0.5">
-                  {submittedClaim.data.claimType === 'reclamo' 
-                    ? 'Disconformidad relacionada a los productos o servicios adquiridos.' 
+                <p className="text-[11px] text-neutral-600 mt-0.5">
+                  {submittedClaim.data.claimType === 'reclamo'
+                    ? 'Disconformidad relacionada a los productos o servicios adquiridos.'
                     : 'Malestar o descontento respecto a la atención al cliente.'}
                 </p>
               </div>
 
               <div>
-                <p className="font-bold text-gray-800">Detalle de los hechos:</p>
-                <p className="mt-1 p-3 bg-gray-50 rounded-lg text-gray-700 whitespace-pre-wrap">
+                <p className="font-bold text-black">Detalle de los hechos:</p>
+                <p className="mt-1 p-3 bg-[#f8f8f8] border border-[#d9d9d9] rounded-none text-neutral-800 whitespace-pre-wrap">
                   {submittedClaim.data.claimDetail}
                 </p>
               </div>
 
               <div>
-                <p className="font-bold text-gray-800">Pedido concreto del consumidor:</p>
-                <p className="mt-1 p-3 bg-gray-50 rounded-lg text-gray-700 whitespace-pre-wrap">
+                <p className="font-bold text-black">Pedido concreto del consumidor:</p>
+                <p className="mt-1 p-3 bg-[#f8f8f8] border border-[#d9d9d9] rounded-none text-neutral-800 whitespace-pre-wrap">
                   {submittedClaim.data.claimRequest}
                 </p>
               </div>
             </div>
 
-            {/* Notas Legales INDECOPI */}
-            <div className="pt-4 border-t border-gray-200 text-[11px] text-gray-500 space-y-1.5 leading-relaxed bg-blue-50/50 p-4 rounded-xl">
+            <div className="pt-4 border-t border-[#d9d9d9] text-[11px] text-neutral-600 space-y-1.5 leading-relaxed bg-[#f8f8f8] p-4 rounded-none">
               <p>
                 * <strong>Plazo de respuesta:</strong> Conforme a la <strong>Ley N° 31435</strong> que modifica el Código de Protección y Defensa del Consumidor, el proveedor deberá dar respuesta al reclamo o queja en un <strong>plazo no mayor a quince (15) días hábiles improrrogables</strong>, al correo electrónico consignado.
               </p>
@@ -426,31 +414,31 @@ export default function LibroDeReclamacionesPage() {
 
   // VISTA DEL FORMULARIO OFICIAL
   return (
-    <div className="min-h-screen pb-16">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-5">
+    <div className="min-h-screen bg-white pb-16">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-6">
         {/* Breadcrumb */}
-        <nav className="flex items-center gap-1.5 text-xs text-gray-500 mb-5 font-light">
-          <Link href="/" className="hover:text-[#3483fa] transition-colors">
+        <nav className="flex items-center gap-1.5 text-[11px] uppercase tracking-wider text-neutral-500 mb-5">
+          <Link href="/" className="hover:text-[#de2a2a] transition-colors">
             Inicio
           </Link>
-          <TbChevronRight size={13} className="text-gray-400" />
-          <span className="text-gray-800 font-medium">Libro de Reclamaciones</span>
+          <TbChevronRight size={13} className="text-neutral-400" />
+          <span className="text-black font-bold">Libro de Reclamaciones</span>
         </nav>
 
         {/* Banner Superior Oficial */}
-        <div className="bg-white rounded-2xl border border-gray-200/80 p-6 sm:p-8 mb-6 shadow-xs">
+        <div className="bg-black text-white rounded-none border-b-4 border-[#de2a2a] p-6 sm:p-8 mb-6">
           <div className="flex items-start gap-4">
-            <div className="p-3 bg-brand/30 text-gray-900 rounded-xl shrink-0">
-              <TbBook size={32} />
+            <div className="p-3 bg-[#de2a2a] text-white rounded-none shrink-0">
+              <TbBook size={30} />
             </div>
             <div>
-              <span className="text-xs font-bold uppercase tracking-wider text-[#3483fa]">
+              <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#de2a2a]">
                 Conforme al Código de Protección y Defensa del Consumidor (Ley N° 29571)
               </span>
-              <h1 className="text-2xl sm:text-3xl font-black text-gray-900 mt-1">
+              <h1 className="font-display text-2xl sm:text-3xl font-extrabold uppercase tracking-tight text-white mt-1">
                 Libro de Reclamaciones Virtual
               </h1>
-              <p className="text-xs sm:text-sm text-gray-500 mt-1.5">
+              <p className="text-xs sm:text-sm text-neutral-300 mt-1.5">
                 Plataforma oficial integrada para registrar tu Queja o Reclamo conforme a los lineamientos de INDECOPI.
               </p>
             </div>
@@ -458,47 +446,57 @@ export default function LibroDeReclamacionesPage() {
         </div>
 
         {/* Ficha Informativa del Proveedor */}
-        <div className="bg-white rounded-2xl border border-gray-200/80 p-5 mb-6 shadow-xs text-xs text-gray-600 grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <div className="bg-[#f8f8f8] rounded-none border border-[#d9d9d9] p-5 mb-6 text-xs text-neutral-600 grid grid-cols-1 sm:grid-cols-3 gap-3">
           <div>
-            <span className="text-gray-400 font-medium block">Razón Social:</span>
-            <span className="font-bold text-gray-900">{legalName}</span>
+            <span className="text-neutral-500 font-bold uppercase text-[10px] tracking-wider block">
+              Razón Social:
+            </span>
+            <span className="font-bold text-black">{legalName}</span>
           </div>
           <div>
-            <span className="text-gray-400 font-medium block">RUC / Identificación:</span>
-            <span className="font-bold text-gray-900">{taxId}</span>
+            <span className="text-neutral-500 font-bold uppercase text-[10px] tracking-wider block">
+              RUC / Identificación:
+            </span>
+            <span className="font-bold text-black">{taxId}</span>
           </div>
           <div>
-            <span className="text-gray-400 font-medium block">Dirección Fiscal:</span>
-            <span className="font-bold text-gray-900">{fiscalAddress}</span>
+            <span className="text-neutral-500 font-bold uppercase text-[10px] tracking-wider block">
+              Dirección Fiscal:
+            </span>
+            <span className="font-bold text-black">{fiscalAddress}</span>
           </div>
         </div>
 
         {/* Formulario */}
-        <form onSubmit={handleSubmit} className="bg-white rounded-2xl border border-gray-200/80 p-6 sm:p-10 shadow-xs space-y-8">
+        <form onSubmit={handleSubmit} className="bg-white rounded-none border border-[#d9d9d9] p-6 sm:p-10 space-y-8">
           {errorMsg && (
-            <div className="p-4 bg-rose-50 border border-rose-200 rounded-xl text-rose-800 text-xs font-semibold flex items-center gap-2">
-              <TbAlertCircle size={18} className="shrink-0 text-rose-600" />
+            <div className="p-4 bg-red-50 border border-[#de2a2a] rounded-none text-[#de2a2a] text-xs font-bold flex items-center gap-2">
+              <TbAlertCircle size={18} className="shrink-0" />
               <span>{errorMsg}</span>
             </div>
           )}
 
           {/* SECCIÓN 1: Identificación del Consumidor */}
           <div className="space-y-4">
-            <div className="flex items-center gap-2 border-b border-gray-100 pb-2">
-              <div className="w-6 h-6 rounded-full bg-blue-50 text-[#3483fa] flex items-center justify-center text-xs font-bold">1</div>
-              <h2 className="font-bold text-gray-900 text-sm uppercase tracking-wide">
+            <div className="flex items-center gap-2.5 border-b border-[#d9d9d9] pb-2.5">
+              <div className="w-6 h-6 rounded-none bg-black text-white flex items-center justify-center text-xs font-bold">
+                1
+              </div>
+              <h2 className="font-display font-extrabold text-black text-sm uppercase tracking-tight">
                 Identificación del Consumidor Reclamante
               </h2>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 text-xs">
               <div className="sm:col-span-4">
-                <label className="block font-medium text-gray-700 mb-1">Tipo de Documento *</label>
+                <label className="block font-bold uppercase tracking-wider text-neutral-700 mb-1 text-[11px]">
+                  Tipo de Documento *
+                </label>
                 <select
                   name="docType"
                   value={formData.docType}
                   onChange={handleChange}
-                  className="w-full border border-gray-200 rounded-lg p-2.5 bg-white text-xs focus:ring-2 focus:ring-[#3483fa]/20 focus:border-[#3483fa] outline-hidden"
+                  className="w-full border border-[#d9d9d9] rounded-none p-2.5 bg-white text-xs focus:border-black outline-none"
                 >
                   <option value="DNI">DNI (Documento Nacional de Identidad)</option>
                   <option value="CE">Carné de Extranjería</option>
@@ -508,64 +506,74 @@ export default function LibroDeReclamacionesPage() {
               </div>
 
               <div className="sm:col-span-8">
-                <label className="block font-medium text-gray-700 mb-1">Número de Documento *</label>
+                <label className="block font-bold uppercase tracking-wider text-neutral-700 mb-1 text-[11px]">
+                  Número de Documento *
+                </label>
                 <input
                   type="text"
                   name="docNumber"
                   value={formData.docNumber}
                   onChange={handleChange}
                   placeholder="Ingresa tu número de documento"
-                  className="w-full border border-gray-200 rounded-lg p-2.5 text-xs focus:ring-2 focus:ring-[#3483fa]/20 focus:border-[#3483fa] outline-hidden"
+                  className="w-full border border-[#d9d9d9] rounded-none p-2.5 text-xs focus:border-black outline-none"
                   required
                 />
               </div>
 
               <div className="sm:col-span-12">
-                <label className="block font-medium text-gray-700 mb-1">Nombres y Apellidos Completos *</label>
+                <label className="block font-bold uppercase tracking-wider text-neutral-700 mb-1 text-[11px]">
+                  Nombres y Apellidos Completos *
+                </label>
                 <input
                   type="text"
                   name="fullName"
                   value={formData.fullName}
                   onChange={handleChange}
                   placeholder="Ej: Juan Carlos Pérez Gómez"
-                  className="w-full border border-gray-200 rounded-lg p-2.5 text-xs focus:ring-2 focus:ring-[#3483fa]/20 focus:border-[#3483fa] outline-hidden"
+                  className="w-full border border-[#d9d9d9] rounded-none p-2.5 text-xs focus:border-black outline-none"
                   required
                 />
               </div>
 
               <div className="sm:col-span-6">
-                <label className="block font-medium text-gray-700 mb-1">Correo Electrónico (Para envío de respuesta) *</label>
+                <label className="block font-bold uppercase tracking-wider text-neutral-700 mb-1 text-[11px]">
+                  Correo Electrónico (Para envío de respuesta) *
+                </label>
                 <input
                   type="email"
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
                   placeholder="ejemplo@correo.com"
-                  className="w-full border border-gray-200 rounded-lg p-2.5 text-xs focus:ring-2 focus:ring-[#3483fa]/20 focus:border-[#3483fa] outline-hidden"
+                  className="w-full border border-[#d9d9d9] rounded-none p-2.5 text-xs focus:border-black outline-none"
                   required
                 />
               </div>
 
               <div className="sm:col-span-6">
-                <label className="block font-medium text-gray-700 mb-1">Teléfono / Celular *</label>
+                <label className="block font-bold uppercase tracking-wider text-neutral-700 mb-1 text-[11px]">
+                  Teléfono / Celular *
+                </label>
                 <input
                   type="tel"
                   name="phone"
                   value={formData.phone}
                   onChange={handleChange}
                   placeholder="987654321"
-                  className="w-full border border-gray-200 rounded-lg p-2.5 text-xs focus:ring-2 focus:ring-[#3483fa]/20 focus:border-[#3483fa] outline-hidden"
+                  className="w-full border border-[#d9d9d9] rounded-none p-2.5 text-xs focus:border-black outline-none"
                   required
                 />
               </div>
 
               <div className="sm:col-span-4">
-                <label className="block font-medium text-gray-700 mb-1">Departamento *</label>
+                <label className="block font-bold uppercase tracking-wider text-neutral-700 mb-1 text-[11px]">
+                  Departamento *
+                </label>
                 <select
                   name="department"
                   value={selectedDeptCode}
                   onChange={handleDepartmentChange}
-                  className="w-full border border-gray-200 rounded-lg p-2.5 bg-white text-xs focus:ring-2 focus:ring-[#3483fa]/20 focus:border-[#3483fa] outline-hidden cursor-pointer"
+                  className="w-full border border-[#d9d9d9] rounded-none p-2.5 bg-white text-xs focus:border-black outline-none cursor-pointer"
                   required
                 >
                   <option value="">-- Elige Departamento --</option>
@@ -578,21 +586,23 @@ export default function LibroDeReclamacionesPage() {
               </div>
 
               <div className="sm:col-span-4">
-                <label className="block font-medium text-gray-700 mb-1">Provincia *</label>
+                <label className="block font-bold uppercase tracking-wider text-neutral-700 mb-1 text-[11px]">
+                  Provincia *
+                </label>
                 <select
                   name="province"
                   value={selectedProvCode}
                   onChange={handleProvinceChange}
                   disabled={!selectedDeptCode || loadingProvinces}
-                  className="w-full border border-gray-200 rounded-lg p-2.5 bg-white text-xs focus:ring-2 focus:ring-[#3483fa]/20 focus:border-[#3483fa] outline-hidden disabled:bg-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed cursor-pointer"
+                  className="w-full border border-[#d9d9d9] rounded-none p-2.5 bg-white text-xs focus:border-black outline-none disabled:bg-neutral-100 disabled:text-neutral-400 disabled:cursor-not-allowed cursor-pointer"
                   required
                 >
                   <option value="">
-                    {loadingProvinces 
-                      ? 'Cargando provincias...' 
-                      : !selectedDeptCode 
-                      ? 'Primero elige departamento' 
-                      : '-- Elige Provincia --'}
+                    {loadingProvinces
+                      ? 'Cargando provincias...'
+                      : !selectedDeptCode
+                        ? 'Primero elige departamento'
+                        : '-- Elige Provincia --'}
                   </option>
                   {provinces.map((prov) => (
                     <option key={prov.provinceCode} value={prov.provinceCode}>
@@ -603,21 +613,23 @@ export default function LibroDeReclamacionesPage() {
               </div>
 
               <div className="sm:col-span-4">
-                <label className="block font-medium text-gray-700 mb-1">Distrito *</label>
+                <label className="block font-bold uppercase tracking-wider text-neutral-700 mb-1 text-[11px]">
+                  Distrito *
+                </label>
                 <select
                   name="district"
                   value={formData.district}
                   onChange={handleDistrictChange}
                   disabled={!selectedProvCode || loadingDistricts}
-                  className="w-full border border-gray-200 rounded-lg p-2.5 bg-white text-xs focus:ring-2 focus:ring-[#3483fa]/20 focus:border-[#3483fa] outline-hidden disabled:bg-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed cursor-pointer"
+                  className="w-full border border-[#d9d9d9] rounded-none p-2.5 bg-white text-xs focus:border-black outline-none disabled:bg-neutral-100 disabled:text-neutral-400 disabled:cursor-not-allowed cursor-pointer"
                   required
                 >
                   <option value="">
-                    {loadingDistricts 
-                      ? 'Cargando distritos...' 
-                      : !selectedProvCode 
-                      ? 'Primero elige provincia' 
-                      : '-- Elige Distrito --'}
+                    {loadingDistricts
+                      ? 'Cargando distritos...'
+                      : !selectedProvCode
+                        ? 'Primero elige provincia'
+                        : '-- Elige Distrito --'}
                   </option>
                   {districts.map((dist) => (
                     <option key={dist.code} value={dist.district}>
@@ -628,67 +640,77 @@ export default function LibroDeReclamacionesPage() {
               </div>
 
               <div className="sm:col-span-12">
-                <label className="block font-medium text-gray-700 mb-1">Dirección Domiciliaria *</label>
+                <label className="block font-bold uppercase tracking-wider text-neutral-700 mb-1 text-[11px]">
+                  Dirección Domiciliaria *
+                </label>
                 <input
                   type="text"
                   name="address"
                   value={formData.address}
                   onChange={handleChange}
                   placeholder="Av. / Calle / Jr. y número interior o referencia"
-                  className="w-full border border-gray-200 rounded-lg p-2.5 text-xs focus:ring-2 focus:ring-[#3483fa]/20 focus:border-[#3483fa] outline-hidden"
+                  className="w-full border border-[#d9d9d9] rounded-none p-2.5 text-xs focus:border-black outline-none"
                   required
                 />
               </div>
 
               {/* Checkbox Menor de Edad */}
               <div className="sm:col-span-12 pt-1">
-                <label className="inline-flex items-center gap-2 cursor-pointer text-xs text-gray-700">
+                <label className="inline-flex items-center gap-2 cursor-pointer text-xs text-neutral-700">
                   <input
                     type="checkbox"
                     name="isMinor"
                     checked={formData.isMinor}
                     onChange={handleChange}
-                    className="rounded border-gray-300 text-[#3483fa] focus:ring-[#3483fa]"
+                    className="rounded-none border-[#d9d9d9] accent-[#de2a2a]"
                   />
-                  <span>El reclamante es <strong>menor de edad</strong> (Habilitar datos del padre, madre o apoderado legal)</span>
+                  <span>
+                    El reclamante es <strong>menor de edad</strong> (Habilitar datos del padre, madre o apoderado legal)
+                  </span>
                 </label>
               </div>
 
               {formData.isMinor && (
-                <div className="sm:col-span-12 grid grid-cols-1 sm:grid-cols-3 gap-3 p-4 bg-gray-50 rounded-xl border border-gray-200 animate-in fade-in">
+                <div className="sm:col-span-12 grid grid-cols-1 sm:grid-cols-3 gap-3 p-4 bg-[#f8f8f8] rounded-none border border-[#d9d9d9] animate-in fade-in">
                   <div>
-                    <label className="block font-medium text-gray-700 mb-1">Nombre del Padre/Tutor *</label>
+                    <label className="block font-bold text-neutral-700 mb-1 text-[11px]">
+                      Nombre del Padre/Tutor *
+                    </label>
                     <input
                       type="text"
                       name="tutorName"
                       value={formData.tutorName}
                       onChange={handleChange}
                       placeholder="Nombre completo del apoderado"
-                      className="w-full border border-gray-200 rounded-lg p-2 text-xs bg-white"
+                      className="w-full border border-[#d9d9d9] rounded-none p-2 text-xs bg-white focus:border-black outline-none"
                       required={formData.isMinor}
                     />
                   </div>
                   <div>
-                    <label className="block font-medium text-gray-700 mb-1">DNI / Doc Apoderado *</label>
+                    <label className="block font-bold text-neutral-700 mb-1 text-[11px]">
+                      DNI / Doc Apoderado *
+                    </label>
                     <input
                       type="text"
                       name="tutorDocNumber"
                       value={formData.tutorDocNumber}
                       onChange={handleChange}
                       placeholder="N° de documento"
-                      className="w-full border border-gray-200 rounded-lg p-2 text-xs bg-white"
+                      className="w-full border border-[#d9d9d9] rounded-none p-2 text-xs bg-white focus:border-black outline-none"
                       required={formData.isMinor}
                     />
                   </div>
                   <div>
-                    <label className="block font-medium text-gray-700 mb-1">Teléfono Apoderado *</label>
+                    <label className="block font-bold text-neutral-700 mb-1 text-[11px]">
+                      Teléfono Apoderado *
+                    </label>
                     <input
                       type="tel"
                       name="tutorPhone"
                       value={formData.tutorPhone}
                       onChange={handleChange}
                       placeholder="Celular"
-                      className="w-full border border-gray-200 rounded-lg p-2 text-xs bg-white"
+                      className="w-full border border-[#d9d9d9] rounded-none p-2 text-xs bg-white focus:border-black outline-none"
                       required={formData.isMinor}
                     />
                   </div>
@@ -699,36 +721,40 @@ export default function LibroDeReclamacionesPage() {
 
           {/* SECCIÓN 2: Identificación del Bien Contratado */}
           <div className="space-y-4">
-            <div className="flex items-center gap-2 border-b border-gray-100 pb-2">
-              <div className="w-6 h-6 rounded-full bg-blue-50 text-[#3483fa] flex items-center justify-center text-xs font-bold">2</div>
-              <h2 className="font-bold text-gray-900 text-sm uppercase tracking-wide">
+            <div className="flex items-center gap-2.5 border-b border-[#d9d9d9] pb-2.5">
+              <div className="w-6 h-6 rounded-none bg-black text-white flex items-center justify-center text-xs font-bold">
+                2
+              </div>
+              <h2 className="font-display font-extrabold text-black text-sm uppercase tracking-tight">
                 Identificación del Bien Contratado
               </h2>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 text-xs">
               <div className="sm:col-span-4">
-                <label className="block font-medium text-gray-700 mb-1">Tipo de Bien *</label>
-                <div className="flex items-center gap-4 pt-1">
-                  <label className="inline-flex items-center gap-1.5 cursor-pointer">
+                <label className="block font-bold uppercase tracking-wider text-neutral-700 mb-1 text-[11px]">
+                  Tipo de Bien *
+                </label>
+                <div className="flex items-center gap-4 pt-1.5">
+                  <label className="inline-flex items-center gap-1.5 cursor-pointer font-medium">
                     <input
                       type="radio"
                       name="contractType"
                       value="producto"
                       checked={formData.contractType === 'producto'}
                       onChange={handleChange}
-                      className="text-[#3483fa] focus:ring-[#3483fa]"
+                      className="accent-[#de2a2a]"
                     />
                     <span>Producto</span>
                   </label>
-                  <label className="inline-flex items-center gap-1.5 cursor-pointer">
+                  <label className="inline-flex items-center gap-1.5 cursor-pointer font-medium">
                     <input
                       type="radio"
                       name="contractType"
                       value="servicio"
                       checked={formData.contractType === 'servicio'}
                       onChange={handleChange}
-                      className="text-[#3483fa] focus:ring-[#3483fa]"
+                      className="accent-[#de2a2a]"
                     />
                     <span>Servicio</span>
                   </label>
@@ -736,7 +762,9 @@ export default function LibroDeReclamacionesPage() {
               </div>
 
               <div className="sm:col-span-4">
-                <label className="block font-medium text-gray-700 mb-1">Monto Reclamado (S/) *</label>
+                <label className="block font-bold uppercase tracking-wider text-neutral-700 mb-1 text-[11px]">
+                  Monto Reclamado (S/) *
+                </label>
                 <input
                   type="number"
                   step="0.01"
@@ -744,31 +772,35 @@ export default function LibroDeReclamacionesPage() {
                   value={formData.claimedAmount}
                   onChange={handleChange}
                   placeholder="0.00"
-                  className="w-full border border-gray-200 rounded-lg p-2.5 text-xs focus:ring-2 focus:ring-[#3483fa]/20 focus:border-[#3483fa] outline-hidden"
+                  className="w-full border border-[#d9d9d9] rounded-none p-2.5 text-xs focus:border-black outline-none"
                 />
               </div>
 
               <div className="sm:col-span-4">
-                <label className="block font-medium text-gray-700 mb-1">N° de Pedido / Boleta (Opcional)</label>
+                <label className="block font-bold uppercase tracking-wider text-neutral-700 mb-1 text-[11px]">
+                  N° de Pedido / Boleta (Opcional)
+                </label>
                 <input
                   type="text"
                   name="orderNumber"
                   value={formData.orderNumber}
                   onChange={handleChange}
-                  placeholder="Ej: ORD-1024"
-                  className="w-full border border-gray-200 rounded-lg p-2.5 text-xs focus:ring-2 focus:ring-[#3483fa]/20 focus:border-[#3483fa] outline-hidden"
+                  placeholder="Ej: ORD-2026-1024"
+                  className="w-full border border-[#d9d9d9] rounded-none p-2.5 text-xs focus:border-black outline-none"
                 />
               </div>
 
               <div className="sm:col-span-12">
-                <label className="block font-medium text-gray-700 mb-1">Descripción del Producto o Servicio *</label>
+                <label className="block font-bold uppercase tracking-wider text-neutral-700 mb-1 text-[11px]">
+                  Descripción del Producto o Servicio *
+                </label>
                 <input
                   type="text"
                   name="contractDescription"
                   value={formData.contractDescription}
                   onChange={handleChange}
-                  placeholder="Ej: Smartphone Samsung Galaxy S23 128GB adquirido en la tienda online"
-                  className="w-full border border-gray-200 rounded-lg p-2.5 text-xs focus:ring-2 focus:ring-[#3483fa]/20 focus:border-[#3483fa] outline-hidden"
+                  placeholder="Ej: Vino Tinto Reserva + Caja de Chocolates de Cacao 70% + Café de Origen"
+                  className="w-full border border-[#d9d9d9] rounded-none p-2.5 text-xs focus:border-black outline-none"
                   required
                 />
               </div>
@@ -777,36 +809,42 @@ export default function LibroDeReclamacionesPage() {
 
           {/* SECCIÓN 3: Detalle de la Reclamación */}
           <div className="space-y-4">
-            <div className="flex items-center gap-2 border-b border-gray-100 pb-2">
-              <div className="w-6 h-6 rounded-full bg-blue-50 text-[#3483fa] flex items-center justify-center text-xs font-bold">3</div>
-              <h2 className="font-bold text-gray-900 text-sm uppercase tracking-wide">
+            <div className="flex items-center gap-2.5 border-b border-[#d9d9d9] pb-2.5">
+              <div className="w-6 h-6 rounded-none bg-black text-white flex items-center justify-center text-xs font-bold">
+                3
+              </div>
+              <h2 className="font-display font-extrabold text-black text-sm uppercase tracking-tight">
                 Detalle de la Reclamación
               </h2>
             </div>
 
             <div className="space-y-3 text-xs">
-              <label className="block font-medium text-gray-700">Selecciona el tipo de reclamación (Definiciones INDECOPI) *</label>
-              
+              <label className="block font-bold uppercase tracking-wider text-neutral-700 text-[11px]">
+                Selecciona el tipo de reclamación (Definiciones INDECOPI) *
+              </label>
+
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <label
-                  className={`p-3.5 rounded-xl border-2 cursor-pointer transition-all ${
+                  className={`p-4 rounded-none border-2 cursor-pointer transition-all ${
                     formData.claimType === 'reclamo'
-                      ? 'border-[#3483fa] bg-blue-50/40 shadow-xs'
-                      : 'border-gray-200 hover:border-gray-300'
+                      ? 'border-black bg-[#f8f8f8]'
+                      : 'border-[#d9d9d9] hover:border-black'
                   }`}
                 >
-                  <div className="flex items-start gap-2">
+                  <div className="flex items-start gap-2.5">
                     <input
                       type="radio"
                       name="claimType"
                       value="reclamo"
                       checked={formData.claimType === 'reclamo'}
                       onChange={handleChange}
-                      className="mt-0.5 text-[#3483fa]"
+                      className="mt-0.5 accent-[#de2a2a]"
                     />
                     <div>
-                      <span className="font-bold text-gray-900 block">RECLAMO</span>
-                      <p className="text-[11px] text-gray-500 mt-0.5 leading-relaxed">
+                      <span className="font-display font-extrabold uppercase text-black block">
+                        RECLAMO
+                      </span>
+                      <p className="text-[11px] text-neutral-600 mt-0.5 leading-relaxed">
                         Disconformidad relacionada directamente a los productos o servicios adquiridos.
                       </p>
                     </div>
@@ -814,24 +852,26 @@ export default function LibroDeReclamacionesPage() {
                 </label>
 
                 <label
-                  className={`p-3.5 rounded-xl border-2 cursor-pointer transition-all ${
+                  className={`p-4 rounded-none border-2 cursor-pointer transition-all ${
                     formData.claimType === 'queja'
-                      ? 'border-[#3483fa] bg-blue-50/40 shadow-xs'
-                      : 'border-gray-200 hover:border-gray-300'
+                      ? 'border-black bg-[#f8f8f8]'
+                      : 'border-[#d9d9d9] hover:border-black'
                   }`}
                 >
-                  <div className="flex items-start gap-2">
+                  <div className="flex items-start gap-2.5">
                     <input
                       type="radio"
                       name="claimType"
                       value="queja"
                       checked={formData.claimType === 'queja'}
                       onChange={handleChange}
-                      className="mt-0.5 text-[#3483fa]"
+                      className="mt-0.5 accent-[#de2a2a]"
                     />
                     <div>
-                      <span className="font-bold text-gray-900 block">QUEJA</span>
-                      <p className="text-[11px] text-gray-500 mt-0.5 leading-relaxed">
+                      <span className="font-display font-extrabold uppercase text-black block">
+                        QUEJA
+                      </span>
+                      <p className="text-[11px] text-neutral-600 mt-0.5 leading-relaxed">
                         Malestar o descontento respecto a la atención al público brindada por el personal.
                       </p>
                     </div>
@@ -840,27 +880,31 @@ export default function LibroDeReclamacionesPage() {
               </div>
 
               <div>
-                <label className="block font-medium text-gray-700 mb-1">Detalle de los hechos (Explica con claridad lo sucedido) *</label>
+                <label className="block font-bold uppercase tracking-wider text-neutral-700 mb-1 text-[11px]">
+                  Detalle de los hechos (Explica con claridad lo sucedido) *
+                </label>
                 <textarea
                   name="claimDetail"
                   rows={4}
                   value={formData.claimDetail}
                   onChange={handleChange}
                   placeholder="Describe cronológicamente lo acontecido con el producto, servicio o atención recibida..."
-                  className="w-full border border-gray-200 rounded-lg p-2.5 text-xs focus:ring-2 focus:ring-[#3483fa]/20 focus:border-[#3483fa] outline-hidden leading-relaxed"
+                  className="w-full border border-[#d9d9d9] rounded-none p-2.5 text-xs focus:border-black outline-none leading-relaxed"
                   required
                 />
               </div>
 
               <div>
-                <label className="block font-medium text-gray-700 mb-1">Pedido Concreto del Consumidor (Qué solución solicitas) *</label>
+                <label className="block font-bold uppercase tracking-wider text-neutral-700 mb-1 text-[11px]">
+                  Pedido Concreto del Consumidor (Qué solución solicitas) *
+                </label>
                 <textarea
                   name="claimRequest"
                   rows={3}
                   value={formData.claimRequest}
                   onChange={handleChange}
-                  placeholder="Indica qué solicitas: Ej: Cambio del equipo por uno nuevo, reembolso del dinero, etc."
-                  className="w-full border border-gray-200 rounded-lg p-2.5 text-xs focus:ring-2 focus:ring-[#3483fa]/20 focus:border-[#3483fa] outline-hidden leading-relaxed"
+                  placeholder="Indica qué solicitas: Ej: Reposición del producto, reembolso del dinero, etc."
+                  className="w-full border border-[#d9d9d9] rounded-none p-2.5 text-xs focus:border-black outline-none leading-relaxed"
                   required
                 />
               </div>
@@ -868,22 +912,22 @@ export default function LibroDeReclamacionesPage() {
           </div>
 
           {/* Declaración Jurada y Advertencias Legales */}
-          <div className="pt-2 border-t border-gray-100 space-y-3 text-[11px] text-gray-500 leading-relaxed">
-            <label className="inline-flex items-start gap-2 cursor-pointer text-gray-800">
+          <div className="pt-2 border-t border-[#d9d9d9] space-y-3 text-[11px] text-neutral-600 leading-relaxed">
+            <label className="inline-flex items-start gap-2 cursor-pointer text-black">
               <input
                 type="checkbox"
                 name="acceptedTerms"
                 checked={formData.acceptedTerms}
                 onChange={handleChange}
-                className="rounded border-gray-300 text-[#3483fa] focus:ring-[#3483fa] mt-0.5"
+                className="rounded-none border-[#d9d9d9] accent-[#de2a2a] mt-0.5"
                 required
               />
-              <span className="font-medium">
+              <span className="font-semibold">
                 Declaro bajo juramento que toda la información consignada en esta Hoja de Reclamación es verdadera y autorizo la notificación de la respuesta al correo electrónico indicado.
               </span>
             </label>
 
-            <div className="bg-gray-50 p-3.5 rounded-xl border border-gray-200/80 space-y-1 text-gray-500">
+            <div className="bg-[#f8f8f8] p-3.5 rounded-none border border-[#d9d9d9] space-y-1 text-neutral-600">
               <p>
                 * <strong>Plazo legal de respuesta:</strong> Conforme a la <strong>Ley N° 31435</strong>, el proveedor deberá dar respuesta al reclamo en un <strong>plazo no mayor a quince (15) días hábiles improrrogables</strong>.
               </p>
@@ -894,17 +938,17 @@ export default function LibroDeReclamacionesPage() {
           </div>
 
           {/* Botón de Envío */}
-          <div className="pt-4 flex items-center justify-end gap-3 border-t border-gray-100">
+          <div className="pt-4 flex items-center justify-end gap-3 border-t border-[#d9d9d9]">
             <Link
               href="/"
-              className="px-4 py-2.5 rounded-xl border border-gray-200 text-gray-700 hover:bg-gray-50 text-xs font-semibold transition-colors"
+              className="px-5 py-2.5 rounded-none border border-black text-black hover:bg-black hover:text-white text-xs font-bold uppercase tracking-wider transition-colors"
             >
               Cancelar
             </Link>
             <button
               type="submit"
               disabled={isSubmitting}
-              className="px-6 py-2.5 bg-[#3483fa] hover:bg-blue-600 disabled:bg-gray-300 text-white rounded-xl text-xs font-bold transition-all shadow-xs cursor-pointer"
+              className="px-6 py-3 bg-[#de2a2a] hover:bg-red-700 disabled:bg-neutral-300 text-white rounded-none text-xs font-bold uppercase tracking-widest transition-colors cursor-pointer"
             >
               {isSubmitting ? 'Registrando en Libro...' : 'Enviar Hoja de Reclamación'}
             </button>
@@ -914,4 +958,3 @@ export default function LibroDeReclamacionesPage() {
     </div>
   );
 }
-

@@ -28,34 +28,34 @@ export const CartSummary = ({
   const total = subtotal + shippingCost;
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-200/90 shadow-2xs p-5 sm:p-6 sticky top-20">
-      <h2 className="text-base font-bold text-gray-900 border-b border-gray-100 pb-3 mb-4">
+    <div className="bg-[#f8f8f8] rounded-none border border-[#d9d9d9] p-5 sm:p-6 sticky top-24">
+      <h2 className="font-display text-base font-extrabold uppercase tracking-tight text-black border-b border-[#d9d9d9] pb-3 mb-4">
         Resumen de compra
       </h2>
 
       <div className="space-y-3 text-xs sm:text-sm">
         {/* Productos / Subtotal */}
-        <div className="flex justify-between text-gray-600">
+        <div className="flex justify-between text-neutral-600">
           <span>
             Productos ({totalItems} {totalItems === 1 ? 'unidad' : 'unidades'})
           </span>
-          <span className="font-semibold text-gray-900">
+          <span className="font-bold text-black">
             {currencySymbol} {subtotal.toFixed(2)}
           </span>
         </div>
 
         {/* Envío */}
-        <div className="flex justify-between items-center text-gray-600">
+        <div className="flex justify-between items-center text-neutral-600">
           <span className="flex items-center gap-1.5">
-            <TbTruckDelivery size={16} className="text-[#00a650]" />
-            <span>Envío</span>
+            <TbTruckDelivery size={16} className="text-[#2e9e7b]" />
+            <span>Delivery</span>
           </span>
           {isFreeShippingQualified ? (
-            <span className="text-[#00a650] font-bold text-xs uppercase">
+            <span className="text-[#2e9e7b] font-bold text-xs uppercase tracking-wider">
               Gratis
             </span>
           ) : (
-            <span className="font-semibold text-gray-900">
+            <span className="font-bold text-black">
               {currencySymbol} {shippingCost.toFixed(2)}
             </span>
           )}
@@ -63,13 +63,13 @@ export const CartSummary = ({
 
         {/* Barra de progreso para envío gratis si no califica aún */}
         {!isFreeShippingQualified && subtotal < 99 && (
-          <div className="p-2.5 bg-blue-50/70 rounded-xl border border-blue-100 text-[11px] text-blue-800">
+          <div className="p-3 bg-white rounded-none border border-[#d9d9d9] text-[11px] text-[#020202]">
             <span>
-              ¡Agrega <strong>{currencySymbol} {(99 - subtotal).toFixed(2)}</strong> más para obtener <strong>Envío Gratis</strong>!
+              ¡Agrega <strong>{currencySymbol} {(99 - subtotal).toFixed(2)}</strong> más para obtener <strong>Delivery Gratis</strong>!
             </span>
-            <div className="w-full bg-blue-200/70 h-1.5 rounded-full mt-1.5 overflow-hidden">
+            <div className="w-full bg-neutral-200 h-1.5 rounded-none mt-2 overflow-hidden">
               <div
-                className="bg-[#3483fa] h-full rounded-full transition-all duration-300"
+                className="bg-[#de2a2a] h-full rounded-none transition-all duration-300"
                 style={{ width: `${Math.min((subtotal / 99) * 100, 100)}%` }}
               />
             </div>
@@ -77,11 +77,11 @@ export const CartSummary = ({
         )}
 
         {/* Separador */}
-        <div className="pt-3 border-t border-gray-100 flex justify-between items-baseline">
-          <span className="text-sm sm:text-base font-bold text-gray-900">
+        <div className="pt-3 border-t border-[#d9d9d9] flex justify-between items-baseline">
+          <span className="text-sm font-bold uppercase tracking-wider text-black">
             Total a pagar
           </span>
-          <span className="text-xl sm:text-2xl font-extrabold text-gray-900 tracking-tight">
+          <span className="font-display text-2xl font-extrabold text-black tracking-tight">
             {currencySymbol} {total.toFixed(2)}
           </span>
         </div>
@@ -90,20 +90,20 @@ export const CartSummary = ({
       {/* Botón principal para realizar pedido */}
       <Link
         href="/checkout"
-        className="w-full mt-5 py-3 px-4 bg-[#3483fa] hover:bg-[#2968c8] text-white text-xs sm:text-sm font-semibold rounded-xl shadow-xs transition-colors flex items-center justify-center gap-2 cursor-pointer text-center"
+        className="w-full mt-5 py-3.5 px-4 bg-[#de2a2a] hover:bg-red-700 text-white text-xs font-bold uppercase tracking-widest rounded-none transition-colors flex items-center justify-center gap-2 cursor-pointer text-center"
       >
         <span>Continuar compra</span>
         <TbArrowRight size={16} />
       </Link>
 
       {/* Garantías y Seguridad */}
-      <div className="mt-5 pt-4 border-t border-gray-100 space-y-2 text-[11px] text-gray-500 font-light">
-        <div className="flex items-center gap-2 text-gray-700 font-normal">
-          <TbShieldCheck size={16} className="text-[#00a650] shrink-0" />
-          <span>Compra Protegida con garantía de devolución</span>
+      <div className="mt-5 pt-4 border-t border-[#d9d9d9] space-y-2 text-[11px] text-neutral-600">
+        <div className="flex items-center gap-2 text-black font-medium">
+          <TbShieldCheck size={16} className="text-[#2e9e7b] shrink-0" />
+          <span>Productos de origen garantizado con compra protegida</span>
         </div>
         <div className="flex items-center gap-2">
-          <TbLock size={15} className="text-gray-400 shrink-0" />
+          <TbLock size={15} className="text-neutral-500 shrink-0" />
           <span>Pago seguro encriptado de punta a punta</span>
         </div>
       </div>

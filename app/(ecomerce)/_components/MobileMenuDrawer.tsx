@@ -106,47 +106,47 @@ export const MobileMenuDrawer = ({ isOpen, onClose }: MobileMenuDrawerProps) => 
       {/* Panel lateral deslizante */}
       <div className="relative w-[320px] max-w-[85vw] bg-white h-full shadow-2xl flex flex-col z-50 overflow-hidden transform transition-transform duration-300 ease-out">
         
-        {/* Cabecera del Menú Móvil (Estilo Mercado Libre) */}
+        {/* Cabecera del Menú Móvil (Estilo Licorería Negro/Rojo) */}
         <div 
-          className="p-4 flex items-center justify-between border-b border-black/10 bg-brand transition-colors duration-300"
+          className="p-4 flex items-center justify-between border-b border-[#262626] bg-black text-white"
         >
           <div className="flex items-center gap-3">
             <Show when="signed-in">
               <UserButton 
                 appearance={{
                   elements: {
-                    userButtonAvatarBox: "w-10 h-10 ring-2 ring-white/80"
+                    userButtonAvatarBox: "w-10 h-10 ring-2 ring-white/40"
                   }
                 }}
               />
               <div className="flex flex-col">
-                <span className="text-xs text-gray-700">Bienvenido</span>
-                <span className="text-sm font-semibold text-[#333]">Mi Cuenta</span>
+                <span className="text-[11px] uppercase tracking-wider text-neutral-400">Bienvenido</span>
+                <span className="text-sm font-bold text-white">Mi Cuenta</span>
               </div>
             </Show>
 
             <Show when="signed-out">
-              <div className="w-10 h-10 rounded-full bg-black/10 flex items-center justify-center text-gray-700">
-                <TbUserCircle size={28} />
+              <div className="w-10 h-10 bg-white/10 flex items-center justify-center text-white">
+                <TbUserCircle size={26} />
               </div>
               <div className="flex flex-col">
-                <span className="text-xs text-gray-700 leading-tight">Bienvenido</span>
-                <div className="flex items-center gap-1.5 mt-0.5">
+                <span className="text-[11px] uppercase tracking-wider text-neutral-400 leading-tight">Bienvenido</span>
+                <div className="flex items-center gap-2 mt-0.5">
                   <SignInButton mode="modal">
                     <button 
                       type="button" 
                       onClick={onClose} 
-                      className="text-xs font-semibold text-[#3483fa] hover:underline cursor-pointer"
+                      className="text-xs font-bold uppercase text-[#de2a2a] hover:underline cursor-pointer"
                     >
                       Ingresa
                     </button>
                   </SignInButton>
-                  <span className="text-gray-400 text-xs">•</span>
+                  <span className="text-neutral-600 text-xs">•</span>
                   <SignUpButton mode="modal">
                     <button 
                       type="button" 
                       onClick={onClose} 
-                      className="text-xs font-semibold text-gray-800 hover:underline cursor-pointer"
+                      className="text-xs font-bold uppercase text-white hover:underline cursor-pointer"
                     >
                       Regístrate
                     </button>
@@ -159,7 +159,7 @@ export const MobileMenuDrawer = ({ isOpen, onClose }: MobileMenuDrawerProps) => 
           <button
             type="button"
             onClick={onClose}
-            className="p-1.5 rounded-full hover:bg-black/10 text-gray-800 transition-colors cursor-pointer"
+            className="p-1.5 hover:bg-white/10 text-white transition-colors cursor-pointer"
             aria-label="Cerrar menú"
           >
             <TbX size={22} />
@@ -192,9 +192,9 @@ export const MobileMenuDrawer = ({ isOpen, onClose }: MobileMenuDrawerProps) => 
             <Link
               href="/rastreo"
               onClick={onClose}
-              className="flex items-center gap-3.5 px-5 py-2.5 hover:bg-blue-50/50 text-[#3483fa] font-medium transition-colors"
+              className="flex items-center gap-3.5 px-5 py-2.5 hover:bg-red-50/60 text-[#de2a2a] font-semibold transition-colors"
             >
-              <TbTruckDelivery size={20} className="text-[#3483fa]" />
+              <TbTruckDelivery size={20} className="text-[#de2a2a]" />
               <span>Rastrea tu pedido</span>
             </Link>
 
@@ -253,8 +253,8 @@ export const MobileMenuDrawer = ({ isOpen, onClose }: MobileMenuDrawerProps) => 
               className="w-full flex items-center justify-between px-5 py-2.5 hover:bg-gray-50 text-left font-medium text-gray-900 cursor-pointer"
             >
               <div className="flex items-center gap-3.5">
-                <TbCategory size={20} className="text-[#3483fa]" />
-                <span>Categorías</span>
+                <TbCategory size={20} className="text-[#de2a2a]" />
+                <span className="font-bold uppercase text-xs tracking-wider">Categorías</span>
               </div>
               <TbChevronDown 
                 size={18} 
@@ -268,7 +268,7 @@ export const MobileMenuDrawer = ({ isOpen, onClose }: MobileMenuDrawerProps) => 
               <div className="bg-gray-50/70 border-y border-gray-100 py-1 pl-12 pr-4 space-y-1">
                 {isLoading && categories.length === 0 ? (
                   <div className="py-4 flex items-center gap-2 text-xs text-gray-500">
-                    <div className="w-4 h-4 border-2 border-[#3483fa] border-t-transparent rounded-full animate-spin" />
+                    <div className="w-4 h-4 border-2 border-[#de2a2a] border-t-transparent rounded-full animate-spin" />
                     <span>Cargando categorías...</span>
                   </div>
                 ) : categories.length === 0 ? (
@@ -284,7 +284,7 @@ export const MobileMenuDrawer = ({ isOpen, onClose }: MobileMenuDrawerProps) => 
                         key={cat.id}
                         href={cat.href || `/category/${cat.id}`}
                         onClick={onClose}
-                        className="flex items-center justify-between py-2 text-[13px] text-gray-700 hover:text-[#3483fa] transition-colors"
+                        className="flex items-center justify-between py-2 text-[13px] text-gray-700 hover:text-[#de2a2a] transition-colors"
                       >
                         <div className="flex items-center gap-2.5 truncate">
                           {cat.icon && (cat.icon.startsWith('http') || cat.icon.startsWith('data:')) ? (
@@ -299,7 +299,7 @@ export const MobileMenuDrawer = ({ isOpen, onClose }: MobileMenuDrawerProps) => 
                           <span className="truncate">{cat.name}</span>
                         </div>
                         {cat.badge && (
-                          <span className="bg-[#00a650] text-white text-[9px] font-bold px-1.5 py-0.2 rounded-full shrink-0">
+                          <span className="bg-[#de2a2a] text-white text-[9px] font-bold px-1.5 py-0.5 uppercase shrink-0">
                             {cat.badge}
                           </span>
                         )}
@@ -312,7 +312,7 @@ export const MobileMenuDrawer = ({ isOpen, onClose }: MobileMenuDrawerProps) => 
                   <Link
                     href="/categories"
                     onClick={onClose}
-                    className="text-xs font-semibold text-[#3483fa] hover:underline flex items-center gap-1"
+                    className="text-xs font-bold uppercase tracking-wider text-[#de2a2a] hover:underline flex items-center gap-1"
                   >
                     Ver todas las categorías <TbChevronRight size={13} />
                   </Link>

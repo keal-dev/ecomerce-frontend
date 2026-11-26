@@ -23,7 +23,7 @@ export function OpenCashModal({ isOpen, onClose, onSuccess }: OpenCashModalProps
 
   if (!isOpen) return null;
 
-  const businessName = company?.name || 'MercadoAdmin';
+  const businessName = company?.name || 'Cooperativa Gourmet';
   const userName = `${currentUser?.firstName || ''} ${currentUser?.lastName || ''}`.trim() || currentUser?.email || 'Usuario';
 
   const handleSubmit = async (e: React.FormEvent) => {

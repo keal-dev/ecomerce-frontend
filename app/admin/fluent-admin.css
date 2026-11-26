@@ -1,9 +1,11 @@
-/* Microsoft Fluent 2 Design System — Scoped to /admin */
+/* Editorial Black & Crimson Design System — Scoped to /admin */
 
 .admin-fluent {
-  --fluent-brand: #0f6cbd;
-  --fluent-brand-hover: #115ea3;
-  --fluent-brand-pressed: #0f548c;
+  --fluent-brand: #111111;
+  --fluent-brand-hover: #262626;
+  --fluent-brand-pressed: #000000;
+  --fluent-accent: #de2a2a;
+  --fluent-accent-hover: #b91c1c;
   --fluent-canvas: #ebebeb;
   --fluent-surface: #ffffff;
   --fluent-stroke: #d1d1d1;
@@ -93,10 +95,10 @@
   ):focus-visible {
   outline: none;
   background-color: var(--fluent-surface);
-  border-color: #c7c7c7 #c7c7c7 var(--fluent-brand) #c7c7c7;
+  border-color: #c7c7c7 #c7c7c7 var(--fluent-accent) #c7c7c7;
   box-shadow:
-    inset 0 -2px 0 0 var(--fluent-brand),
-    0 0 0 1px rgba(15, 108, 189, 0.14);
+    inset 0 -2px 0 0 var(--fluent-accent),
+    0 0 0 1px rgba(222, 42, 42, 0.14);
 }
 
 .admin-fluent
@@ -171,8 +173,8 @@
 }
 
 .admin-fluent input[type='checkbox']:not(.sr-only):checked {
-  background-color: var(--fluent-brand);
-  border-color: var(--fluent-brand);
+  background-color: var(--fluent-accent);
+  border-color: var(--fluent-accent);
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12' fill='none'%3E%3Cpath d='M2.5 6.2L4.9 8.6L9.5 3.6' stroke='%23ffffff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: center;
@@ -180,14 +182,14 @@
 }
 
 .admin-fluent input[type='radio']:not(.sr-only):checked {
-  border-color: var(--fluent-brand);
+  border-color: var(--fluent-accent);
   border-width: 5px;
 }
 
 .admin-fluent input[type='checkbox']:not(.sr-only):focus-visible,
 .admin-fluent input[type='radio']:not(.sr-only):focus-visible {
   outline: none;
-  box-shadow: 0 0 0 2px rgba(15, 108, 189, 0.25);
+  box-shadow: 0 0 0 2px rgba(222, 42, 42, 0.22);
 }
 
 /* Field labels inside forms */
@@ -246,4 +248,29 @@
 .admin-fluent form button[type='submit']:disabled {
   opacity: 0.55;
   cursor: not-allowed;
+}
+
+/* Harmonize legacy #3483fa accent utilities across admin modules */
+.admin-fluent .bg-\[\#3483fa\] {
+  background-color: var(--fluent-brand);
+}
+
+.admin-fluent .bg-\[\#3483fa\]:hover:not(:disabled) {
+  background-color: var(--fluent-accent);
+}
+
+.admin-fluent .text-\[\#3483fa\] {
+  color: var(--fluent-accent);
+}
+
+.admin-fluent .border-\[\#3483fa\] {
+  border-color: var(--fluent-accent);
+}
+
+.admin-fluent .hover\:text-\[\#3483fa\]:hover {
+  color: var(--fluent-accent);
+}
+
+.admin-fluent .focus\:border-\[\#3483fa\]:focus {
+  border-color: var(--fluent-accent);
 }

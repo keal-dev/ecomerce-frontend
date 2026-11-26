@@ -12,25 +12,28 @@ interface CartEmptyStateProps {
 
 export const CartEmptyState = ({ recommendedProducts }: CartEmptyStateProps) => {
   return (
-    <div className="space-y-8">
+    <div className="space-y-10">
       {/* Caja de estado vacío */}
-      <div className="bg-white rounded-2xl border border-gray-200/90 shadow-2xs p-8 sm:p-12 text-center max-w-xl mx-auto">
-        <div className="w-16 h-16 bg-blue-50 text-[#3483fa] rounded-full flex items-center justify-center mx-auto mb-4 border border-blue-100">
-          <TbShoppingCartOff size={34} />
+      <div className="bg-[#f8f8f8] rounded-none border border-[#d9d9d9] p-8 sm:p-12 text-center max-w-xl mx-auto">
+        <div className="w-16 h-16 bg-black text-white rounded-none flex items-center justify-center mx-auto mb-5">
+          <TbShoppingCartOff size={32} />
         </div>
 
-        <h2 className="text-lg sm:text-xl font-bold text-gray-900 tracking-tight">
+        <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#de2a2a] block mb-1">
+          Aún sin productos
+        </span>
+        <h2 className="font-display text-xl sm:text-2xl font-extrabold uppercase tracking-tight text-black">
           Tu carrito está vacío
         </h2>
 
-        <p className="text-xs sm:text-sm text-gray-500 mt-2 max-w-sm mx-auto leading-relaxed font-light">
-          ¿Aún no sabes qué comprar? Tenemos miles de publicaciones con precios increíbles esperándote.
+        <p className="text-xs sm:text-sm text-neutral-600 mt-2 max-w-sm mx-auto leading-relaxed">
+          Descubre nuestra selección de vinos, chocolates finos, derivados del cacao y café de origen.
         </p>
 
         <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
           <Link
             href="/ofertas"
-            className="px-5 py-2.5 bg-[#3483fa] hover:bg-[#2968c8] text-white text-xs sm:text-sm font-semibold rounded-xl shadow-xs transition-colors flex items-center gap-2"
+            className="px-6 py-3 bg-[#de2a2a] hover:bg-red-700 text-white text-xs font-bold uppercase tracking-widest rounded-none transition-colors flex items-center gap-2"
           >
             <TbFlame size={16} />
             <span>Descubrir ofertas</span>
@@ -38,7 +41,7 @@ export const CartEmptyState = ({ recommendedProducts }: CartEmptyStateProps) => 
 
           <Link
             href="/"
-            className="px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-800 text-xs sm:text-sm font-medium rounded-xl transition-colors flex items-center gap-2"
+            className="px-6 py-3 border border-black bg-white hover:bg-black hover:text-white text-black text-xs font-bold uppercase tracking-widest rounded-none transition-colors flex items-center gap-2"
           >
             <TbHome size={16} />
             <span>Ir a la tienda</span>
@@ -48,11 +51,11 @@ export const CartEmptyState = ({ recommendedProducts }: CartEmptyStateProps) => 
 
       {/* Productos recomendados */}
       {recommendedProducts.length > 0 && (
-        <div className="bg-white rounded-2xl border border-gray-200/90 p-5 sm:p-6 shadow-2xs">
-          <div className="flex items-center gap-2 mb-4">
-            <TbFlame className="text-[#00a650]" size={20} />
-            <h3 className="text-sm sm:text-base font-bold text-gray-900">
-              Productos recomendados para ti
+        <div className="bg-white rounded-none border border-[#d9d9d9] p-5 sm:p-6">
+          <div className="flex items-center gap-2 mb-5 pb-3 border-b border-[#d9d9d9]">
+            <TbFlame className="text-[#de2a2a]" size={20} />
+            <h3 className="font-display text-sm sm:text-base font-extrabold uppercase tracking-tight text-black">
+              Recomendados de nuestra cooperativa
             </h3>
           </div>
 
@@ -69,6 +72,7 @@ export const CartEmptyState = ({ recommendedProducts }: CartEmptyStateProps) => 
                 full: p.full ?? false,
                 imageUrl: p.imageUrl || '/placeholder.png',
                 description: p.description,
+                stock: p.stock,
               };
 
               return <ProductCard key={p.id} product={cardProduct} />;

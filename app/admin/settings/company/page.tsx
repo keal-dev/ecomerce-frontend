@@ -4,7 +4,7 @@ import { TbArrowLeft } from 'react-icons/tb';
 import { CompanyManager } from '../_components/CompanyManager';
 
 export const metadata = {
-  title: 'Datos de la Empresa & Marca | MercadoAdmin',
+  title: 'Datos de la Empresa & Marca | Panel Admin',
   description: 'Gestiona la información legal, logotipo, colores y datos de contacto de tu negocio.',
 };
 

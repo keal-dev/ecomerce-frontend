@@ -2,10 +2,12 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { FaBolt, FaStar, FaHeart } from 'react-icons/fa6';
+import { FaHeart } from 'react-icons/fa6';
+import { TbPlus } from 'react-icons/tb';
 import { useCompanyStore } from '@/stores/company.store';
 import { useRecentlyViewedStore } from '@/stores/recently-viewed.store';
 import { useFavoritesStore } from '@/stores/favorites.store';
+import { useCartStore } from '@/stores/cart.store';
 
 export interface Product {
   id: string;
@@ -18,39 +20,26 @@ export interface Product {
   full: boolean;
   imageUrl: string;
   description?: string | null;
+  stock?: number;
   rating?: number | null;
   reviewCount?: number | null;
-}
-
-// Generador determinista de calificación si no viene de base de datos
-function getProductRating(id: string): { rating: number; count: number } {
-  let hash = 0;
-  for (let i = 0; i < id.length; i++) {
-    hash = (hash << 5) - hash + id.charCodeAt(i);
-    hash |= 0;
-  }
-  const positive = Math.abs(hash);
-  const rating = 4.3 + (positive % 8) * 0.1; // entre 4.3 y 5.0
-  const count = 15 + (positive % 85); // entre 15 y 99 reseñas
-  return {
-    rating: Number(rating.toFixed(1)),
-    count,
-  };
 }
 
 export const ProductCard = ({ product }: { product: Product }) => {
   const { company } = useCompanyStore();
   const { addViewedId } = useRecentlyViewedStore();
   const { toggleFavorite, isFavorite } = useFavoritesStore();
+  const addItem = useCartStore((state) => state.addItem);
+  const openDrawer = useCartStore((state) => state.openDrawer);
 
   const isFav = isFavorite(product.id);
-
   const symbol = company?.currencySymbol || 'S/';
   const href = `/product/${product.slug || product.id}`;
-
-  const { rating, count } = product.rating
-    ? { rating: product.rating, count: product.reviewCount || 10 }
-    : getProductRating(product.id || 'default');
+  const isOutOfStock = product.stock !== undefined && Number(product.stock) <= 0;
+  const hasDiscount = Boolean(
+    (product.discount && product.discount > 0) ||
+      (product.originalPrice && product.originalPrice > product.price),
+  );
 
   const handleClick = () => {
     addViewedId(product.id);
@@ -62,104 +51,122 @@ export const ProductCard = ({ product }: { product: Product }) => {
     toggleFavorite(product.id);
   };
 
-  const [priceInt, priceDec] = Number(product.price || 0).toFixed(2).split('.');
+  const handleQuickAdd = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (isOutOfStock) return;
+    addItem(
+      {
+        id: product.id,
+        title: product.title,
+        slug: product.slug,
+        price: Number(product.price) || 0,
+        originalPrice: product.originalPrice ?? null,
+        discount: product.discount ?? null,
+        imageUrl: product.imageUrl,
+        stock: product.stock,
+        freeShipping: product.freeShipping,
+        full: product.full,
+      },
+      1,
+    );
+    openDrawer();
+  };
 
   return (
     <Link
       href={href}
       onClick={handleClick}
-      className="bg-white rounded-xl shadow-2xs hover:shadow-lg transition-all duration-300 cursor-pointer group flex flex-col h-full border border-gray-100 overflow-hidden hover:-translate-y-0.5"
+      className="bg-white border border-[#e5e5e5] hover:border-black transition-colors duration-200 cursor-pointer group flex flex-col h-full overflow-hidden rounded-none"
     >
-      {/* Imagen del producto más estilizada y menos ancha */}
-      <div className="w-full aspect-square max-h-44 p-3 bg-white flex items-center justify-center border-b border-gray-100/80 shrink-0 relative">
-        {/* Botón flotante de favoritos */}
+      {/* Contenedor cuadrado de botella */}
+      <div className="w-full aspect-square bg-[#f8f8f8] flex items-center justify-center relative overflow-hidden p-4 shrink-0">
+        {/* Badge de oferta / agotado */}
+        {isOutOfStock ? (
+          <span className="absolute top-2.5 left-2.5 z-10 bg-[#6f719b] text-white text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-none">
+            AGOTADO
+          </span>
+        ) : product.discount && product.discount > 0 ? (
+          <span className="absolute top-2.5 left-2.5 z-10 bg-[#de2a2a] text-white text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-none">
+            -{product.discount}%
+          </span>
+        ) : null}
+
+        {/* Favoritos */}
         <button
           type="button"
           onClick={handleFavoriteClick}
           title={isFav ? 'Quitar de favoritos' : 'Agregar a favoritos'}
-          className={`absolute top-2 right-2 p-1.5 rounded-full z-10 transition-all cursor-pointer ${
+          className={`absolute top-2.5 right-2.5 p-1.5 z-10 transition-all cursor-pointer ${
             isFav
-              ? 'bg-rose-50 text-rose-500 shadow-2xs'
-              : 'bg-white/80 hover:bg-white text-gray-300 hover:text-rose-500 shadow-2xs opacity-0 group-hover:opacity-100'
+              ? 'bg-white text-[#de2a2a] shadow-xs'
+              : 'bg-white/85 hover:bg-white text-neutral-400 hover:text-[#de2a2a] opacity-0 group-hover:opacity-100'
           }`}
         >
-          <FaHeart size={13} className={isFav ? 'fill-rose-500 text-rose-500' : ''} />
+          <FaHeart size={13} className={isFav ? 'fill-[#de2a2a] text-[#de2a2a]' : ''} />
         </button>
 
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img 
-          src={product.imageUrl || 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500&q=80'} 
-          alt={product.title} 
+        <img
+          src={product.imageUrl || '/placeholder.png'}
+          alt={product.title}
           onError={(e) => {
-            (e.currentTarget as HTMLImageElement).src = 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500&q=80';
+            (e.currentTarget as HTMLImageElement).src = '/placeholder.png';
           }}
           className="object-contain w-full h-full group-hover:scale-105 transition-transform duration-300"
           loading="lazy"
         />
       </div>
 
-      <div className="p-3 flex flex-col flex-grow justify-between">
+      {/* Info del Producto */}
+      <div className="p-3.5 flex flex-col flex-1 justify-between gap-3">
         <div>
-          {/* Estrellas y calificación */}
-          <div className="flex items-center gap-1.5 mb-1.5">
-            <div className="flex items-center text-amber-400">
-              {[1, 2, 3, 4, 5].map((star) => (
-                <FaStar
-                  key={star}
-                  size={11}
-                  className={star <= Math.round(rating) ? 'text-amber-400' : 'text-gray-200'}
-                />
-              ))}
-            </div>
-            <span className="text-xs font-semibold text-gray-700 leading-none">{rating}</span>
-            <span className="text-[11px] text-gray-400 leading-none">({count})</span>
-          </div>
-
-          {/* Título del producto */}
-          <h3 className="text-gray-800 text-xs sm:text-sm font-normal line-clamp-2 leading-snug group-hover:text-[#3483fa] transition-colors">
+          <h3 className="text-[#020202] text-[13px] sm:text-sm font-semibold line-clamp-2 leading-snug group-hover:text-[#de2a2a] transition-colors">
             {product.title}
           </h3>
-
-          {/* Descripción corta (Siempre visible para cumplir con Culqi) */}
-          <p className="text-[11px] sm:text-xs text-gray-500 line-clamp-2 mt-1 leading-relaxed font-light">
-            {product.description?.trim() || `${product.title} con garantía oficial de marca y comprobante electrónico.`}
+          <p className="text-[11px] text-neutral-500 line-clamp-1 mt-1">
+            {product.description?.trim() || `${product.title} • Producto original garantizado.`}
           </p>
         </div>
 
-        <div className="mt-2.5 pt-2 border-t border-gray-50">
-          {product.originalPrice && product.originalPrice > product.price && (
-            <span className="text-gray-400 text-xs line-through block leading-none mb-1">
-              {symbol} {Number(product.originalPrice).toFixed(2)}
+        <div className="space-y-2.5">
+          <div className="flex flex-wrap items-baseline gap-2">
+            <span
+              className={`text-base sm:text-[17px] font-extrabold tracking-tight ${
+                hasDiscount ? 'text-[#de2a2a]' : 'text-black'
+              }`}
+            >
+              {symbol} {Number(product.price || 0).toFixed(2)}
             </span>
-          )}
 
-          <div className="flex items-baseline gap-1.5 mb-1">
-            <div className="flex items-start text-gray-900 font-semibold tracking-tight">
-              <span className="text-xs sm:text-[13px] mr-0.5">{symbol}</span>
-              <span className="text-base sm:text-lg leading-tight">{priceInt}</span>
-              <span className="text-[10px] sm:text-[11px] leading-tight font-medium ml-0.5">{priceDec}</span>
-            </div>
-            {product.discount && product.discount > 0 ? (
-              <span className="text-[#00a650] text-[10.5px] font-bold bg-emerald-50 px-1.5 py-0.2 rounded">
-                {product.discount}% OFF
+            {product.originalPrice && product.originalPrice > product.price && (
+              <span className="text-neutral-400 text-xs line-through">
+                {symbol} {Number(product.originalPrice).toFixed(2)}
               </span>
-            ) : null}
+            )}
+
+            {product.freeShipping && (
+              <span className="text-[#2e9e7b] text-[10px] font-bold uppercase tracking-wider ml-auto">
+                Envío gratis
+              </span>
+            )}
           </div>
-          
-          <div className="mt-1 flex flex-col gap-1 min-h-[18px]">
-            <div className="flex items-center gap-2">
-              {product.freeShipping && (
-                <span className="text-[#00a650] text-xs font-semibold leading-tight">
-                  Envío gratis
-                </span>
-              )}
-              {product.full && (
-                <span className="text-[#00a650] text-xs font-bold italic flex items-center leading-tight">
-                  <FaBolt size={10} className="mr-0.5" /> FULL
-                </span>
-              )}
-            </div>
-          </div>
+
+          <button
+            type="button"
+            disabled={isOutOfStock}
+            onClick={handleQuickAdd}
+            className="w-full h-10 bg-black hover:bg-[#de2a2a] disabled:bg-[#6f719b] text-white text-[11px] font-bold uppercase tracking-widest rounded-none transition-colors flex items-center justify-center gap-1.5 cursor-pointer disabled:cursor-not-allowed"
+          >
+            {isOutOfStock ? (
+              <span>AGOTADO</span>
+            ) : (
+              <>
+                <TbPlus size={14} />
+                <span>AGREGAR</span>
+              </>
+            )}
+          </button>
         </div>
       </div>
     </Link>

@@ -2,7 +2,7 @@ import React from 'react';
 import { SalesManager } from './_components/SalesManager';
 
 export const metadata = {
-  title: 'Punto de Venta (POS) | MercadoAdmin',
+  title: 'Punto de Venta (POS) | Panel Admin',
   description: 'Ventas directas en tienda física y caja registradora.',
 };
 

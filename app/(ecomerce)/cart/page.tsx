@@ -48,23 +48,23 @@ export default function CartPage() {
 
   if (!mounted) {
     return (
-      <div className="min-h-[60vh] flex flex-col items-center justify-center gap-3">
-        <TbLoader2 className="animate-spin text-[#3483fa]" size={36} />
-        <p className="text-xs text-gray-500">Cargando tu carrito...</p>
+      <div className="min-h-[60vh] bg-white flex flex-col items-center justify-center gap-3">
+        <TbLoader2 className="animate-spin text-[#de2a2a]" size={36} />
+        <p className="text-xs font-medium uppercase tracking-wider text-neutral-500">Cargando tu carrito...</p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen pb-16">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-4">
+    <div className="min-h-screen bg-white pb-16">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-6">
         {/* Breadcrumb */}
-        <nav className="flex items-center gap-1.5 text-xs text-gray-500 mb-4 font-light">
-          <Link href="/" className="hover:text-[#3483fa] transition-colors">
+        <nav className="flex items-center gap-1.5 text-[11px] uppercase tracking-wider text-neutral-500 mb-5">
+          <Link href="/" className="hover:text-[#de2a2a] transition-colors">
             Inicio
           </Link>
-          <TbChevronRight size={13} className="text-gray-400" />
-          <span className="text-gray-800 font-medium">Carrito</span>
+          <TbChevronRight size={13} className="text-neutral-400" />
+          <span className="text-black font-bold">Carrito</span>
         </nav>
 
         {items.length === 0 ? (
@@ -72,13 +72,13 @@ export default function CartPage() {
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
             {/* Columna Izquierda: Lista de productos en el carrito */}
-            <div className="lg:col-span-8 bg-white rounded-2xl border border-gray-200/90 shadow-2xs p-4 sm:p-6">
-              <div className="flex items-center justify-between border-b border-gray-100 pb-4 mb-3">
-                <div className="flex items-center gap-2">
-                  <h1 className="text-lg sm:text-xl font-bold text-gray-900 tracking-tight">
+            <div className="lg:col-span-8 bg-white rounded-none border border-[#d9d9d9] p-4 sm:p-6">
+              <div className="flex items-center justify-between border-b border-[#d9d9d9] pb-4 mb-3">
+                <div className="flex items-baseline gap-2.5 flex-wrap">
+                  <h1 className="font-display text-lg sm:text-2xl font-extrabold uppercase tracking-tight text-black">
                     Carrito de compras
                   </h1>
-                  <span className="text-xs text-gray-500 font-light">
+                  <span className="text-xs font-bold uppercase tracking-wider text-neutral-500">
                     ({totalItems} {totalItems === 1 ? 'producto' : 'productos'})
                   </span>
                 </div>
@@ -86,7 +86,7 @@ export default function CartPage() {
                 <button
                   type="button"
                   onClick={clearCart}
-                  className="text-xs text-rose-600 hover:text-rose-700 font-medium inline-flex items-center gap-1 cursor-pointer transition-colors"
+                  className="text-xs text-[#de2a2a] hover:text-red-700 font-bold uppercase tracking-wider inline-flex items-center gap-1 cursor-pointer transition-colors"
                 >
                   <TbTrash size={15} />
                   <span>Vaciar carrito</span>
@@ -94,7 +94,7 @@ export default function CartPage() {
               </div>
 
               {/* Lista de filas de productos */}
-              <div className="divide-y divide-gray-100">
+              <div className="divide-y divide-[#d9d9d9]">
                 {items.map((item) => (
                   <CartItemRow
                     key={item.id}

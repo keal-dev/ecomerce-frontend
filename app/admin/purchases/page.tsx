@@ -2,7 +2,7 @@ import React from 'react';
 import { PurchasesManager } from './_components/PurchasesManager';
 
 export const metadata = {
-  title: 'Compras e Inventario | MercadoAdmin',
+  title: 'Compras e Inventario | Panel Admin',
   description: 'Gestión de compras a proveedores e ingreso de stock al catálogo.',
 };
 

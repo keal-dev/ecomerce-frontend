@@ -40,20 +40,16 @@ const iconMap: Record<string, React.ElementType> = {
   TbCategory
 };
 
-// Fallback por defecto si aún no hay categorías registradas en la base de datos
+// Fallback de categorías de cooperativa gourmet si aún no hay registradas en la BD
 const defaultFallbackCategories: Category[] = [
-  { id: '1', name: 'Celulares', href: '#', icon: 'TbDeviceMobile' },
-  { id: '2', name: 'Computación', href: '#', icon: 'TbDeviceLaptop' },
-  { id: '3', name: 'Consolas y Juegos', href: '#', icon: 'TbDeviceGamepad2' },
-  { id: '4', name: 'Televisores y Audio', href: '#', icon: 'TbDeviceTv' },
-  { id: '5', name: 'Ropa y Moda', href: '#', icon: 'TbShirt' },
-  { id: '6', name: 'Calzado', href: '#', icon: 'TbShoe' },
-  { id: '7', name: 'Hogar y Muebles', href: '#', icon: 'TbArmchair' },
-  { id: '8', name: 'Electrodomésticos', href: '#', icon: 'TbToolsKitchen2' },
-  { id: '9', name: 'Accesorios Vehículos', href: '#', icon: 'TbCar' },
-  { id: '10', name: 'Deportes y Fitness', href: '#', icon: 'TbBarbell' },
-  { id: '11', name: 'Juguetes', href: '#', icon: 'TbHorseToy' },
-  { id: '12', name: 'Supermercado', href: '#', icon: 'TbShoppingCart', badge: 'Envío Gratis' },
+  { id: '1', name: 'Vinos', href: '/search?q=vino', icon: 'TbCategory' },
+  { id: '2', name: 'Chocolates', href: '/search?q=chocolate', icon: 'TbCategory' },
+  { id: '3', name: 'Cacao', href: '/search?q=cacao', icon: 'TbCategory' },
+  { id: '4', name: 'Café de Origen', href: '/search?q=cafe', icon: 'TbCategory' },
+  { id: '5', name: 'Derivados del Cacao', href: '/search?q=derivados', icon: 'TbCategory' },
+  { id: '6', name: 'Nibs y Pasta', href: '/search?q=pasta', icon: 'TbCategory' },
+  { id: '7', name: 'Packs de Regalo', href: '/search?q=pack', icon: 'TbCategory' },
+  { id: '8', name: 'Edición Limitada', href: '/search?q=especial', icon: 'TbCategory', badge: 'Top' },
 ];
 
 interface CategoryCarouselProps {
@@ -61,9 +57,9 @@ interface CategoryCarouselProps {
   categories?: Category[];
 }
 
-export const CategoryCarousel = ({ 
-  title = "Categorías destacadas", 
-  categories: propCategories 
+export const CategoryCarousel = ({
+  title = 'EXPLORA POR CATEGORÍA',
+  categories: propCategories,
 }: CategoryCarouselProps) => {
   const { categories: storeCategories, isLoading, fetchCategories } = useCategoryStore();
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -103,61 +99,60 @@ export const CategoryCarousel = ({
   };
 
   return (
-    <div className="max-w-7xl mx-auto py-8 px-4 md:px-7">
-      <div className="flex items-end justify-between mb-5">
-        <div className="flex items-center gap-3">
-          <h2 className="text-2xl font-light text-[#666]">{title}</h2>
-          {storeCategories.length > 0 && (
-            <span className="text-xs bg-gray-200/80 text-gray-600 px-2 py-0.5 rounded-full font-medium hidden sm:inline-block">
-              {storeCategories.length} {storeCategories.length === 1 ? 'categoría' : 'categorías'}
-            </span>
-          )}
+    <section className="max-w-7xl mx-auto py-8 px-4 md:px-7">
+      <div className="flex items-end justify-between gap-4 mb-6">
+        <div>
+          <span className="block text-[11px] font-bold uppercase tracking-[0.2em] text-[#de2a2a] mb-1">
+            NUESTRA COOPERATIVA
+          </span>
+          <h2 className="font-display text-2xl sm:text-3xl font-extrabold uppercase tracking-tight text-black leading-none">
+            {title}
+          </h2>
         </div>
-        <Link href="/categories" className="text-[#3483fa] text-sm font-medium hover:text-blue-700 transition-colors">
-          Ver todas las categorías
+        <Link
+          href="/categories"
+          className="text-xs font-bold uppercase tracking-widest text-black hover:text-[#de2a2a] underline underline-offset-4 transition-colors shrink-0"
+        >
+          VER TODAS
         </Link>
       </div>
 
       <div className="relative group/carousel">
-        {/* Botón flecha izquierda */}
         {canScrollLeft && (
           <button
             type="button"
             onClick={() => handleScroll('left')}
             aria-label="Ver categorías anteriores"
-            className="absolute -left-3.5 top-1/2 -translate-y-1/2 z-20 w-9 h-9 md:w-10 md:h-10 bg-white rounded-full shadow-lg border border-gray-100 flex items-center justify-center text-gray-700 hover:text-black hover:scale-105 active:scale-95 transition-all cursor-pointer"
+            className="absolute -left-2 md:-left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 bg-white border border-[#d9d9d9] hover:bg-black hover:text-white hover:border-black flex items-center justify-center text-black shadow-md transition-colors cursor-pointer rounded-none"
           >
-            <TbChevronLeft size={22} />
+            <TbChevronLeft size={20} />
           </button>
         )}
 
-        {/* Botón flecha derecha */}
         {canScrollRight && (
           <button
             type="button"
             onClick={() => handleScroll('right')}
             aria-label="Ver categorías siguientes"
-            className="absolute -right-3.5 top-1/2 -translate-y-1/2 z-20 w-9 h-9 md:w-10 md:h-10 bg-white rounded-full shadow-lg border border-gray-100 flex items-center justify-center text-gray-700 hover:text-black hover:scale-105 active:scale-95 transition-all cursor-pointer"
+            className="absolute -right-2 md:-right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 bg-white border border-[#d9d9d9] hover:bg-black hover:text-white hover:border-black flex items-center justify-center text-black shadow-md transition-colors cursor-pointer rounded-none"
           >
-            <TbChevronRight size={22} />
+            <TbChevronRight size={20} />
           </button>
         )}
 
-        {/* Contenedor desplazable de categorías */}
         <div
           ref={scrollContainerRef}
           onScroll={checkScroll}
-          className="flex gap-3.5 overflow-x-auto scrollbar-none scroll-smooth pb-2 pt-1 px-1 -mx-1"
+          className="flex gap-4 overflow-x-auto scrollbar-none scroll-smooth pb-2 pt-1"
         >
           {isLoading && storeCategories.length === 0 ? (
-            // Skeleton Loader mientras carga del backend
             Array.from({ length: 6 }).map((_, index) => (
               <div
                 key={index}
-                className="w-[145px] sm:w-[165px] md:w-[185px] shrink-0 bg-white rounded-lg p-4 border border-gray-100 shadow-sm flex flex-col items-center justify-center text-center animate-pulse"
+                className="w-[155px] sm:w-[175px] md:w-[190px] shrink-0 bg-white rounded-none p-5 border border-[#e5e5e5] flex flex-col items-center justify-center text-center animate-pulse"
               >
-                <div className="w-14 h-14 rounded-full bg-gray-200 mb-3" />
-                <div className="h-3.5 bg-gray-200 rounded w-3/4 mb-1" />
+                <div className="w-16 h-16 bg-neutral-100 mb-3" />
+                <div className="h-3.5 bg-neutral-200 w-3/4 mb-1" />
               </div>
             ))
           ) : (
@@ -172,15 +167,15 @@ export const CategoryCarousel = ({
                 <Link
                   key={cat.id}
                   href={linkHref}
-                  className="group w-[145px] sm:w-[165px] md:w-[185px] shrink-0 bg-white rounded-lg p-4 border border-gray-100 shadow-sm hover:shadow-md transition-all duration-200 flex flex-col items-center justify-center text-center relative overflow-hidden hover:-translate-y-1 select-none"
+                  className="group w-[155px] sm:w-[175px] md:w-[190px] shrink-0 bg-white rounded-none p-5 border border-[#e5e5e5] hover:border-black transition-colors duration-200 flex flex-col items-center justify-center text-center relative overflow-hidden select-none"
                 >
                   {cat.badge && (
-                    <span className="absolute top-2 right-2 bg-[#00a650] text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full uppercase tracking-wider shadow-xs">
+                    <span className="absolute top-2 right-2 bg-[#de2a2a] text-white text-[9px] font-extrabold px-1.5 py-0.5 rounded-none uppercase tracking-wider">
                       {cat.badge}
                     </span>
                   )}
 
-                  <div className="w-14 h-14 rounded-full bg-gray-50 group-hover:bg-[#ffe600]/25 text-[#333] group-hover:text-black flex items-center justify-center mb-3 transition-colors duration-200 overflow-hidden p-2.5">
+                  <div className="w-16 h-16 bg-[#f8f8f8] group-hover:bg-black text-black group-hover:text-white flex items-center justify-center mb-3 transition-colors duration-200 overflow-hidden p-2.5">
                     {isImage ? (
                       <img
                         src={cat.icon}
@@ -189,14 +184,14 @@ export const CategoryCarousel = ({
                         loading="lazy"
                       />
                     ) : (
-                      <IconComponent 
-                        size={28} 
-                        className="transition-transform duration-200 group-hover:scale-110 text-gray-700 group-hover:text-black shrink-0" 
+                      <IconComponent
+                        size={28}
+                        className="transition-transform duration-200 group-hover:scale-110 shrink-0"
                       />
                     )}
                   </div>
 
-                  <span className="text-[13px] font-medium text-gray-700 group-hover:text-[#3483fa] transition-colors line-clamp-1 w-full text-center">
+                  <span className="text-xs font-extrabold uppercase tracking-wider text-black group-hover:text-[#de2a2a] transition-colors line-clamp-1 w-full text-center">
                     {cat.name}
                   </span>
                 </Link>
@@ -205,6 +200,6 @@ export const CategoryCarousel = ({
           )}
         </div>
       </div>
-    </div>
+    </section>
   );
 };

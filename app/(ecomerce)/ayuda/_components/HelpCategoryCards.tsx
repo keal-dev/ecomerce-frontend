@@ -18,35 +18,27 @@ interface HelpCategoryCardsProps {
 const CATEGORIES = [
   {
     id: 'shipping' as HelpCategoryType,
-    title: 'Compras y Envíos',
-    description: 'Seguimiento, plazos de entrega, envíos gratis y FULL',
+    title: 'Compras y Delivery',
+    description: 'Seguimiento, plazos de entrega, envíos gratis y EXPRESS',
     icon: TbTruckDelivery,
-    color: 'text-blue-600 bg-blue-50 border-blue-200',
-    activeRing: 'ring-2 ring-blue-500 border-blue-500',
   },
   {
     id: 'payments' as HelpCategoryType,
     title: 'Pagos y Facturación',
-    description: 'Tarjetas, transferencias, boletas y facturas electrónicas',
+    description: 'Tarjetas, Yape/Plin, boletas y facturas electrónicas',
     icon: TbCreditCard,
-    color: 'text-emerald-600 bg-emerald-50 border-emerald-200',
-    activeRing: 'ring-2 ring-emerald-500 border-emerald-500',
   },
   {
     id: 'returns' as HelpCategoryType,
     title: 'Garantía y Devolución',
-    description: 'Compra Protegida, plazos y cómo solicitar reembolsos',
+    description: 'Autenticidad, plazos y cómo solicitar reembolsos',
     icon: TbShieldCheck,
-    color: 'text-amber-600 bg-amber-50 border-amber-200',
-    activeRing: 'ring-2 ring-amber-500 border-amber-500',
   },
   {
     id: 'account' as HelpCategoryType,
     title: 'Cuenta y Seguridad',
     description: 'Actualización de datos, contraseñas y privacidad',
     icon: TbUserCheck,
-    color: 'text-purple-600 bg-purple-50 border-purple-200',
-    activeRing: 'ring-2 ring-purple-500 border-purple-500',
   },
 ];
 
@@ -57,14 +49,14 @@ export const HelpCategoryCards = ({
   return (
     <div className="mb-10">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg sm:text-xl font-bold text-gray-900 tracking-tight">
+        <h2 className="font-display text-lg sm:text-xl font-extrabold uppercase tracking-tight text-black">
           Explora por temas frecuentes
         </h2>
         {selectedCategory !== 'all' && (
           <button
             type="button"
             onClick={() => onSelectCategory('all')}
-            className="text-xs font-semibold text-[#3483fa] hover:underline cursor-pointer"
+            className="text-xs font-bold uppercase tracking-wider text-[#de2a2a] hover:underline cursor-pointer"
           >
             Ver todos los temas
           </button>
@@ -81,29 +73,33 @@ export const HelpCategoryCards = ({
               key={cat.id}
               type="button"
               onClick={() => onSelectCategory(isSelected ? 'all' : cat.id)}
-              className={`p-5 rounded-2xl bg-white border text-left transition-all duration-200 shadow-2xs hover:shadow-md cursor-pointer flex flex-col justify-between ${
+              className={`p-5 rounded-none border text-left transition-all duration-200 cursor-pointer flex flex-col justify-between ${
                 isSelected
-                  ? `${cat.activeRing} shadow-md`
-                  : 'border-gray-200 hover:border-gray-300'
+                  ? 'border-[#de2a2a] ring-1 ring-[#de2a2a] bg-[#f8f8f8]'
+                  : 'bg-white border-[#d9d9d9] hover:border-black'
               }`}
             >
               <div>
                 <div
-                  className={`w-11 h-11 rounded-xl flex items-center justify-center mb-3 border ${cat.color}`}
+                  className={`w-11 h-11 rounded-none flex items-center justify-center mb-3 border transition-colors ${
+                    isSelected
+                      ? 'bg-[#de2a2a] text-white border-[#de2a2a]'
+                      : 'bg-[#f8f8f8] text-black border-[#d9d9d9]'
+                  }`}
                 >
-                  <Icon size={24} />
+                  <Icon size={22} />
                 </div>
-                <h3 className="text-sm font-bold text-gray-900 leading-snug">
+                <h3 className="font-display text-sm font-extrabold uppercase text-black leading-snug">
                   {cat.title}
                 </h3>
-                <p className="text-xs text-gray-500 mt-1 leading-relaxed font-light">
+                <p className="text-xs text-neutral-600 mt-1 leading-relaxed">
                   {cat.description}
                 </p>
               </div>
 
               <span
-                className={`mt-4 text-[11px] font-semibold inline-flex items-center ${
-                  isSelected ? 'text-[#3483fa]' : 'text-gray-400 group-hover:text-gray-600'
+                className={`mt-4 text-[11px] font-bold uppercase tracking-wider inline-flex items-center ${
+                  isSelected ? 'text-[#de2a2a]' : 'text-neutral-500'
                 }`}
               >
                 {isSelected ? '✓ Tema filtrado' : 'Ver preguntas →'}

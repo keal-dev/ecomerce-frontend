@@ -1,15 +1,18 @@
 'use client';
 
 import React, { useRef, useState, useEffect } from 'react';
+import Link from 'next/link';
 import { ProductCard, Product } from './ProductCard';
 import { FeaturedProductCard } from './FeaturedProductCard';
 import { TbChevronLeft, TbChevronRight } from 'react-icons/tb';
 
 interface ProductCarouselProps {
+  eyebrow?: string;
   title: string;
   products: Product[];
   variant?: 'default' | 'featured';
   scrollable?: boolean;
+  darkSurface?: boolean;
   headerAction?: {
     label: string;
     href?: string;
@@ -17,11 +20,13 @@ interface ProductCarouselProps {
   };
 }
 
-export const ProductCarousel = ({ 
-  title, 
-  products, 
+export const ProductCarousel = ({
+  eyebrow,
+  title,
+  products,
   variant = 'default',
   scrollable,
+  darkSurface = false,
   headerAction,
 }: ProductCarouselProps) => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -60,98 +65,99 @@ export const ProductCarousel = ({
 
   const renderAction = () => {
     if (!headerAction) return null;
+    const baseCls = darkSurface
+      ? 'text-xs font-bold uppercase tracking-widest text-white hover:text-[#de2a2a] underline underline-offset-4 transition-colors cursor-pointer shrink-0'
+      : 'text-xs font-bold uppercase tracking-widest text-black hover:text-[#de2a2a] underline underline-offset-4 transition-colors cursor-pointer shrink-0';
+
     if (headerAction.onClick) {
       return (
-        <button
-          type="button"
-          onClick={headerAction.onClick}
-          className="text-[#3483fa] text-sm font-medium hover:text-blue-700 cursor-pointer"
-        >
+        <button type="button" onClick={headerAction.onClick} className={baseCls}>
           {headerAction.label}
         </button>
       );
     }
     return (
-      <a 
-        href={headerAction.href || '#'} 
-        className="text-[#3483fa] text-sm font-medium hover:text-blue-700"
-      >
+      <Link href={headerAction.href || '#'} className={baseCls}>
         {headerAction.label}
-      </a>
+      </Link>
     );
   };
+
+  const renderHeader = () => (
+    <div className="flex items-end justify-between gap-4 mb-6">
+      <div>
+        {eyebrow && (
+          <span className="block text-[11px] font-bold uppercase tracking-[0.2em] text-[#de2a2a] mb-1">
+            {eyebrow}
+          </span>
+        )}
+        <h2
+          className={`font-display text-2xl sm:text-3xl font-extrabold uppercase tracking-tight leading-none ${
+            darkSurface ? 'text-white' : 'text-black'
+          }`}
+        >
+          {title}
+        </h2>
+      </div>
+      {renderAction()}
+    </div>
+  );
 
   if (variant === 'featured' && products.length > 0) {
     const featuredProduct = products[0];
     const sideProducts = products.slice(1, 4);
 
     return (
-      <div className="max-w-7xl mx-auto py-6 px-4 md:px-7">
-        <div className="flex items-end justify-between mb-4">
-          <h2 className="text-xl sm:text-2xl font-light text-[#666]">{title}</h2>
-          {renderAction()}
-        </div>
-        
+      <section className="max-w-7xl mx-auto py-8 px-4 md:px-7">
+        {renderHeader()}
+
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
           <FeaturedProductCard product={featuredProduct} />
           {sideProducts.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
         </div>
-      </div>
+      </section>
     );
   }
 
   return (
-    <div className="max-w-7xl mx-auto py-6 px-4 md:px-7">
-      <div className="flex items-end justify-between mb-3.5">
-        <div className="flex items-center gap-2.5">
-          <h2 className="text-xl sm:text-2xl font-light text-[#666]">{title}</h2>
-          {products.length > 5 && (
-            <span className="text-[11px] bg-gray-200/80 text-gray-600 px-2 py-0.5 rounded-full font-medium hidden sm:inline-block">
-              {products.length} productos
-            </span>
-          )}
-        </div>
-        {renderAction()}
-      </div>
+    <section className="max-w-7xl mx-auto py-8 px-4 md:px-7">
+      {renderHeader()}
 
       {isScrollMode ? (
         <div className="relative group/carousel">
-          {/* Botón flecha izquierda */}
           {canScrollLeft && (
             <button
               type="button"
               onClick={() => handleScroll('left')}
               aria-label="Ver productos anteriores"
-              className="absolute -left-3.5 top-1/2 -translate-y-1/2 z-20 w-8 h-8 sm:w-9 sm:h-9 bg-white rounded-full shadow-md border border-gray-100 flex items-center justify-center text-gray-700 hover:text-black hover:scale-105 active:scale-95 transition-all cursor-pointer"
+              className="absolute -left-2 md:-left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 bg-white border border-[#d9d9d9] hover:bg-black hover:text-white hover:border-black flex items-center justify-center text-black shadow-md transition-colors cursor-pointer rounded-none"
             >
               <TbChevronLeft size={20} />
             </button>
           )}
 
-          {/* Botón flecha derecha */}
           {canScrollRight && (
             <button
               type="button"
               onClick={() => handleScroll('right')}
               aria-label="Ver productos siguientes"
-              className="absolute -right-3.5 top-1/2 -translate-y-1/2 z-20 w-8 h-8 sm:w-9 sm:h-9 bg-white rounded-full shadow-md border border-gray-100 flex items-center justify-center text-gray-700 hover:text-black hover:scale-105 active:scale-95 transition-all cursor-pointer"
+              className="absolute -right-2 md:-right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 bg-white border border-[#d9d9d9] hover:bg-black hover:text-white hover:border-black flex items-center justify-center text-black shadow-md transition-colors cursor-pointer rounded-none"
             >
               <TbChevronRight size={20} />
             </button>
           )}
 
-          {/* Contenedor desplazable menos ancho y más estilizado */}
           <div
             ref={scrollContainerRef}
             onScroll={checkScroll}
-            className="flex gap-3.5 overflow-x-auto scrollbar-none scroll-smooth pb-3 pt-1 px-1 -mx-1"
+            className="flex gap-4 overflow-x-auto scrollbar-none scroll-smooth pb-2 pt-1"
           >
             {products.map((product) => (
               <div
                 key={product.id}
-                className="w-[165px] sm:w-[180px] md:w-[192px] shrink-0 flex flex-col"
+                className="w-[180px] sm:w-[215px] md:w-[232px] shrink-0 flex flex-col"
               >
                 <ProductCard product={product} />
               </div>
@@ -159,12 +165,12 @@ export const ProductCarousel = ({
           </div>
         </div>
       ) : (
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3.5">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
           {products.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
         </div>
       )}
-    </div>
+    </section>
   );
 };

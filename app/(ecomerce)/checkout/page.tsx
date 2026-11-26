@@ -3,7 +3,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Script from 'next/script';
-import { useRouter } from 'next/navigation';
 import {
   TbChevronRight,
   TbTruckDelivery,
@@ -13,7 +12,6 @@ import {
   TbCheck,
   TbArrowLeft,
   TbShoppingBag,
-  TbReceipt,
   TbUser,
   TbMapPin,
   TbAlertCircle,
@@ -37,7 +35,6 @@ declare global {
 }
 
 export default function CheckoutPage() {
-  const router = useRouter();
   const { items, clearCart, getSubtotal, getTotalItems } = useCartStore();
   const { company, fetchCompany } = useCompanyStore();
 
@@ -142,7 +139,6 @@ export default function CheckoutPage() {
         const currentSubtotal = subtotalRef.current;
         const currentShipping = shippingCostRef.current;
 
-        // Separar nombre y apellido para el motor antifraude de Culqi
         const nameParts = currentForm.fullName.trim().split(/\s+/);
         const firstName = nameParts[0] || 'Cliente';
         const lastName = nameParts.slice(1).join(' ') || 'General';
@@ -156,7 +152,7 @@ export default function CheckoutPage() {
             amount: Math.round(currentTotal * 100),
             email: currentForm.email,
             currencyCode: 'PEN',
-            description: `Pedido de ${currentForm.fullName} en ${companyRef.current?.name || 'Tienda Online'}`,
+            description: `Pedido de ${currentForm.fullName} en ${companyRef.current?.name || 'Cooperativa Gourmet'}`,
             firstName,
             lastName,
             address: currentForm.address,
@@ -174,7 +170,7 @@ export default function CheckoutPage() {
             invoiceType: currentForm.invoiceType,
             companyRuc: currentForm.companyRuc,
             companyLegalName: currentForm.companyLegalName,
-            companyName: companyRef.current?.name || 'Tienda Online',
+            companyName: companyRef.current?.name || 'Cooperativa Gourmet',
             currencySymbol: companyRef.current?.currencySymbol || 'S/',
             items: currentItems.map((it) => ({
               productId: it.id,
@@ -246,12 +242,11 @@ export default function CheckoutPage() {
   }, [clearCart]);
 
   const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target;
     let sanitizedValue = value;
 
-    // Solo números y límites de caracteres específicos
     if (name === 'docNumber') {
       const maxLen = formData.invoiceType === 'factura' ? 11 : 8;
       sanitizedValue = value.replace(/\D/g, '').slice(0, maxLen);
@@ -386,15 +381,15 @@ export default function CheckoutPage() {
 
         const resolvedPublicKey = isProd
           ? process.env.NEXT_PUBLIC_CULQI_PUBLIC_KEY_LIVE ||
-          process.env.NEXT_PUBLIC_CULQI_PUBLIC_KEY
+            process.env.NEXT_PUBLIC_CULQI_PUBLIC_KEY
           : process.env.NEXT_PUBLIC_CULQI_PUBLIC_KEY_TEST ||
-          process.env.NEXT_PUBLIC_CULQI_PUBLIC_KEY ||
-          'pk_test_KSDBPPU0XO3e36qf';
+            process.env.NEXT_PUBLIC_CULQI_PUBLIC_KEY ||
+            'pk_test_KSDBPPU0XO3e36qf';
 
         window.Culqi.publicKey = resolvedPublicKey;
 
         window.Culqi.settings({
-          title: company?.name || 'Tienda Online',
+          title: company?.name || 'Cooperativa Gourmet',
           currency: 'PEN',
           amount: Math.round(totalToPay * 100),
         });
@@ -412,11 +407,11 @@ export default function CheckoutPage() {
           },
           style: {
             logo: company?.logoUrl || '',
-            bannerColor: '#0f172a',
-            buttonBackground: '#3483fa',
-            menuColor: '#3483fa',
-            linksColor: '#3483fa',
-            priceColor: '#3483fa',
+            bannerColor: '#000000',
+            buttonBackground: '#de2a2a',
+            menuColor: '#000000',
+            linksColor: '#de2a2a',
+            priceColor: '#000000',
           },
         });
 
@@ -434,9 +429,11 @@ export default function CheckoutPage() {
 
   if (!mounted) {
     return (
-      <div className="min-h-[60vh] flex flex-col items-center justify-center gap-3">
-        <TbLoader2 className="animate-spin text-[#3483fa]" size={36} />
-        <p className="text-xs text-gray-500">Cargando pasarela de pago segura...</p>
+      <div className="min-h-[60vh] bg-white flex flex-col items-center justify-center gap-3">
+        <TbLoader2 className="animate-spin text-[#de2a2a]" size={36} />
+        <p className="text-xs font-medium uppercase tracking-wider text-neutral-500">
+          Cargando pasarela de pago segura...
+        </p>
       </div>
     );
   }
@@ -444,44 +441,44 @@ export default function CheckoutPage() {
   // PANTALLA DE ÉXITO DE COMPRA
   if (orderCompleted) {
     return (
-      <div className="min-h-screen pb-16 pt-6">
+      <div className="min-h-screen bg-white pb-16 pt-8">
         <div className="max-w-2xl mx-auto px-4 sm:px-6">
-          <div className="bg-white rounded-2xl border border-gray-200/90 shadow-sm p-6 sm:p-10 text-center space-y-6">
-            <div className="w-16 h-16 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center mx-auto shadow-xs">
+          <div className="bg-white rounded-none border border-[#d9d9d9] p-6 sm:p-10 text-center space-y-6">
+            <div className="w-16 h-16 bg-[#2e9e7b] text-white rounded-none flex items-center justify-center mx-auto">
               <TbCheck size={32} />
             </div>
 
             <div>
-              <span className="text-xs font-bold uppercase tracking-wider text-emerald-600 block mb-1">
-                ¡Pedido Realizado con Éxito!
+              <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#2e9e7b] block mb-1.5">
+                Pedido realizado con éxito
               </span>
-              <h1 className="text-2xl sm:text-3xl font-black text-gray-900">
+              <h1 className="font-display text-2xl sm:text-3xl font-extrabold uppercase tracking-tight text-black">
                 Gracias por tu compra
               </h1>
-              <p className="text-xs sm:text-sm text-gray-500 mt-2 max-w-md mx-auto">
-                Hemos enviado la confirmación y el detalle de tu compra al correo:{' '}
-                <strong className="text-gray-800">{orderCompleted.email}</strong>.
+              <p className="text-xs sm:text-sm text-neutral-600 mt-2 max-w-md mx-auto">
+                Hemos enviado la confirmación y el detalle de tu pedido al correo:{' '}
+                <strong className="text-black">{orderCompleted.email}</strong>.
               </p>
             </div>
 
-            <div className="p-5 bg-gray-50 rounded-xl border border-gray-200/80 text-left space-y-2 text-xs">
-              <div className="flex justify-between border-b pb-2">
-                <span className="text-gray-500">Número de Pedido:</span>
-                <span className="font-bold text-gray-900">{orderCompleted.orderNumber}</span>
+            <div className="p-5 bg-[#f8f8f8] rounded-none border border-[#d9d9d9] text-left space-y-2.5 text-xs">
+              <div className="flex justify-between border-b border-[#d9d9d9] pb-2">
+                <span className="text-neutral-500">Número de Pedido:</span>
+                <span className="font-bold font-mono text-black">{orderCompleted.orderNumber}</span>
               </div>
-              <div className="flex justify-between border-b pb-2">
-                <span className="text-gray-500">Fecha y Hora:</span>
-                <span className="font-medium text-gray-800">{orderCompleted.date}</span>
+              <div className="flex justify-between border-b border-[#d9d9d9] pb-2">
+                <span className="text-neutral-500">Fecha y Hora:</span>
+                <span className="font-semibold text-black">{orderCompleted.date}</span>
               </div>
-              <div className="flex justify-between border-b pb-2">
-                <span className="text-gray-500">Método de Pago:</span>
-                <span className="font-medium text-gray-800 uppercase">
+              <div className="flex justify-between border-b border-[#d9d9d9] pb-2">
+                <span className="text-neutral-500">Método de Pago:</span>
+                <span className="font-semibold text-black uppercase">
                   {formData.paymentMethod === 'card' ? 'Tarjeta Bancaria' : formData.paymentMethod}
                 </span>
               </div>
               <div className="flex justify-between pt-1 text-sm">
-                <span className="font-bold text-gray-900">Total Pagado:</span>
-                <span className="font-extrabold text-[#3483fa]">
+                <span className="font-bold uppercase text-black">Total Pagado:</span>
+                <span className="font-display font-extrabold text-[#de2a2a] text-lg">
                   {currencySymbol} {orderCompleted.total.toFixed(2)}
                 </span>
               </div>
@@ -489,16 +486,16 @@ export default function CheckoutPage() {
 
             {/* Comprobante Electrónico SUNAT */}
             {orderCompleted.invoicePdfUrl && (
-              <div className="p-4 bg-emerald-50 border border-emerald-200/90 rounded-xl flex flex-col sm:flex-row items-center justify-between gap-3 text-left">
+              <div className="p-4 bg-[#2e9e7b]/10 border border-[#2e9e7b]/40 rounded-none flex flex-col sm:flex-row items-center justify-between gap-3 text-left">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
+                  <div className="w-10 h-10 rounded-none bg-[#2e9e7b] text-white flex items-center justify-center shrink-0">
                     <TbFileInvoice size={22} />
                   </div>
                   <div>
-                    <span className="text-xs font-bold text-emerald-900 block">
+                    <span className="text-xs font-bold uppercase text-black block">
                       Comprobante Electrónico SUNAT Emitido
                     </span>
-                    <span className="text-[11px] text-emerald-700">
+                    <span className="text-[11px] text-neutral-700">
                       {orderCompleted.invoiceType === 'factura' ? 'Factura Electrónica' : 'Boleta Electrónica'}:{' '}
                       <strong>{orderCompleted.invoiceSeries}-{orderCompleted.invoiceNumber}</strong> (Aceptada por SUNAT)
                     </span>
@@ -508,10 +505,10 @@ export default function CheckoutPage() {
                   href={orderCompleted.invoicePdfUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold transition-colors shadow-xs shrink-0"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 px-4 py-2.5 bg-black hover:bg-neutral-800 text-white rounded-none text-xs font-bold uppercase tracking-wider transition-colors shrink-0"
                 >
                   <TbDownload size={15} />
-                  <span>Descargar Comprobante PDF</span>
+                  <span>Descargar PDF</span>
                 </a>
               </div>
             )}
@@ -519,23 +516,23 @@ export default function CheckoutPage() {
             <div className="pt-2 flex flex-col sm:flex-row gap-3 justify-center items-center">
               <Link
                 href={`/rastreo?order=${encodeURIComponent(orderCompleted.orderNumber)}`}
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#3483fa] hover:bg-blue-600 text-white rounded-xl text-xs font-bold transition-all shadow-md hover:shadow-lg"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#de2a2a] hover:bg-red-700 text-white rounded-none text-xs font-bold uppercase tracking-widest transition-colors"
               >
                 <TbTruckDelivery size={18} />
-                <span>Rastrear mi pedido en tiempo real</span>
+                <span>Rastrear pedido</span>
               </Link>
               <Link
                 href="/mis-compras"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 px-5 py-3 rounded-xl border border-gray-300 hover:border-gray-400 text-gray-700 hover:bg-gray-50 text-xs font-bold transition-colors"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 px-5 py-3 rounded-none border border-black text-black hover:bg-black hover:text-white text-xs font-bold uppercase tracking-wider transition-colors"
               >
                 <span>Ver mis compras</span>
               </Link>
               <button
                 type="button"
                 onClick={() => window.print()}
-                className="w-full sm:w-auto px-4 py-3 rounded-xl border border-gray-200 text-gray-600 hover:bg-gray-50 text-xs font-medium transition-colors"
+                className="w-full sm:w-auto px-4 py-3 rounded-none border border-[#d9d9d9] text-neutral-700 hover:border-black hover:text-black text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer"
               >
-                Imprimir Comprobante
+                Imprimir
               </button>
             </div>
           </div>
@@ -547,20 +544,22 @@ export default function CheckoutPage() {
   // SI EL CARRITO ESTÁ VACÍO
   if (items.length === 0) {
     return (
-      <div className="min-h-screen pb-16 pt-8">
-        <div className="max-w-md mx-auto px-4 text-center bg-white p-8 rounded-2xl border border-gray-200/80 shadow-xs space-y-4">
-          <div className="w-14 h-14 bg-gray-100 text-gray-400 rounded-full flex items-center justify-center mx-auto">
+      <div className="min-h-screen bg-white pb-16 pt-10">
+        <div className="max-w-md mx-auto px-4 text-center bg-[#f8f8f8] p-8 rounded-none border border-[#d9d9d9] space-y-4">
+          <div className="w-14 h-14 bg-black text-white rounded-none flex items-center justify-center mx-auto">
             <TbShoppingBag size={28} />
           </div>
-          <h2 className="text-lg font-bold text-gray-900">Tu carrito está vacío</h2>
-          <p className="text-xs text-gray-500">
+          <h2 className="font-display text-xl font-extrabold uppercase tracking-tight text-black">
+            Tu carrito está vacío
+          </h2>
+          <p className="text-xs text-neutral-600">
             No tienes productos seleccionados para iniciar el proceso de compra.
           </p>
           <Link
             href="/"
-            className="inline-block px-5 py-2.5 bg-[#3483fa] hover:bg-blue-600 text-white rounded-xl text-xs font-bold transition-colors"
+            className="inline-block px-6 py-3 bg-[#de2a2a] hover:bg-red-700 text-white rounded-none text-xs font-bold uppercase tracking-widest transition-colors"
           >
-            Explorar Productos
+            Explorar Catálogo
           </Link>
         </div>
       </div>
@@ -568,49 +567,50 @@ export default function CheckoutPage() {
   }
 
   return (
-    <div className="min-h-screen pb-16 pt-4">
+    <div className="min-h-screen bg-white pb-16 pt-6">
       {/* Script oficial de Culqi Checkout v4 */}
       <Script src="https://checkout.culqi.com/js/v4" strategy="afterInteractive" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         {/* Breadcrumb */}
-        <nav className="flex items-center gap-1.5 text-xs text-gray-500 mb-5 font-light">
-          <Link href="/cart" className="hover:text-[#3483fa] transition-colors flex items-center gap-1">
+        <nav className="flex items-center gap-1.5 text-[11px] uppercase tracking-wider text-neutral-500 mb-6">
+          <Link href="/cart" className="hover:text-[#de2a2a] transition-colors flex items-center gap-1">
             <TbArrowLeft size={13} />
             Volver al Carrito
           </Link>
-          <TbChevronRight size={13} className="text-gray-400" />
-          <span className="text-gray-800 font-medium">Finalizar Compra Segura</span>
+          <TbChevronRight size={13} className="text-neutral-400" />
+          <span className="text-black font-bold">Finalizar Compra Segura</span>
         </nav>
 
         <form onSubmit={handleProcessOrder} className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
           {/* COLUMNA IZQUIERDA: Formulario de Datos y Entrega */}
           <div className="lg:col-span-7 space-y-6">
             {errorMessage && (
-              <div className="p-4 bg-rose-50 border border-rose-200 rounded-xl text-rose-800 text-xs font-semibold flex items-center gap-2 shadow-2xs">
-                <TbAlertCircle size={18} className="shrink-0 text-rose-600" />
+              <div className="p-4 bg-red-50 border border-[#de2a2a] rounded-none text-[#de2a2a] text-xs font-bold flex items-center gap-2">
+                <TbAlertCircle size={18} className="shrink-0" />
                 <span>{errorMessage}</span>
               </div>
             )}
 
             {/* 1. Datos Personales y Comprobante */}
-            <div className="bg-white rounded-2xl border border-gray-200/80 p-5 sm:p-6 shadow-2xs space-y-4">
-              <div className="flex items-center gap-2 border-b border-gray-100 pb-3">
-                <TbUser className="text-[#3483fa]" size={20} />
-                <h2 className="font-bold text-gray-900 text-sm">1. Datos del Comprador y Comprobante</h2>
+            <div className="bg-white rounded-none border border-[#d9d9d9] p-5 sm:p-6 space-y-4">
+              <div className="flex items-center gap-2 border-b border-[#d9d9d9] pb-3">
+                <TbUser className="text-[#de2a2a]" size={20} />
+                <h2 className="font-display font-extrabold uppercase tracking-tight text-black text-sm">
+                  1. Datos del Comprador y Comprobante
+                </h2>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 text-xs">
-                {/* Selector de Comprobante / Documento combinado */}
                 <div className="sm:col-span-12">
-                  <label className="block font-medium text-gray-700 mb-1">
+                  <label className="block font-bold uppercase tracking-wider text-neutral-700 mb-1.5 text-[11px]">
                     ¿Con qué documento deseas tu comprobante? *
                   </label>
                   <div className="flex gap-2">
                     <select
                       value={formData.invoiceType}
                       onChange={(e) => handleInvoiceTypeChange(e.target.value as 'boleta' | 'factura')}
-                      className="border border-gray-200 rounded-lg p-2.5 bg-gray-50 text-xs font-bold text-gray-800 focus:ring-2 focus:ring-[#3483fa]/20 focus:border-[#3483fa] outline-hidden cursor-pointer shrink-0"
+                      className="border border-[#d9d9d9] rounded-none p-2.5 bg-[#f8f8f8] text-xs font-bold text-black focus:border-black outline-none cursor-pointer shrink-0"
                     >
                       <option value="boleta">DNI (Boleta)</option>
                       <option value="factura">RUC (Factura)</option>
@@ -628,31 +628,31 @@ export default function CheckoutPage() {
                           ? 'Número de RUC (11 dígitos)'
                           : 'Número de DNI (8 dígitos)'
                       }
-                      className="flex-1 border border-gray-200 rounded-lg p-2.5 text-xs focus:ring-2 focus:ring-[#3483fa]/20 focus:border-[#3483fa] outline-hidden font-mono"
+                      className="flex-1 border border-[#d9d9d9] rounded-none p-2.5 text-xs focus:border-black outline-none font-mono"
                       required
                     />
                   </div>
                 </div>
 
-                {/* Si es Factura: Razón Social */}
                 {formData.invoiceType === 'factura' && (
                   <div className="sm:col-span-12 animate-in fade-in">
-                    <label className="block font-medium text-gray-700 mb-1">Razón Social de la Empresa *</label>
+                    <label className="block font-bold uppercase tracking-wider text-neutral-700 mb-1.5 text-[11px]">
+                      Razón Social de la Empresa *
+                    </label>
                     <input
                       type="text"
                       name="companyLegalName"
                       value={formData.companyLegalName}
                       onChange={handleInputChange}
                       placeholder="Ej: Inversiones y Servicios S.A.C."
-                      className="w-full border border-gray-200 rounded-lg p-2.5 text-xs focus:ring-2 focus:ring-[#3483fa]/20 focus:border-[#3483fa] outline-hidden"
+                      className="w-full border border-[#d9d9d9] rounded-none p-2.5 text-xs focus:border-black outline-none"
                       required
                     />
                   </div>
                 )}
 
-                {/* Nombre de la persona (o quien recibe si es factura) */}
                 <div className="sm:col-span-12">
-                  <label className="block font-medium text-gray-700 mb-1">
+                  <label className="block font-bold uppercase tracking-wider text-neutral-700 mb-1.5 text-[11px]">
                     {formData.invoiceType === 'factura' ? 'Persona de Contacto / Quien Recibe *' : 'Nombres y Apellidos *'}
                   </label>
                   <input
@@ -661,26 +661,30 @@ export default function CheckoutPage() {
                     value={formData.fullName}
                     onChange={handleInputChange}
                     placeholder={formData.invoiceType === 'factura' ? 'Persona responsable de recibir el pedido' : 'Juan Pérez'}
-                    className="w-full border border-gray-200 rounded-lg p-2.5 text-xs focus:ring-2 focus:ring-[#3483fa]/20 focus:border-[#3483fa] outline-hidden"
+                    className="w-full border border-[#d9d9d9] rounded-none p-2.5 text-xs focus:border-black outline-none"
                     required
                   />
                 </div>
 
                 <div className="sm:col-span-6">
-                  <label className="block font-medium text-gray-700 mb-1">Correo Electrónico *</label>
+                  <label className="block font-bold uppercase tracking-wider text-neutral-700 mb-1.5 text-[11px]">
+                    Correo Electrónico *
+                  </label>
                   <input
                     type="email"
                     name="email"
                     value={formData.email}
                     onChange={handleInputChange}
                     placeholder="tucorreo@ejemplo.com"
-                    className="w-full border border-gray-200 rounded-lg p-2.5 text-xs focus:ring-2 focus:ring-[#3483fa]/20 focus:border-[#3483fa] outline-hidden"
+                    className="w-full border border-[#d9d9d9] rounded-none p-2.5 text-xs focus:border-black outline-none"
                     required
                   />
                 </div>
 
                 <div className="sm:col-span-6">
-                  <label className="block font-medium text-gray-700 mb-1">Teléfono Móvil (9 dígitos) *</label>
+                  <label className="block font-bold uppercase tracking-wider text-neutral-700 mb-1.5 text-[11px]">
+                    Teléfono Móvil (9 dígitos) *
+                  </label>
                   <input
                     type="tel"
                     inputMode="numeric"
@@ -689,7 +693,7 @@ export default function CheckoutPage() {
                     onChange={handleInputChange}
                     maxLength={9}
                     placeholder="Ej: 987654321"
-                    className="w-full border border-gray-200 rounded-lg p-2.5 text-xs focus:ring-2 focus:ring-[#3483fa]/20 focus:border-[#3483fa] outline-hidden"
+                    className="w-full border border-[#d9d9d9] rounded-none p-2.5 text-xs focus:border-black outline-none"
                     required
                   />
                 </div>
@@ -697,20 +701,24 @@ export default function CheckoutPage() {
             </div>
 
             {/* 2. Dirección de Entrega (Ubigeo Automático) */}
-            <div className="bg-white rounded-2xl border border-gray-200/80 p-5 sm:p-6 shadow-2xs space-y-4">
-              <div className="flex items-center gap-2 border-b border-gray-100 pb-3">
-                <TbMapPin className="text-[#3483fa]" size={20} />
-                <h2 className="font-bold text-gray-900 text-sm">2. Dirección de Entrega y Despacho</h2>
+            <div className="bg-white rounded-none border border-[#d9d9d9] p-5 sm:p-6 space-y-4">
+              <div className="flex items-center gap-2 border-b border-[#d9d9d9] pb-3">
+                <TbMapPin className="text-[#de2a2a]" size={20} />
+                <h2 className="font-display font-extrabold uppercase tracking-tight text-black text-sm">
+                  2. Dirección de Entrega y Delivery
+                </h2>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 text-xs">
                 <div className="sm:col-span-4">
-                  <label className="block font-medium text-gray-700 mb-1">Departamento *</label>
+                  <label className="block font-bold uppercase tracking-wider text-neutral-700 mb-1.5 text-[11px]">
+                    Departamento *
+                  </label>
                   <select
                     name="department"
                     value={selectedDeptCode}
                     onChange={handleDepartmentChange}
-                    className="w-full border border-gray-200 rounded-lg p-2.5 bg-white text-xs focus:ring-2 focus:ring-[#3483fa]/20 focus:border-[#3483fa] outline-hidden cursor-pointer"
+                    className="w-full border border-[#d9d9d9] rounded-none p-2.5 bg-white text-xs focus:border-black outline-none cursor-pointer"
                     required
                   >
                     <option value="">-- Departamento --</option>
@@ -723,13 +731,15 @@ export default function CheckoutPage() {
                 </div>
 
                 <div className="sm:col-span-4">
-                  <label className="block font-medium text-gray-700 mb-1">Provincia *</label>
+                  <label className="block font-bold uppercase tracking-wider text-neutral-700 mb-1.5 text-[11px]">
+                    Provincia *
+                  </label>
                   <select
                     name="province"
                     value={selectedProvCode}
                     onChange={handleProvinceChange}
                     disabled={!selectedDeptCode || loadingProvinces}
-                    className="w-full border border-gray-200 rounded-lg p-2.5 bg-white text-xs focus:ring-2 focus:ring-[#3483fa]/20 focus:border-[#3483fa] outline-hidden disabled:bg-gray-100 disabled:cursor-not-allowed cursor-pointer"
+                    className="w-full border border-[#d9d9d9] rounded-none p-2.5 bg-white text-xs focus:border-black outline-none disabled:bg-neutral-100 disabled:cursor-not-allowed cursor-pointer"
                     required
                   >
                     <option value="">
@@ -744,13 +754,15 @@ export default function CheckoutPage() {
                 </div>
 
                 <div className="sm:col-span-4">
-                  <label className="block font-medium text-gray-700 mb-1">Distrito *</label>
+                  <label className="block font-bold uppercase tracking-wider text-neutral-700 mb-1.5 text-[11px]">
+                    Distrito *
+                  </label>
                   <select
                     name="district"
                     value={formData.district}
                     onChange={handleDistrictChange}
                     disabled={!selectedProvCode || loadingDistricts}
-                    className="w-full border border-gray-200 rounded-lg p-2.5 bg-white text-xs focus:ring-2 focus:ring-[#3483fa]/20 focus:border-[#3483fa] outline-hidden disabled:bg-gray-100 disabled:cursor-not-allowed cursor-pointer"
+                    className="w-full border border-[#d9d9d9] rounded-none p-2.5 bg-white text-xs focus:border-black outline-none disabled:bg-neutral-100 disabled:cursor-not-allowed cursor-pointer"
                     required
                   >
                     <option value="">
@@ -765,54 +777,59 @@ export default function CheckoutPage() {
                 </div>
 
                 <div className="sm:col-span-8">
-                  <label className="block font-medium text-gray-700 mb-1">Dirección Exacta (Calle, Jr, Av y N°) *</label>
+                  <label className="block font-bold uppercase tracking-wider text-neutral-700 mb-1.5 text-[11px]">
+                    Dirección Exacta (Calle, Jr, Av y N°) *
+                  </label>
                   <input
                     type="text"
                     name="address"
                     value={formData.address}
                     onChange={handleInputChange}
                     placeholder="Ej: Av. Los Sauces 123 Dpto 401"
-                    className="w-full border border-gray-200 rounded-lg p-2.5 text-xs focus:ring-2 focus:ring-[#3483fa]/20 focus:border-[#3483fa] outline-hidden"
+                    className="w-full border border-[#d9d9d9] rounded-none p-2.5 text-xs focus:border-black outline-none"
                     required
                   />
                 </div>
 
                 <div className="sm:col-span-4">
-                  <label className="block font-medium text-gray-700 mb-1">Referencia</label>
+                  <label className="block font-bold uppercase tracking-wider text-neutral-700 mb-1.5 text-[11px]">
+                    Referencia
+                  </label>
                   <input
                     type="text"
                     name="reference"
                     value={formData.reference}
                     onChange={handleInputChange}
                     placeholder="Frente al parque"
-                    className="w-full border border-gray-200 rounded-lg p-2.5 text-xs focus:ring-2 focus:ring-[#3483fa]/20 focus:border-[#3483fa] outline-hidden"
+                    className="w-full border border-[#d9d9d9] rounded-none p-2.5 text-xs focus:border-black outline-none"
                   />
                 </div>
               </div>
             </div>
 
             {/* 3. Selección de Medio de Pago */}
-            <div className="bg-white rounded-2xl border border-gray-200/80 p-5 sm:p-6 shadow-2xs space-y-4">
-              <div className="flex items-center justify-between border-b border-gray-100 pb-3">
+            <div className="bg-white rounded-none border border-[#d9d9d9] p-5 sm:p-6 space-y-4">
+              <div className="flex items-center justify-between border-b border-[#d9d9d9] pb-3">
                 <div className="flex items-center gap-2">
-                  <TbCreditCard className="text-[#3483fa]" size={20} />
-                  <h2 className="font-bold text-gray-900 text-sm">3. Método de Pago</h2>
+                  <TbCreditCard className="text-[#de2a2a]" size={20} />
+                  <h2 className="font-display font-extrabold uppercase tracking-tight text-black text-sm">
+                    3. Método de Pago
+                  </h2>
                 </div>
-                <div className="flex items-center gap-2 text-gray-400">
-                  <FaCcVisa size={22} className="text-blue-700" />
-                  <FaCcMastercard size={22} className="text-red-500" />
-                  <FaCcAmex size={22} className="text-blue-500" />
+                <div className="flex items-center gap-2 text-neutral-400">
+                  <FaCcVisa size={22} className="text-black" />
+                  <FaCcMastercard size={22} className="text-[#de2a2a]" />
+                  <FaCcAmex size={22} className="text-neutral-700" />
                 </div>
               </div>
 
-              {/* 2 Cartas con Iconos y Logos oficiales */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 text-xs">
                 {/* Opción 1: Tarjeta Débito / Crédito */}
                 <label
-                  className={`p-4 rounded-xl border-2 cursor-pointer transition-all flex flex-col justify-between gap-3 ${
+                  className={`p-4 rounded-none border-2 cursor-pointer transition-all flex flex-col justify-between gap-3 ${
                     formData.paymentMethod === 'card'
-                      ? 'border-[#3483fa] bg-blue-50/40 shadow-xs'
-                    : 'border-gray-200 hover:border-gray-300 bg-white'
+                      ? 'border-black bg-[#f8f8f8]'
+                      : 'border-[#d9d9d9] hover:border-black bg-white'
                   }`}
                 >
                   <input
@@ -825,29 +842,33 @@ export default function CheckoutPage() {
                   />
                   <div className="flex items-start justify-between gap-2">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-xl bg-blue-100/80 text-[#3483fa] flex items-center justify-center shrink-0">
+                      <div className="w-10 h-10 rounded-none bg-black text-white flex items-center justify-center shrink-0">
                         <TbCreditCard size={22} />
                       </div>
                       <div>
-                        <div className="font-bold text-gray-900 text-sm">Tarjeta Débito / Crédito</div>
-                        <div className="text-[11px] text-gray-500">Visa, Mastercard, Amex, Diners</div>
+                        <div className="font-bold text-black text-sm uppercase">
+                          Tarjeta Débito / Crédito
+                        </div>
+                        <div className="text-[11px] text-neutral-500">Visa, Mastercard, Amex, Diners</div>
                       </div>
                     </div>
                   </div>
-                  <div className="flex items-center gap-2.5 pt-2.5 border-t border-gray-100">
-                    <FaCcVisa size={24} className="text-blue-700" />
-                    <FaCcMastercard size={24} className="text-red-500" />
-                    <FaCcAmex size={24} className="text-blue-500" />
-                    <span className="text-[10px] text-gray-400 ml-auto font-medium">Pago en cuotas</span>
+                  <div className="flex items-center gap-2.5 pt-2.5 border-t border-[#d9d9d9]">
+                    <FaCcVisa size={24} className="text-black" />
+                    <FaCcMastercard size={24} className="text-[#de2a2a]" />
+                    <FaCcAmex size={24} className="text-neutral-700" />
+                    <span className="text-[10px] text-neutral-500 ml-auto font-bold uppercase">
+                      Pago en cuotas
+                    </span>
                   </div>
                 </label>
 
                 {/* Opción 2: Billeteras Digitales (Yape / Plin) */}
                 <label
-                  className={`p-4 rounded-xl border-2 cursor-pointer transition-all flex flex-col justify-between gap-3 ${
+                  className={`p-4 rounded-none border-2 cursor-pointer transition-all flex flex-col justify-between gap-3 ${
                     formData.paymentMethod === 'yape'
-                    ? 'border-purple-600 bg-purple-50/40 shadow-xs'
-                    : 'border-gray-200 hover:border-gray-300 bg-white'
+                      ? 'border-black bg-[#f8f8f8]'
+                      : 'border-[#d9d9d9] hover:border-black bg-white'
                   }`}
                 >
                   <input
@@ -860,31 +881,35 @@ export default function CheckoutPage() {
                   />
                   <div className="flex items-start justify-between gap-2">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-xl bg-purple-100/80 text-purple-700 flex items-center justify-center shrink-0">
+                      <div className="w-10 h-10 rounded-none bg-[#de2a2a] text-white flex items-center justify-center shrink-0">
                         <TbQrcode size={22} />
                       </div>
                       <div>
-                        <div className="font-bold text-gray-900 text-sm">Billeteras Digitales</div>
-                        <div className="text-[11px] text-gray-500">Yape / Plin con código QR</div>
+                        <div className="font-bold text-black text-sm uppercase">
+                          Billeteras Digitales
+                        </div>
+                        <div className="text-[11px] text-neutral-500">Yape / Plin con código QR</div>
                       </div>
                     </div>
                   </div>
-                  <div className="flex items-center gap-2 pt-2.5 border-t border-gray-100">
-                    <span className="inline-flex items-center justify-center px-2.5 py-0.5 rounded bg-[#742284] text-white text-[11px] font-black tracking-wide shadow-2xs">
+                  <div className="flex items-center gap-2 pt-2.5 border-t border-[#d9d9d9]">
+                    <span className="inline-flex items-center justify-center px-2.5 py-0.5 rounded-none bg-[#742284] text-white text-[11px] font-black tracking-wide">
                       yape
                     </span>
-                    <span className="inline-flex items-center justify-center px-2.5 py-0.5 rounded bg-[#00d4aa] text-white text-[11px] font-black tracking-wide shadow-2xs">
+                    <span className="inline-flex items-center justify-center px-2.5 py-0.5 rounded-none bg-[#00d4aa] text-black text-[11px] font-black tracking-wide">
                       plin
                     </span>
-                    <span className="text-[10px] text-gray-400 ml-auto font-medium">Confirmación al instante</span>
+                    <span className="text-[10px] text-neutral-500 ml-auto font-bold uppercase">
+                      Al instante
+                    </span>
                   </div>
                 </label>
               </div>
 
               {/* Banner informativo de Culqi */}
-              <div className="p-3.5 bg-blue-50/70 rounded-xl border border-blue-100 flex items-start gap-2.5 text-xs text-blue-900">
-                <TbShieldCheck size={20} className="text-[#3483fa] shrink-0 mt-0.5" />
-                <p className="text-[11px] leading-relaxed text-blue-800">
+              <div className="p-3.5 bg-[#f8f8f8] rounded-none border border-[#d9d9d9] flex items-start gap-2.5 text-xs text-black">
+                <TbShieldCheck size={20} className="text-[#2e9e7b] shrink-0 mt-0.5" />
+                <p className="text-[11px] leading-relaxed text-neutral-700">
                   Al presionar el botón <strong>&ldquo;Pagar con Culqi&rdquo;</strong>, se abrirá la pasarela oficial y protegida de <strong>Culqi</strong> para completar tu pago de forma 100% segura con encriptación bancaria PCI-DSS.
                 </p>
               </div>
@@ -892,25 +917,25 @@ export default function CheckoutPage() {
           </div>
 
           {/* COLUMNA DERECHA: Resumen de Pedido y Botón Final */}
-          <div className="lg:col-span-5 sticky top-20 space-y-4">
-            <div className="bg-white rounded-2xl border border-gray-200/90 shadow-2xs p-5 sm:p-6 space-y-4">
-              <h2 className="font-bold text-gray-900 text-sm border-b border-gray-100 pb-3">
+          <div className="lg:col-span-5 sticky top-24 space-y-4">
+            <div className="bg-[#f8f8f8] rounded-none border border-[#d9d9d9] p-5 sm:p-6 space-y-4">
+              <h2 className="font-display font-extrabold uppercase tracking-tight text-black text-sm border-b border-[#d9d9d9] pb-3">
                 Resumen del Pedido ({totalItems} {totalItems === 1 ? 'artículo' : 'artículos'})
               </h2>
 
               {/* Lista de productos en resumen */}
-              <div className="max-h-60 overflow-y-auto divide-y divide-gray-100 pr-1 space-y-2">
+              <div className="max-h-64 overflow-y-auto divide-y divide-[#d9d9d9] pr-1 space-y-2">
                 {items.map((item) => (
-                  <div key={item.id} className="pt-2 flex items-center gap-3 text-xs">
-                    <div className="w-12 h-12 rounded-lg bg-gray-50 border border-gray-100 flex items-center justify-center p-1 shrink-0 overflow-hidden">
+                  <div key={item.id} className="pt-2.5 flex items-center gap-3 text-xs">
+                    <div className="w-12 h-12 rounded-none bg-white border border-[#d9d9d9] flex items-center justify-center p-1 shrink-0 overflow-hidden">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img src={item.imageUrl} alt={item.title} className="w-full h-full object-contain" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-gray-900 font-medium truncate">{item.title}</p>
-                      <p className="text-gray-500 text-[11px]">Cant: {item.quantity}</p>
+                      <p className="text-black font-bold truncate">{item.title}</p>
+                      <p className="text-neutral-500 text-[11px]">Cant: {item.quantity}</p>
                     </div>
-                    <div className="font-bold text-gray-900 shrink-0">
+                    <div className="font-extrabold text-black shrink-0">
                       {currencySymbol} {(item.price * item.quantity).toFixed(2)}
                     </div>
                   </div>
@@ -918,31 +943,33 @@ export default function CheckoutPage() {
               </div>
 
               {/* Cálculos */}
-              <div className="pt-3 border-t border-gray-100 space-y-2 text-xs">
-                <div className="flex justify-between text-gray-600">
+              <div className="pt-3 border-t border-[#d9d9d9] space-y-2 text-xs">
+                <div className="flex justify-between text-neutral-600">
                   <span>Subtotal:</span>
-                  <span className="font-semibold text-gray-900">
+                  <span className="font-bold text-black">
                     {currencySymbol} {subtotal.toFixed(2)}
                   </span>
                 </div>
 
-                <div className="flex justify-between text-gray-600">
+                <div className="flex justify-between text-neutral-600">
                   <span className="flex items-center gap-1">
-                    <TbTruckDelivery size={15} className="text-[#00a650]" />
-                    <span>Costo de Envío:</span>
+                    <TbTruckDelivery size={15} className="text-[#2e9e7b]" />
+                    <span>Costo de Delivery:</span>
                   </span>
-                  <span className="font-semibold text-gray-900">
+                  <span className="font-bold text-black">
                     {isFreeShipping ? (
-                      <span className="text-[#00a650] font-bold uppercase">Gratis</span>
+                      <span className="text-[#2e9e7b] font-bold uppercase">Gratis</span>
                     ) : (
                       `${currencySymbol} ${shippingCost.toFixed(2)}`
                     )}
                   </span>
                 </div>
 
-                <div className="pt-3 border-t border-gray-100 flex justify-between items-baseline">
-                  <span className="text-sm font-bold text-gray-900">Total a Pagar:</span>
-                  <span className="text-xl font-black text-gray-900">
+                <div className="pt-3 border-t border-[#d9d9d9] flex justify-between items-baseline">
+                  <span className="text-sm font-bold uppercase tracking-wider text-black">
+                    Total a Pagar:
+                  </span>
+                  <span className="font-display text-2xl font-extrabold text-black">
                     {currencySymbol} {totalToPay.toFixed(2)}
                   </span>
                 </div>
@@ -952,7 +979,7 @@ export default function CheckoutPage() {
               <button
                 type="submit"
                 disabled={isProcessing}
-                className="w-full py-3.5 px-4 bg-[#3483fa] hover:bg-blue-600 disabled:bg-gray-300 text-white text-xs sm:text-sm font-bold rounded-xl shadow-xs transition-all flex items-center justify-center gap-2 cursor-pointer"
+                className="w-full py-3.5 px-4 bg-[#de2a2a] hover:bg-red-700 disabled:bg-neutral-300 text-white text-xs font-bold uppercase tracking-widest rounded-none transition-colors flex items-center justify-center gap-2 cursor-pointer"
               >
                 {isProcessing ? (
                   <>
@@ -967,20 +994,20 @@ export default function CheckoutPage() {
                 ) : (
                   <>
                     <TbLock size={18} />
-                        <span>Pagar con Culqi ({currencySymbol} {totalToPay.toFixed(2)})</span>
+                    <span>Pagar con Culqi ({currencySymbol} {totalToPay.toFixed(2)})</span>
                   </>
                 )}
               </button>
 
               {/* Sellos de Seguridad */}
-              <div className="pt-2 border-t border-gray-100 space-y-1.5 text-[11px] text-gray-500">
-                <div className="flex items-center gap-2 text-emerald-700 font-medium">
-                  <TbShieldCheck size={16} className="shrink-0" />
+              <div className="pt-2 border-t border-[#d9d9d9] space-y-1.5 text-[11px] text-neutral-600">
+                <div className="flex items-center gap-2 text-black font-medium">
+                  <TbShieldCheck size={16} className="text-[#2e9e7b] shrink-0" />
                   <span>Compra 100% Protegida con garantía de entrega</span>
                 </div>
-                <div className="flex items-center gap-2 text-gray-400">
+                <div className="flex items-center gap-2 text-neutral-500">
                   <TbLock size={14} className="shrink-0" />
-                  <span>Transacción encriptada con cifrado SSL</span>
+                  <span>Transacción encriptada con cifrado SSL · Venta de vinos exclusiva +18</span>
                 </div>
               </div>
             </div>
@@ -990,4 +1017,3 @@ export default function CheckoutPage() {
     </div>
   );
 }
-

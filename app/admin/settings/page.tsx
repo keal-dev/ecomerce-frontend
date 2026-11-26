@@ -104,8 +104,8 @@ export default function AdminSettingsHubPage() {
       {/* Cabecera del Hub de Configuración */}
       <div className="flex items-start justify-between gap-4">
         <div>
-          <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-md bg-brand/40 text-gray-800 text-[11px] font-bold mb-2">
-            <TbSettings size={14} />
+          <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-md bg-black text-white text-[11px] font-bold mb-2">
+            <TbSettings size={14} className="text-[#de2a2a]" />
             <span>PANEL DE CONTROL</span>
           </div>
           <h1 className="text-xl sm:text-2xl font-black text-gray-900 tracking-tight">
