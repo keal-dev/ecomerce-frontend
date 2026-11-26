@@ -13,6 +13,7 @@ import {
   TbSettings,
   TbCash,
   TbPhotoVideo,
+  TbDatabase,
 } from 'react-icons/tb';
 import { useAuthStore } from '@/stores/auth.store';
 
@@ -27,6 +28,7 @@ interface SettingCard {
   iconBg: string;
   isAvailable: boolean;
   superAdminOnly?: boolean;
+  isDanger?: boolean;
 }
 
 const SETTING_CARDS: SettingCard[] = [
@@ -89,6 +91,19 @@ const SETTING_CARDS: SettingCard[] = [
     isAvailable: true,
     superAdminOnly: true,
   },
+  {
+    title: 'Resetear Base de Datos',
+    description: 'Elimina los datos del sistema y reinicia la base de datos conservando el Super Admin.',
+    href: '/admin/settings/database-reset',
+    icon: TbDatabase,
+    badge: 'Zona Crítica',
+    badgeColor: 'bg-red-100 text-[#de2a2a]',
+    iconColor: 'text-[#de2a2a]',
+    iconBg: 'bg-red-50',
+    isAvailable: true,
+    superAdminOnly: true,
+    isDanger: true,
+  },
 ];
 
 export default function AdminSettingsHubPage() {
@@ -139,7 +154,11 @@ export default function AdminSettingsHubPage() {
                 </div>
 
                 {/* Título y Descripción */}
-                <h3 className="font-bold text-[12px] text-gray-900 group-hover:text-[#3483fa] transition-colors leading-tight truncate">
+                <h3
+                  className={`font-bold text-[12px] text-gray-900 transition-colors leading-tight truncate ${
+                    card.isDanger ? 'group-hover:text-[#de2a2a]' : 'group-hover:text-[#111111]'
+                  }`}
+                >
                   {card.title}
                 </h3>
                 <p className="text-[10.5px] text-gray-500 mt-1 leading-snug line-clamp-2">
@@ -149,15 +168,27 @@ export default function AdminSettingsHubPage() {
 
               {/* Pie de la Card con botón/enlace de acción */}
               <div className="mt-3 pt-2 border-t border-gray-100 flex items-center justify-between text-[10.5px] font-semibold">
-                <span className={`truncate mr-1 ${card.isAvailable ? 'text-[#3483fa]' : 'text-gray-400'}`}>
-                  {card.isAvailable ? 'Configurar' : 'Pronto'}
+                <span
+                  className={`truncate mr-1 ${
+                    !card.isAvailable
+                      ? 'text-gray-400'
+                      : card.isDanger
+                        ? 'text-[#de2a2a]'
+                        : 'text-gray-800 group-hover:text-[#111111]'
+                  }`}
+                >
+                  {!card.isAvailable ? 'Pronto' : card.isDanger ? 'Administrar' : 'Configurar'}
                 </span>
 
-                <div className={`w-5 h-5 rounded-md flex items-center justify-center shrink-0 transition-all ${
-                  card.isAvailable 
-                    ? 'bg-blue-50 text-[#3483fa] group-hover:bg-[#3483fa] group-hover:text-white group-hover:translate-x-0.5' 
-                    : 'bg-gray-100 text-gray-400'
-                }`}>
+                <div
+                  className={`w-5 h-5 rounded-md flex items-center justify-center shrink-0 transition-all ${
+                    !card.isAvailable
+                      ? 'bg-gray-100 text-gray-400'
+                      : card.isDanger
+                        ? 'bg-red-50 text-[#de2a2a] group-hover:bg-[#de2a2a] group-hover:text-white group-hover:translate-x-0.5'
+                        : 'bg-gray-100 text-gray-700 group-hover:bg-[#111111] group-hover:text-white group-hover:translate-x-0.5'
+                  }`}
+                >
                   <TbChevronRight size={12} />
                 </div>
               </div>
@@ -169,7 +200,11 @@ export default function AdminSettingsHubPage() {
               <Link
                 key={card.title}
                 href={card.href}
-                className="bg-white rounded-xl border border-gray-200/90 hover:border-[#3483fa] hover:shadow-md cursor-pointer p-3 flex flex-col justify-between transition-all duration-200 group relative"
+                className={`bg-white rounded-xl border hover:shadow-md cursor-pointer p-3 flex flex-col justify-between transition-all duration-200 group relative ${
+                  card.isDanger
+                    ? 'border-red-200/90 hover:border-[#de2a2a]'
+                    : 'border-gray-200/90 hover:border-[#111111]'
+                }`}
               >
                 {CardInner}
               </Link>
