@@ -19,6 +19,7 @@ import {
   TbQrcode,
   TbFileInvoice,
   TbDownload,
+  TbSearch,
 } from 'react-icons/tb';
 import { FaCcVisa, FaCcMastercard, FaCcAmex } from 'react-icons/fa6';
 import { useCartStore } from '@/stores/cart.store';
@@ -26,6 +27,7 @@ import { useCompanyStore } from '@/stores/company.store';
 import { getDepartments, getProvinces, getDistricts } from '@/services/ubigeo.service';
 import { DepartmentItem, ProvinceItem, DistrictItem } from '@/types/ubigeo.types';
 import { processCulqiCharge } from '@/services/payment.service';
+import { lookupDni, lookupRuc } from '@/services/document-lookup.service';
 
 declare global {
   interface Window {
@@ -70,6 +72,14 @@ export default function CheckoutPage() {
   });
 
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  // Estados de consulta automática DNI / RUC (Decolecta)
+  const [isLookingUpDoc, setIsLookingUpDoc] = useState(false);
+  const [docLookupStatus, setDocLookupStatus] = useState<{
+    type: 'success' | 'error';
+    text: string;
+  } | null>(null);
+  const lastLookedUpDocRef = useRef<string>('');
 
   // Estados de Ubigeo
   const [departments, setDepartments] = useState<DepartmentItem[]>([]);
@@ -241,6 +251,61 @@ export default function CheckoutPage() {
     };
   }, [clearCart]);
 
+  const runDocumentLookup = async (
+    invoiceType: 'boleta' | 'factura',
+    rawNumber: string,
+    force = false,
+  ) => {
+    const clean = rawNumber.replace(/\D/g, '');
+    const expectedLen = invoiceType === 'factura' ? 11 : 8;
+    if (clean.length !== expectedLen) return;
+
+    const cacheKey = `${invoiceType}:${clean}`;
+    if (!force && lastLookedUpDocRef.current === cacheKey) return;
+    lastLookedUpDocRef.current = cacheKey;
+
+    setIsLookingUpDoc(true);
+    setDocLookupStatus(null);
+
+    try {
+      if (invoiceType === 'factura') {
+        const res = await lookupRuc(clean);
+        setFormData((prev) => ({
+          ...prev,
+          companyRuc: clean,
+          companyLegalName: res.legalName,
+        }));
+        const extra = [res.status, res.condition].filter(Boolean).join(' · ');
+        setDocLookupStatus({
+          type: 'success',
+          text: extra
+            ? `SUNAT: ${res.legalName} (${extra})`
+            : `SUNAT: ${res.legalName}`,
+        });
+      } else {
+        const res = await lookupDni(clean);
+        setFormData((prev) => ({
+          ...prev,
+          fullName: res.fullName,
+        }));
+        setDocLookupStatus({
+          type: 'success',
+          text: `RENIEC: ${res.fullName}`,
+        });
+      }
+    } catch (err: unknown) {
+      const msg =
+        (err as { response?: { data?: { message?: string } } })?.response?.data?.message ||
+        'No se pudo consultar el documento. Puedes escribir tus datos manualmente.';
+      setDocLookupStatus({
+        type: 'error',
+        text: Array.isArray(msg) ? msg.join(', ') : msg,
+      });
+    } finally {
+      setIsLookingUpDoc(false);
+    }
+  };
+
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>,
   ) => {
@@ -250,21 +315,45 @@ export default function CheckoutPage() {
     if (name === 'docNumber') {
       const maxLen = formData.invoiceType === 'factura' ? 11 : 8;
       sanitizedValue = value.replace(/\D/g, '').slice(0, maxLen);
+      setDocLookupStatus(null);
+      if (sanitizedValue.length < maxLen) {
+        lastLookedUpDocRef.current = '';
+      }
     } else if (name === 'phone') {
       sanitizedValue = value.replace(/\D/g, '').slice(0, 9);
     } else if (name === 'companyRuc') {
       sanitizedValue = value.replace(/\D/g, '').slice(0, 11);
     }
 
-    setFormData((prev) => ({ ...prev, [name]: sanitizedValue }));
+    setFormData((prev) => ({
+      ...prev,
+      [name]: sanitizedValue,
+      ...(name === 'docNumber' && prev.invoiceType === 'factura'
+        ? { companyRuc: sanitizedValue }
+        : {}),
+    }));
+
+    if (name === 'docNumber') {
+      const targetLen = formData.invoiceType === 'factura' ? 11 : 8;
+      if (sanitizedValue.length === targetLen) {
+        void runDocumentLookup(
+          formData.invoiceType as 'boleta' | 'factura',
+          sanitizedValue,
+        );
+      }
+    }
   };
 
   const handleInvoiceTypeChange = (type: 'boleta' | 'factura') => {
+    lastLookedUpDocRef.current = '';
+    setDocLookupStatus(null);
     setFormData((prev) => ({
       ...prev,
       invoiceType: type,
       docType: type === 'factura' ? 'RUC' : 'DNI',
       docNumber: '',
+      companyRuc: '',
+      companyLegalName: type === 'boleta' ? '' : prev.companyLegalName,
     }));
   };
 
@@ -637,40 +726,120 @@ export default function CheckoutPage() {
                           ? 'Número de RUC (11 dígitos)'
                           : 'Número de DNI (8 dígitos)'
                       }
-                      className="flex-1 border border-[#d9d9d9] rounded-none p-2.5 text-xs focus:border-black outline-none font-mono"
+                      className="flex-1 min-w-0 border border-[#d9d9d9] rounded-none p-2.5 text-xs focus:border-black outline-none font-mono"
                       required
                     />
+
+                    <button
+                      type="button"
+                      onClick={() =>
+                        void runDocumentLookup(
+                          formData.invoiceType as 'boleta' | 'factura',
+                          formData.docNumber,
+                          true,
+                        )
+                      }
+                      disabled={
+                        isLookingUpDoc ||
+                        formData.docNumber.length !==
+                          (formData.invoiceType === 'factura' ? 11 : 8)
+                      }
+                      title="Consultar automáticamente en RENIEC / SUNAT"
+                      className="px-3.5 py-2.5 bg-brand-primary hover:bg-brand-accent disabled:bg-neutral-200 disabled:text-neutral-400 text-white text-[11px] font-bold uppercase tracking-wider rounded-none transition-colors inline-flex items-center gap-1.5 cursor-pointer disabled:cursor-not-allowed shrink-0"
+                    >
+                      {isLookingUpDoc ? (
+                        <TbLoader2 size={15} className="animate-spin" />
+                      ) : (
+                        <TbSearch size={15} />
+                      )}
+                      <span className="hidden sm:inline">
+                        {isLookingUpDoc ? 'Buscando...' : 'Buscar'}
+                      </span>
+                    </button>
                   </div>
+
+                  {docLookupStatus && (
+                    <p
+                      className={`mt-1.5 text-[11px] font-medium flex items-center gap-1.5 ${
+                        docLookupStatus.type === 'success'
+                          ? 'text-[#2e9e7b]'
+                          : 'text-amber-700'
+                      }`}
+                    >
+                      {docLookupStatus.type === 'success' ? (
+                        <TbCheck size={14} className="shrink-0" />
+                      ) : (
+                        <TbAlertCircle size={14} className="shrink-0" />
+                      )}
+                      <span>{docLookupStatus.text}</span>
+                    </p>
+                  )}
                 </div>
 
                 {formData.invoiceType === 'factura' && (
                   <div className="sm:col-span-12 animate-in fade-in">
-                    <label className="block font-bold uppercase tracking-wider text-neutral-700 mb-1.5 text-[11px]">
-                      Razón Social de la Empresa *
+                    <label className="flex items-center justify-between font-bold uppercase tracking-wider text-neutral-700 mb-1.5 text-[11px]">
+                      <span>Razón Social de la Empresa *</span>
+                      {docLookupStatus?.type === 'success' && formData.companyLegalName.trim() && (
+                        <span className="text-[10px] font-bold text-[#2e9e7b] normal-case tracking-normal inline-flex items-center gap-1">
+                          <TbCheck size={12} /> Verificado SUNAT
+                        </span>
+                      )}
                     </label>
                     <input
                       type="text"
                       name="companyLegalName"
                       value={formData.companyLegalName}
                       onChange={handleInputChange}
+                      readOnly={
+                        docLookupStatus?.type === 'success' &&
+                        Boolean(formData.companyLegalName.trim())
+                      }
                       placeholder="Ej: Inversiones y Servicios S.A.C."
-                      className="w-full border border-[#d9d9d9] rounded-none p-2.5 text-xs focus:border-black outline-none"
+                      className={`w-full border border-[#d9d9d9] rounded-none p-2.5 text-xs outline-none ${
+                        docLookupStatus?.type === 'success' &&
+                        formData.companyLegalName.trim()
+                          ? 'bg-neutral-100 text-neutral-700 cursor-not-allowed'
+                          : 'bg-white focus:border-black'
+                      }`}
                       required
                     />
                   </div>
                 )}
 
                 <div className="sm:col-span-12">
-                  <label className="block font-bold uppercase tracking-wider text-neutral-700 mb-1.5 text-[11px]">
-                    {formData.invoiceType === 'factura' ? 'Persona de Contacto / Quien Recibe *' : 'Nombres y Apellidos *'}
+                  <label className="flex items-center justify-between font-bold uppercase tracking-wider text-neutral-700 mb-1.5 text-[11px]">
+                    <span>
+                      {formData.invoiceType === 'factura'
+                        ? 'Persona de Contacto / Quien Recibe *'
+                        : 'Nombres y Apellidos *'}
+                    </span>
+                    {formData.invoiceType === 'boleta' &&
+                      docLookupStatus?.type === 'success' &&
+                      formData.fullName.trim() && (
+                        <span className="text-[10px] font-bold text-[#2e9e7b] normal-case tracking-normal inline-flex items-center gap-1">
+                          <TbCheck size={12} /> Verificado RENIEC
+                        </span>
+                      )}
                   </label>
                   <input
                     type="text"
                     name="fullName"
                     value={formData.fullName}
                     onChange={handleInputChange}
+                    readOnly={
+                      formData.invoiceType === 'boleta' &&
+                      docLookupStatus?.type === 'success' &&
+                      Boolean(formData.fullName.trim())
+                    }
                     placeholder={formData.invoiceType === 'factura' ? 'Persona responsable de recibir el pedido' : 'Juan Pérez'}
-                    className="w-full border border-[#d9d9d9] rounded-none p-2.5 text-xs focus:border-black outline-none"
+                    className={`w-full border border-[#d9d9d9] rounded-none p-2.5 text-xs outline-none ${
+                      formData.invoiceType === 'boleta' &&
+                      docLookupStatus?.type === 'success' &&
+                      formData.fullName.trim()
+                        ? 'bg-neutral-100 text-neutral-700 cursor-not-allowed'
+                        : 'bg-white focus:border-black'
+                    }`}
                     required
                   />
                 </div>

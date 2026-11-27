@@ -77,7 +77,7 @@ export const ProductCard = ({ product }: { product: Product }) => {
     <Link
       href={href}
       onClick={handleClick}
-      className="bg-white border border-[#e5e5e5] hover:border-black transition-colors duration-200 cursor-pointer group flex flex-col h-full overflow-hidden rounded-none"
+      className="bg-white border border-[#e5e5e5] hover:border-black hover:-translate-y-1 hover:shadow-[0_14px_28px_-10px_rgba(0,0,0,0.14)] transition-all duration-300 ease-out cursor-pointer group flex flex-col h-full overflow-hidden rounded-none"
     >
       {/* Contenedor cuadrado de botella */}
       <div className="w-full aspect-square bg-[#f8f8f8] flex items-center justify-center relative overflow-hidden p-4 shrink-0">

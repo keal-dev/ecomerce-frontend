@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import Link from 'next/link';
 import {
   TbShoppingCart,
@@ -24,12 +24,14 @@ import {
   TbX,
   TbHistory,
   TbPackage,
+  TbLoader2,
 } from 'react-icons/tb';
 import { useProductStore } from '@/stores/product.store';
 import { useCompanyStore } from '@/stores/company.store';
 import { useCategoryStore } from '@/stores/category.store';
 import { createOrder, emitOrderInvoice, getOrders } from '@/services/order.service';
 import { getCurrentCashSession } from '@/services/cash-register.service';
+import { lookupDni, lookupRuc } from '@/services/document-lookup.service';
 import { Product } from '@/types/product.types';
 import { Order } from '@/types/order.types';
 import { CashSession } from '@/types/cash-register.types';
@@ -57,6 +59,12 @@ export function SalesManager() {
   const [customerDoc, setCustomerDoc] = useState('');
   const [customerName, setCustomerName] = useState('');
   const [cashReceived, setCashReceived] = useState('');
+  const [isLookingUpDoc, setIsLookingUpDoc] = useState(false);
+  const [docLookupNote, setDocLookupNote] = useState<{
+    type: 'success' | 'error';
+    text: string;
+  } | null>(null);
+  const lastLookedUpDocRef = useRef<string>('');
 
   // Estados de procesamiento y resultado
   const [isCheckoutModalOpen, setIsCheckoutModalOpen] = useState(false);
@@ -100,17 +108,72 @@ export function SalesManager() {
     loadAuxData();
   }, [fetchProducts, fetchCategories, loadAuxData]);
 
+  const runPosDocumentLookup = async (
+    targetDocType: 'boleta' | 'factura',
+    rawDoc: string,
+    force = false,
+  ) => {
+    const clean = rawDoc.replace(/\D/g, '');
+    const expectedLen = targetDocType === 'factura' ? 11 : 8;
+    if (clean.length !== expectedLen) return;
+
+    const cacheKey = `${targetDocType}:${clean}`;
+    if (!force && lastLookedUpDocRef.current === cacheKey) return;
+    lastLookedUpDocRef.current = cacheKey;
+
+    setIsLookingUpDoc(true);
+    setDocLookupNote(null);
+
+    try {
+      if (targetDocType === 'factura') {
+        const res = await lookupRuc(clean);
+        setCustomerName(res.legalName);
+        const extra = [res.status, res.condition].filter(Boolean).join(' · ');
+        setDocLookupNote({
+          type: 'success',
+          text: extra ? `SUNAT (${extra})` : 'SUNAT verificado',
+        });
+      } else {
+        const res = await lookupDni(clean);
+        setCustomerName(res.fullName);
+        setDocLookupNote({
+          type: 'success',
+          text: 'RENIEC verificado',
+        });
+      }
+    } catch (err: unknown) {
+      const msg =
+        (err as { response?: { data?: { message?: string } } })?.response?.data?.message ||
+        'No encontrado; ingrésalo manualmente.';
+      setDocLookupNote({
+        type: 'error',
+        text: Array.isArray(msg) ? msg.join(', ') : msg,
+      });
+    } finally {
+      setIsLookingUpDoc(false);
+    }
+  };
+
   // Limpiar documento cuando cambia entre boleta/factura/nota
   const handleSelectDocType = (type: 'boleta' | 'factura' | 'nota') => {
     setDocType(type);
     setErrorMessage(null);
     setCustomerDoc('');
+    setCustomerName('');
+    setDocLookupNote(null);
+    lastLookedUpDocRef.current = '';
   };
 
   const handleCustomerDocChange = (val: string) => {
     const maxLen = docType === 'factura' ? 11 : 8;
     const digits = val.replace(/\D/g, '').slice(0, maxLen);
     setCustomerDoc(digits);
+    setDocLookupNote(null);
+    if (digits.length < maxLen) {
+      lastLookedUpDocRef.current = '';
+    } else if (docType === 'boleta' || docType === 'factura') {
+      void runPosDocumentLookup(docType, digits);
+    }
   };
 
   const addToCart = (product: Product) => {
@@ -927,36 +990,83 @@ export function SalesManager() {
                       )}
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-12 gap-2">
+                    <div className="space-y-2">
                       {docType !== 'nota' && (
-                        <div className="sm:col-span-5">
+                        <div className="flex gap-2">
                           <input
                             type="text"
                             inputMode="numeric"
                             value={customerDoc}
                             onChange={(e) => handleCustomerDocChange(e.target.value)}
                             placeholder={
-                              docType === 'factura' ? 'RUC (11 dígitos)' : 'DNI (8 dígitos)'
+                              docType === 'factura' ? 'Número de RUC (11 dígitos)' : 'Número de DNI (8 dígitos)'
                             }
-                            className="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-xs font-mono text-gray-900 focus:outline-none focus:border-gray-900"
+                            className="flex-1 min-w-0 px-3 py-2 bg-white border border-gray-200 rounded-lg text-xs font-mono text-gray-900 focus:outline-none focus:border-gray-900"
                           />
+                          <button
+                            type="button"
+                            onClick={() =>
+                              void runPosDocumentLookup(docType, customerDoc, true)
+                            }
+                            disabled={
+                              isLookingUpDoc ||
+                              customerDoc.length !== (docType === 'factura' ? 11 : 8)
+                            }
+                            title="Consultar en RENIEC / SUNAT"
+                            className="px-3.5 py-2 bg-brand-primary hover:bg-brand-accent disabled:bg-gray-200 disabled:text-gray-400 text-white rounded-lg text-xs font-bold transition-colors inline-flex items-center justify-center gap-1.5 cursor-pointer disabled:cursor-not-allowed shrink-0"
+                          >
+                            {isLookingUpDoc ? (
+                              <TbLoader2 size={14} className="animate-spin" />
+                            ) : (
+                              <TbSearch size={14} />
+                            )}
+                            <span>{isLookingUpDoc ? 'Buscando...' : 'Buscar'}</span>
+                          </button>
                         </div>
                       )}
 
-                      <div className={docType !== 'nota' ? 'sm:col-span-7' : 'sm:col-span-12'}>
+                      <div>
                         <input
                           type="text"
                           value={customerName}
                           onChange={(e) => setCustomerName(e.target.value)}
+                          readOnly={
+                            docType !== 'nota' &&
+                            docLookupNote?.type === 'success' &&
+                            Boolean(customerName.trim())
+                          }
                           placeholder={
                             docType === 'factura'
                               ? 'Razón Social de la empresa'
                               : 'Nombre del cliente (o Clientes Varios)'
                           }
-                          className="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-xs text-gray-900 focus:outline-none focus:border-gray-900"
+                          className={`w-full px-3 py-2 border border-gray-200 rounded-lg text-xs focus:outline-none ${
+                            docType !== 'nota' &&
+                            docLookupNote?.type === 'success' &&
+                            customerName.trim()
+                              ? 'bg-gray-100 text-gray-700 cursor-not-allowed'
+                              : 'bg-white text-gray-900 focus:border-gray-900'
+                          }`}
                         />
                       </div>
                     </div>
+
+                    {docLookupNote && (
+                      <p
+                        className={`text-[11px] font-medium flex items-center gap-1 ${
+                          docLookupNote.type === 'success'
+                            ? 'text-emerald-700'
+                            : 'text-amber-700'
+                        }`}
+                      >
+                        {docLookupNote.type === 'success' ? (
+                          <TbCheck size={13} className="shrink-0" />
+                        ) : (
+                          <TbAlertCircle size={13} className="shrink-0" />
+                        )}
+                        <span>{docLookupNote.text}</span>
+                      </p>
+                    )}
                   </div>
                 </div>
 

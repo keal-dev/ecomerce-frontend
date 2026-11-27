@@ -7,6 +7,7 @@ import { MainCarousel } from './_components/MainCarousel';
 import { ProductCarousel } from './_components/ProductCarousel';
 import { CategoryCarousel } from './_components/CategoryCarousel';
 import { BrandsCarousel } from './_components/BrandsCarousel';
+import { ScrollReveal } from '@/components/shared/ScrollReveal';
 import { useProductStore } from '@/stores/product.store';
 import { useCategoryStore } from '@/stores/category.store';
 import { useRecentlyViewedStore } from '@/stores/recently-viewed.store';
@@ -123,7 +124,7 @@ export default function Ecomerce() {
 
       {/* 2. Nuevas Joyas / Novedades */}
       {newArrivals.length > 0 && (
-        <div className="border-b border-[#ebebeb]">
+        <ScrollReveal variant="fade-up" className="border-b border-[#ebebeb]">
           <ProductCarousel
             eyebrow="ENTÉRATE DE LAS NOVEDADES"
             title="NUEVAS JOYAS"
@@ -134,12 +135,12 @@ export default function Ecomerce() {
               href: '/search',
             }}
           />
-        </div>
+        </ScrollReveal>
       )}
 
       {/* 3. Bloque Rich-Text Editorial */}
       <section className="py-12 px-4 md:px-7 border-b border-[#ebebeb] bg-white">
-        <div className="max-w-3xl mx-auto text-center space-y-4">
+        <ScrollReveal variant="fade-up" className="max-w-3xl mx-auto text-center space-y-4">
           <span className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.22em] text-brand-accent">
             <TbSparkles size={14} />
             <span>DE NUESTRA COOPERATIVA A TU MESA</span>
@@ -153,29 +154,34 @@ export default function Ecomerce() {
           <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
             <Link
               href="/ofertas"
-              className="px-7 py-3 bg-brand-accent hover:bg-red-700 text-white text-xs font-bold uppercase tracking-widest rounded-none transition-colors"
+              className="px-7 py-3 bg-brand-accent hover:bg-brand-primary text-white text-xs font-bold uppercase tracking-widest rounded-none transition-all duration-200 hover:-translate-y-0.5"
             >
               VER OFERTAS
             </Link>
             <Link
               href="/categories"
-              className="px-7 py-3 bg-black hover:bg-neutral-800 text-white text-xs font-bold uppercase tracking-widest rounded-none transition-colors"
+              className="px-7 py-3 bg-brand-primary hover:bg-brand-accent text-white text-xs font-bold uppercase tracking-widest rounded-none transition-all duration-200 hover:-translate-y-0.5"
             >
               VER CATÁLOGO
             </Link>
           </div>
-        </div>
+        </ScrollReveal>
       </section>
 
       {/* 4. Categorías */}
-      <div className="border-b border-[#ebebeb]">
+      <ScrollReveal variant="fade-up" className="border-b border-[#ebebeb]">
         <CategoryCarousel title="EXPLORA POR CATEGORÍA" />
-      </div>
+      </ScrollReveal>
 
       {/* 5. Colecciones dinámicas por categoría real */}
       {categorySections.length > 0 ? (
-        categorySections.map((sec) => (
-          <div key={sec.id} className="border-b border-[#ebebeb]">
+        categorySections.map((sec, idx) => (
+          <ScrollReveal
+            key={sec.id}
+            variant="fade-up"
+            delay={Math.min(idx * 50, 150)}
+            className="border-b border-[#ebebeb]"
+          >
             <ProductCarousel
               eyebrow="SELECCIÓN DE ORIGEN"
               title={sec.name}
@@ -186,11 +192,11 @@ export default function Ecomerce() {
                 href: sec.href,
               }}
             />
-          </div>
+          </ScrollReveal>
         ))
       ) : (
         activeProducts.length > 0 && (
-          <div className="border-b border-[#ebebeb]">
+          <ScrollReveal variant="fade-up" className="border-b border-[#ebebeb]">
             <ProductCarousel
               eyebrow="SELECCIÓN DE ORIGEN"
               title="DESCUBRE NUESTRO CATÁLOGO"
@@ -201,30 +207,32 @@ export default function Ecomerce() {
                 href: '/search',
               }}
             />
-          </div>
+          </ScrollReveal>
         )
       )}
 
-      {/* 6. Bloque Negro de Alto Contraste: Ofertas Exclusivas */}
+      {/* 6. Bloque Oscuro de Alto Contraste: Ofertas Exclusivas */}
       {featuredOfferProducts.length > 0 && (
-        <div className="bg-black py-4 border-y border-[#262626]">
-          <ProductCarousel
-            eyebrow="PROMOCIONES DE LA SEMANA"
-            title="OFERTAS EXCLUSIVAS"
-            products={featuredOfferProducts}
-            variant="featured"
-            darkSurface
-            headerAction={{
-              label: 'VER TODAS LAS OFERTAS',
-              href: '/ofertas',
-            }}
-          />
+        <div className="bg-brand-primary py-4 border-y border-white/15">
+          <ScrollReveal variant="fade-up">
+            <ProductCarousel
+              eyebrow="PROMOCIONES DE LA SEMANA"
+              title="OFERTAS EXCLUSIVAS"
+              products={featuredOfferProducts}
+              variant="featured"
+              darkSurface
+              headerAction={{
+                label: 'VER TODAS LAS OFERTAS',
+                href: '/ofertas',
+              }}
+            />
+          </ScrollReveal>
         </div>
       )}
 
       {/* 7. Basado en tu última visita */}
       {mounted && recentlyViewedProducts.length > 0 && (
-        <div className="border-b border-[#ebebeb]">
+        <ScrollReveal variant="fade-up" className="border-b border-[#ebebeb]">
           <ProductCarousel
             eyebrow="RECOMENDADOS PARA TI"
             title="BASADO EN TU ÚLTIMA VISITA"
@@ -234,17 +242,17 @@ export default function Ecomerce() {
               href: '/historial',
             }}
           />
-        </div>
+        </ScrollReveal>
       )}
 
       {/* 8. Marcas */}
-      <div className="border-b border-[#ebebeb]">
+      <ScrollReveal variant="fade-up" className="border-b border-[#ebebeb]">
         <BrandsCarousel title="LAS MEJORES MARCAS" />
-      </div>
+      </ScrollReveal>
 
       {/* 9. Guías & Maridajes (Sección Editorial) */}
       <section className="max-w-7xl mx-auto py-12 px-4 md:px-7 border-b border-[#ebebeb]">
-        <div className="flex items-end justify-between gap-4 mb-6">
+        <ScrollReveal variant="fade-up" className="flex items-end justify-between gap-4 mb-6">
           <div>
             <span className="block text-[11px] font-bold uppercase tracking-[0.2em] text-brand-accent mb-1">
               CULTURA & MARIDAJE
@@ -259,42 +267,46 @@ export default function Ecomerce() {
           >
             EXPLORAR CATÁLOGO
           </Link>
-        </div>
+        </ScrollReveal>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-          {EDITORIAL_GUIDES.map((guide) => (
-            <Link
-              key={guide.title}
-              href={guide.href}
-              className="group border border-[#e5e5e5] hover:border-black bg-white p-6 flex flex-col justify-between transition-colors"
-            >
-              <div>
-                <div className="flex items-center justify-between mb-4">
-                  <span className="text-[10px] font-extrabold uppercase tracking-[0.18em] px-2.5 py-1 bg-black text-white group-hover:bg-brand-accent transition-colors">
-                    {guide.tag}
-                  </span>
-                  <TbCoffee size={20} className="text-neutral-400 group-hover:text-black transition-colors" />
+          {EDITORIAL_GUIDES.map((guide, idx) => (
+            <ScrollReveal key={guide.title} variant="fade-up" delay={idx * 100} className="h-full">
+              <Link
+                href={guide.href}
+                className="group border border-[#e5e5e5] hover:border-black bg-white p-6 flex flex-col justify-between h-full transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-[0_14px_28px_-10px_rgba(0,0,0,0.12)]"
+              >
+                <div>
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="text-[10px] font-extrabold uppercase tracking-[0.18em] px-2.5 py-1 bg-brand-primary text-white group-hover:bg-brand-accent transition-colors">
+                      {guide.tag}
+                    </span>
+                    <TbCoffee size={20} className="text-neutral-400 group-hover:text-black transition-colors" />
+                  </div>
+                  <h3 className="font-display font-extrabold uppercase text-base sm:text-lg text-black leading-snug group-hover:text-brand-accent transition-colors">
+                    {guide.title}
+                  </h3>
+                  <p className="text-xs text-neutral-600 mt-2.5 leading-relaxed">
+                    {guide.excerpt}
+                  </p>
                 </div>
-                <h3 className="font-display font-extrabold uppercase text-base sm:text-lg text-black leading-snug group-hover:text-brand-accent transition-colors">
-                  {guide.title}
-                </h3>
-                <p className="text-xs text-neutral-600 mt-2.5 leading-relaxed">
-                  {guide.excerpt}
-                </p>
-              </div>
 
-              <div className="mt-5 pt-4 border-t border-[#efefef] inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-black group-hover:text-brand-accent">
-                <span>VER PRODUCTOS RELACIONADOS</span>
-                <TbArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
-              </div>
-            </Link>
+                <div className="mt-5 pt-4 border-t border-[#efefef] inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-black group-hover:text-brand-accent">
+                  <span>VER PRODUCTOS RELACIONADOS</span>
+                  <TbArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                </div>
+              </Link>
+            </ScrollReveal>
           ))}
         </div>
       </section>
 
       {/* 10. Banner Newsletter de Ofertas */}
       <section className="bg-[#f5f5f5] py-12 px-4 md:px-7">
-        <div className="max-w-3xl mx-auto bg-white border border-[#d9d9d9] p-7 sm:p-10 text-center space-y-4">
+        <ScrollReveal
+          variant="zoom-in"
+          className="max-w-3xl mx-auto bg-white border border-[#d9d9d9] p-7 sm:p-10 text-center space-y-4"
+        >
           <div className="w-11 h-11 bg-brand-accent text-white flex items-center justify-center mx-auto">
             <TbMail size={22} />
           </div>
@@ -334,7 +346,7 @@ export default function Ecomerce() {
               </button>
             </form>
           )}
-        </div>
+        </ScrollReveal>
       </section>
     </div>
   );
